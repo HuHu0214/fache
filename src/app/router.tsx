@@ -7,6 +7,7 @@ import ArticlePage from '../features/laws/ArticlePage';
 import LawPage from '../features/laws/LawPage';
 import NotesPage from '../features/notes/NotesPage';
 import ReviewPage from '../features/review/ReviewPage';
+import SearchPage from '../features/search/SearchPage';
 import AppLayout from './AppLayout';
 import NotFound from './NotFound';
 
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
         element: <ArticlePage />,
       },
       { path: 'review', element: <ReviewPage /> },
-      { path: 'search', element: <Placeholder title="搜索" /> },
+      { path: 'search', element: <SearchPage /> },
       { path: 'notes', element: <NotesPage /> },
       { path: 'settings', element: <Placeholder title="设置" /> },
       { path: '*', element: <NotFound /> },

@@ -5,6 +5,7 @@ import ScenarioPage from '../features/learning/ScenarioPage';
 import ThemePage from '../features/learning/ThemePage';
 import ArticlePage from '../features/laws/ArticlePage';
 import LawPage from '../features/laws/LawPage';
+import NotesPage from '../features/notes/NotesPage';
 import AppLayout from './AppLayout';
 import NotFound from './NotFound';
 
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
       },
       { path: 'review', element: <Placeholder title="复习" /> },
       { path: 'search', element: <Placeholder title="搜索" /> },
-      { path: 'notes', element: <Placeholder title="笔记" /> },
+      { path: 'notes', element: <NotesPage /> },
       { path: 'settings', element: <Placeholder title="设置" /> },
       { path: '*', element: <NotFound /> },
     ],

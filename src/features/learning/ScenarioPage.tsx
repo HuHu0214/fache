@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import { mdxComponents } from '../../components/mdx';
 import { Reveal } from '../../components/mdx/reveal';
 import { ArticleRef } from '../../components/mdx/article-ref';
+import { BookmarkButton } from '../bookmarks/BookmarkButton';
+import { NoteEditor } from '../notes/NoteEditor';
 import { getScenario, getTheme } from '../../content/registry';
 import type { RatingInput } from '../../lib/db';
 import { markScenarioRead, markScenarioRated } from './reads-repo';
@@ -107,6 +109,17 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
           )}
         </section>
       )}
+
+      <section className="space-y-3 border-t border-[var(--line)] pt-5">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-sm font-medium">笔记与收藏</h3>
+          <BookmarkButton
+            targetType="scenario"
+            targetId={entry.meta.id}
+          />
+        </div>
+        <NoteEditor targetType="scenario" targetId={entry.meta.id} />
+      </section>
     </article>
   );
 }

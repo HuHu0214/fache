@@ -7,6 +7,7 @@ export type ParsedArticle = {
 };
 
 const ARTICLE_RE = /^\*\*(第[一二三四五六七八九十百千零〇两]+条)\*\*[　\s]*(.*)$/;
+const H1_VOLUME_RE = /^#\s+(第[一二三四五六七八九十百千零〇两]+编.*)$/;
 const H2_RE = /^##\s+(.+)$/;
 const H3_RE = /^###\s+(.+)$/;
 
@@ -55,9 +56,16 @@ export function chineseNumeralToInt(numeral: string): number {
 export function parseLawMarkdown(markdown: string): ParsedArticle[] {
   const lines = matter(markdown).content.split(/\r?\n/);
   const articles: ParsedArticle[] = [];
-  let path: string[] = [];
+  let volume: string | undefined;
+  let chapter: string | undefined;
+  let section: string | undefined;
   let current: ParsedArticle | undefined;
   let paragraphs: string[] = [];
+
+  const currentPath = () =>
+    [volume, chapter, section].filter(
+      (part): part is string => part !== undefined,
+    );
 
   const flushParagraph = () => {
     if (!current) {
@@ -72,22 +80,35 @@ export function parseLawMarkdown(markdown: string): ParsedArticle[] {
   };
 
   for (const raw of lines) {
+    const volumeHeading = H1_VOLUME_RE.exec(raw);
+    if (volumeHeading) {
+      flushParagraph();
+      volume = volumeHeading[1].trim();
+      chapter = undefined;
+      section = undefined;
+      continue;
+    }
+
+    if (raw.startsWith('# ')) {
+      flushParagraph();
+      volume = undefined;
+      chapter = undefined;
+      section = undefined;
+      continue;
+    }
+
     const h2 = H2_RE.exec(raw);
     if (h2) {
       flushParagraph();
-      path = [h2[1].trim()];
+      chapter = h2[1].trim();
+      section = undefined;
       continue;
     }
 
     const h3 = H3_RE.exec(raw);
     if (h3) {
       flushParagraph();
-      path = path.length ? [path[0], h3[1].trim()] : [h3[1].trim()];
-      continue;
-    }
-
-    if (raw.startsWith('# ')) {
-      flushParagraph();
+      section = h3[1].trim();
       continue;
     }
 
@@ -97,7 +118,7 @@ export function parseLawMarkdown(markdown: string): ParsedArticle[] {
       current = {
         articleNo: article[1],
         text: article[2].trim(),
-        path: [...path],
+        path: currentPath(),
       };
       articles.push(current);
       continue;

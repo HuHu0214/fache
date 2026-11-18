@@ -27,6 +27,22 @@ test('解析条号、正文、章节路径', () => {
   expect(articles[2].articleNo).toBe('第十条');
 });
 
+test('民法典的编作为路径第一级', () => {
+  const md = `# 第三编　合同
+
+## 第一分编　通则
+
+### 第一章　一般规定
+
+**第四百六十三条**　本编调整因合同产生的民事关系。
+`;
+  expect(parseLawMarkdown(md)[0].path).toEqual([
+    '第三编　合同',
+    '第一分编　通则',
+    '第一章　一般规定',
+  ]);
+});
+
 test('中文数字转整数', () => {
   expect(chineseNumeralToInt('一')).toBe(1);
   expect(chineseNumeralToInt('十一')).toBe(11);

@@ -1,4 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
+import HomePage from '../features/home/HomePage';
+import ThemePage from '../features/learning/ThemePage';
 import AppLayout from './AppLayout';
 import NotFound from './NotFound';
 
@@ -11,10 +13,10 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <Placeholder title="首页" /> },
+      { index: true, element: <HomePage /> },
       {
         path: 'theme/:themeId',
-        element: <Placeholder title="主题" />,
+        element: <ThemePage />,
       },
       {
         path: 'scenario/:scenarioId',

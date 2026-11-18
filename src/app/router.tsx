@@ -8,12 +8,9 @@ import LawPage from '../features/laws/LawPage';
 import NotesPage from '../features/notes/NotesPage';
 import ReviewPage from '../features/review/ReviewPage';
 import SearchPage from '../features/search/SearchPage';
+import SettingsPage from '../features/settings/SettingsPage';
 import AppLayout from './AppLayout';
 import NotFound from './NotFound';
-
-function Placeholder({ title }: { title: string }) {
-  return <p className="text-sm text-[var(--muted)]">{title}（建设中）</p>;
-}
 
 export const router = createBrowserRouter([
   {
@@ -41,7 +38,7 @@ export const router = createBrowserRouter([
       { path: 'review', element: <ReviewPage /> },
       { path: 'search', element: <SearchPage /> },
       { path: 'notes', element: <NotesPage /> },
-      { path: 'settings', element: <Placeholder title="设置" /> },
+      { path: 'settings', element: <SettingsPage /> },
       { path: '*', element: <NotFound /> },
     ],
   },

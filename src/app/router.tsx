@@ -1,7 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '../features/home/HomePage';
+import KnowledgePointPage from '../features/learning/KnowledgePointPage';
 import ScenarioPage from '../features/learning/ScenarioPage';
 import ThemePage from '../features/learning/ThemePage';
+import ArticlePage from '../features/laws/ArticlePage';
+import LawPage from '../features/laws/LawPage';
 import AppLayout from './AppLayout';
 import NotFound from './NotFound';
 
@@ -25,12 +28,12 @@ export const router = createBrowserRouter([
       },
       {
         path: 'concept/:kpId',
-        element: <Placeholder title="知识点" />,
+        element: <KnowledgePointPage />,
       },
-      { path: 'law/:lawId', element: <Placeholder title="法律" /> },
+      { path: 'law/:lawId', element: <LawPage /> },
       {
         path: 'law/:lawId/:articleNo',
-        element: <Placeholder title="法条" />,
+        element: <ArticlePage />,
       },
       { path: 'review', element: <Placeholder title="复习" /> },
       { path: 'search', element: <Placeholder title="搜索" /> },

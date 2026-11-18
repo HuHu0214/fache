@@ -55,7 +55,7 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
   };
 
   return (
-    <article className="space-y-6">
+    <article className="page-shell space-y-6">
       <div className="space-y-2">
         {theme && (
           <Link

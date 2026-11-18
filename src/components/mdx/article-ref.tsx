@@ -26,7 +26,9 @@ export function ArticleRef({ law, no }: ArticleRefProps) {
       <summary className="cursor-pointer text-[var(--accent)]">
         {lawMeta?.shortTitle ?? law} · {no}
       </summary>
-      <p className="mt-2 whitespace-pre-wrap leading-7">{article.text}</p>
+      <p className="mt-2 whitespace-pre-wrap break-words leading-7">
+        {article.text}
+      </p>
       <Link
         to={`/law/${law}/${no}`}
         className="mt-2 inline-block text-xs text-[var(--muted)] underline underline-offset-4"

@@ -55,7 +55,7 @@ export default function ArticlePage({
         )}
       </header>
 
-      <p className="whitespace-pre-wrap rounded-xl border border-[var(--line)] bg-[var(--card)] px-5 py-4 text-[15px] leading-8">
+      <p className="whitespace-pre-wrap break-words rounded-xl border border-[var(--line)] bg-[var(--card)] px-5 py-4 text-[15px] leading-8">
         {article.text}
       </p>
 

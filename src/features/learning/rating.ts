@@ -1,4 +1,5 @@
 import type { RatingInput } from '../../lib/db';
+import { scheduleProgress } from '../../lib/review';
 import { getProgress, putProgress } from './progress-repo';
 
 export async function rateKnowledgePoint(
@@ -6,12 +7,8 @@ export async function rateKnowledgePoint(
   rating: RatingInput,
   now: Date = new Date(),
 ): Promise<void> {
-  await putProgress({
-    kpId,
-    state: 'learning',
-    lastRating: rating,
-    updatedAt: now.toISOString(),
-  });
+  const existing = await getProgress(kpId);
+  await putProgress(scheduleProgress(existing, kpId, rating, now));
 }
 
 export async function touchKnowledgePoint(

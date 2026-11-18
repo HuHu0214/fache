@@ -1,0 +1,38 @@
+---
+id: contract-deposit
+title: 定金和订金，差一个字差很多
+hook: 买房交了 2 万「订金」，后来不想买了，能退吗？
+thinkPrompt: 收据上写的是「订金」还是「定金」？
+kpIds:
+  - contract-deposit
+  - contract-penalty
+primaryKpId: contract-deposit
+articleRefs:
+  - lawId: civil-code
+    articleNo: 第五百八十六条
+  - lawId: civil-code
+    articleNo: 第五百八十七条
+order: 3
+estimatedMinutes: 4
+reviewStatus: draft
+---
+
+<Steps>
+<Step title="先分清两个字">
+「定金」是法律规定的担保方式，适用定金罚则。「订金」通常只是预付款，法律上没有定金罚则，能不能退主要看合同约定和双方协商。
+<ArticleRef law="civil-code" no="第五百八十六条" />
+</Step>
+<Step title="定金怎么罚">
+付定金的一方不履行债务，致使不能实现合同目的的，无权要求返还定金；收定金的一方不履行，应当双倍返还定金。
+<ArticleRef law="civil-code" no="第五百八十七条" />
+</Step>
+<Step title="现在怎么办">
+先看收据、合同上写的是哪个字，再看有没有约定退款条件。写的是「订金」，可以主张按预付款处理；写的是「定金」，单方不买通常要不回来。
+</Step>
+</Steps>
+
+<Callout type="tip">
+签合同、开收据时把字写清楚。口头说「订金」但收据写「定金」，争议时以书面为准。定金数额也有限制，不能超过主合同标的额的一定比例。
+</Callout>
+
+相关概念：<ConceptLink id="contract-deposit">定金罚则</ConceptLink>、<ConceptLink id="contract-penalty">违约金</ConceptLink>。

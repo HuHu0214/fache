@@ -1,0 +1,41 @@
+---
+id: contract-loan
+title: 借钱给朋友没写借条
+hook: 朋友借了我 3 万，只有微信转账，没写借条，现在不认账了。
+thinkPrompt: 没有借条，这钱还能要回来吗？
+kpIds:
+  - contract-loan
+  - contract-limitation
+primaryKpId: contract-loan
+articleRefs:
+  - lawId: civil-code
+    articleNo: 第六百七十九条
+  - lawId: civil-code
+    articleNo: 第六百八十条
+  - lawId: civil-code
+    articleNo: 第一百八十八条
+order: 6
+estimatedMinutes: 4
+reviewStatus: draft
+---
+
+<Steps>
+<Step title="借款合同什么时候成立">
+自然人之间的借款合同，自贷款人提供借款时成立。转账记录能证明你实际交付了钱，这很关键。
+<ArticleRef law="civil-code" no="第六百七十九条" />
+</Step>
+<Step title="没约定利息怎么办">
+借款合同对支付利息没有约定的，视为没有利息。自然人之间对利息约定不明的，也视为没有利息。
+<ArticleRef law="civil-code" no="第六百八十条" />
+</Step>
+<Step title="多久内要主张">
+一般诉讼时效是三年，从知道或者应当知道权利受损及义务人之日起算。催款、对方承诺还款等行为可能引起时效中断。
+<ArticleRef law="civil-code" no="第一百八十八条" />
+</Step>
+</Steps>
+
+<Callout type="tip">
+没有借条时，转账备注、聊天记录、通话录音、对方承认欠款的文字，都能补强证据。让对方在微信里确认「我欠你 3 万，某月某日前还」，比空口争论有用。
+</Callout>
+
+相关概念：<ConceptLink id="contract-loan">借款合同</ConceptLink>、<ConceptLink id="contract-limitation">诉讼时效</ConceptLink>。

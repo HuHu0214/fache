@@ -1,0 +1,38 @@
+---
+id: contract-lease
+title: 房东不退押金
+hook: 租约到期，房东说墙面有划痕，押金一分不退。
+thinkPrompt: 押金和定金是一回事吗？
+kpIds:
+  - contract-deposit-money
+  - contract-lease
+primaryKpId: contract-deposit-money
+articleRefs:
+  - lawId: civil-code
+    articleNo: 第七百三十三条
+  - lawId: civil-code
+    articleNo: 第五百零九条
+order: 5
+estimatedMinutes: 4
+reviewStatus: draft
+---
+
+<Steps>
+<Step title="押金是什么">
+押金不是法律明文规定的担保方式，性质和退还条件主要看合同约定。它和「定金」不是一回事，不适用定金罚则。
+<ArticleRef law="civil-code" no="第五百零九条" />
+</Step>
+<Step title="退房时应该是什么状态">
+租期届满，承租人应当返还租赁物，返还的租赁物应当符合按照约定或者根据租赁物性质使用后的状态。正常使用留下的痕迹，不等于损坏。
+<ArticleRef law="civil-code" no="第七百三十三条" />
+</Step>
+<Step title="房东要扣怎么办">
+要求房东说明损坏部位、维修费用和依据，保留入住和退房时的照片、视频、聊天记录。协商不成，可以走调解或诉讼。
+</Step>
+</Steps>
+
+<Callout type="tip">
+入住时拍一套照片，退房时再拍一套，是押金纠纷里最便宜的证据。合同里最好写清扣押金的具体情形和上限。
+</Callout>
+
+相关概念：<ConceptLink id="contract-deposit-money">押金</ConceptLink>、<ConceptLink id="contract-lease">租赁合同</ConceptLink>。

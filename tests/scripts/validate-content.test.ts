@@ -5,7 +5,12 @@ import { validateContent } from '../../scripts/validate-content';
 
 async function writeFixture(
   root: string,
-  opts: { articleNo?: string; duplicate?: boolean; draft?: boolean } = {},
+  opts: {
+    articleNo?: string;
+    duplicate?: boolean;
+    draft?: boolean;
+    scenarioId?: string;
+  } = {},
 ) {
   const themeDir = join(root, 'content/themes/contracts');
   await mkdir(join(themeDir, 'scenarios'), { recursive: true });
@@ -21,7 +26,7 @@ async function writeFixture(
   );
   await writeFile(
     join(themeDir, 'scenarios/01.mdx'),
-    `---\nid: contract-formation-story\ntitle: 口头约定\nhook: 口头说好的算数吗\nkpIds: [contract-formation]\nprimaryKpId: contract-formation\narticleRefs:\n  - lawId: civil-code\n    articleNo: ${opts.articleNo ?? '第四百六十九条'}\norder: 1\nreviewStatus: checked\n---\n\n<ConceptLink id="contract-formation">合同成立</ConceptLink>`,
+    `---\nid: ${opts.scenarioId ?? 'contract-formation-story'}\ntitle: 口头约定\nhook: 口头说好的算数吗\nkpIds: [contract-formation]\nprimaryKpId: contract-formation\narticleRefs:\n  - lawId: civil-code\n    articleNo: ${opts.articleNo ?? '第四百六十九条'}\norder: 1\nreviewStatus: checked\n---\n\n<ConceptLink id="contract-formation">合同成立</ConceptLink>`,
   );
   await writeFile(
     join(root, 'content/laws/civil-code.json'),
@@ -73,6 +78,14 @@ test('重复 id 报错', async () => {
   expect(
     validateContent(root).some((i) => i.message.includes('重复 id')),
   ).toBe(true);
+});
+
+test('不同类型可以复用同一个 id', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'fajing-'));
+  await writeFixture(root, { scenarioId: 'contract-formation' });
+  expect(
+    validateContent(root).some((i) => i.message.includes('重复 id')),
+  ).toBe(false);
 });
 
 test('strict 模式下 draft 内容报错', async () => {

@@ -80,13 +80,14 @@ export function validateContent(
   };
 
   const idOwners = new Map<string, string>();
-  const claimId = (file: string, id: string) => {
-    const owner = idOwners.get(id);
+  const claimId = (kind: string, file: string, id: string) => {
+    const key = `${kind}:${id}`;
+    const owner = idOwners.get(key);
     if (owner) {
-      add(file, `重复 id：${id}（已被 ${owner} 使用）`);
+      add(file, `重复 id：${id}（${kind}，已被 ${owner} 使用）`);
       return;
     }
-    idOwners.set(id, file);
+    idOwners.set(key, file);
   };
 
   const themes: Theme[] = [];
@@ -108,7 +109,7 @@ export function validateContent(
           JSON.parse(readFileSync(file, 'utf8')),
         );
         themes.push(theme);
-        claimId(relative, theme.id);
+        claimId('theme', relative, theme.id);
       } catch (error) {
         add(relative, `主题解析失败：${messageOf(error)}`);
       }
@@ -123,7 +124,7 @@ export function validateContent(
         const lawFile = lawFileSchema.parse(
           JSON.parse(readFileSync(file, 'utf8')),
         );
-        claimId(relative, lawFile.law.id);
+        claimId('law', relative, lawFile.law.id);
         laws.set(lawFile.law.id, {
           law: lawFile.law,
           articleNos: new Set(
@@ -165,7 +166,7 @@ export function validateContent(
     if (kind === 'scenarios') {
       try {
         const data = scenarioFrontmatterSchema.parse(scan.frontmatter);
-        claimId(relative, data.id);
+        claimId('scenario', relative, data.id);
         scenarios.push({
           file: relative,
           themeId,
@@ -185,7 +186,7 @@ export function validateContent(
         const data = knowledgePointFrontmatterSchema.parse(
           scan.frontmatter,
         );
-        claimId(relative, data.id);
+        claimId('concept', relative, data.id);
         concepts.push({
           file: relative,
           themeId,

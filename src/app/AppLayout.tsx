@@ -1,5 +1,7 @@
+import { useLiveQuery } from 'dexie-react-hooks';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { Disclaimer } from '../components/Disclaimer';
+import { db } from '../lib/db';
 import { cn } from '../lib/cn';
 import { useTheme } from '../features/settings/useTheme';
 
@@ -13,6 +15,11 @@ const navItems = [
 
 export default function AppLayout() {
   const { theme, setTheme } = useTheme();
+  const progress = useLiveQuery(() => db.progress.toArray(), []) ?? [];
+  const now = new Date();
+  const dueCount = progress.filter(
+    (item) => item.due !== undefined && new Date(item.due) <= now,
+  ).length;
 
   return (
     <div className="min-h-dvh">
@@ -38,6 +45,14 @@ export default function AppLayout() {
                 }
               >
                 {item.label}
+                {item.to === '/review' && dueCount > 0 && (
+                  <span
+                    aria-hidden="true"
+                    className="ml-1 text-[10px] text-[var(--accent)]"
+                  >
+                    {dueCount}
+                  </span>
+                )}
               </NavLink>
             ))}
           </nav>

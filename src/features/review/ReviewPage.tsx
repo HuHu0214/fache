@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { ArticleRef } from '../../components/mdx/article-ref';
 import { Button } from '../../components/ui/button';
@@ -10,17 +10,17 @@ import { RatingButtons } from '../learning/rating-buttons';
 
 export default function ReviewPage() {
   const progress = useLiveQuery(() => db.progress.toArray(), []) ?? [];
-  const [revealed, setRevealed] = useState(false);
+  const [revealedKpId, setRevealedKpId] = useState<string | null>(
+    null,
+  );
 
   const queue = dueProgress(progress, new Date());
   const current = queue[0];
   const entry = current
     ? getKnowledgePoint(current.kpId)
     : undefined;
-
-  useEffect(() => {
-    setRevealed(false);
-  }, [current?.kpId]);
+  const revealed =
+    current !== undefined && revealedKpId === current.kpId;
 
   const handleRate = (rating: RatingInput) => {
     if (current) {
@@ -65,7 +65,7 @@ export default function ReviewPage() {
         {!revealed ? (
           <Button
             variant="outline"
-            onClick={() => setRevealed(true)}
+            onClick={() => setRevealedKpId(current.kpId)}
           >
             显示答案
           </Button>

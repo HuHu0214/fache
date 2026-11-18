@@ -15,7 +15,6 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
 
   useEffect(() => {
     let cancelled = false;
-    setLoaded(false);
     void getNote(targetType, targetId).then((note) => {
       if (cancelled) {
         return;

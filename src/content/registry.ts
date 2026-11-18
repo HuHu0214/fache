@@ -61,7 +61,7 @@ function parseOrThrow<T>(
     return parser.parse(value);
   } catch (error) {
     const detail = error instanceof Error ? error.message : String(error);
-    throw new Error(`内容错误：${key} ${detail}`);
+    throw new Error(`内容错误：${key} ${detail}`, { cause: error });
   }
 }
 

@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import HomePage from '../features/home/HomePage';
+import ScenarioPage from '../features/learning/ScenarioPage';
 import ThemePage from '../features/learning/ThemePage';
 import AppLayout from './AppLayout';
 import NotFound from './NotFound';
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'scenario/:scenarioId',
-        element: <Placeholder title="场景" />,
+        element: <ScenarioPage />,
       },
       {
         path: 'concept/:kpId',

@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f7f3ea;
+  --card: #fffdf8;
+  --ink: #1f1b16;
+  --muted: #6b6257;
+  --line: #d9d0c1;
+  --accent: #a33a2b;
+}
+
+[data-theme="dark"] {
+  --paper: #171512;
+  --card: #211e1a;
+  --ink: #ece5d8;
+  --muted: #a69c8d;
+  --line: #3a342c;
+  --accent: #d0705f;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Noto Serif SC", "SimSun", serif;
+}

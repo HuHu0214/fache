@@ -9,6 +9,7 @@ import {
 
 export type SearchDoc = {
   id: string;
+  entityId: string;
   type: 'scenario' | 'concept' | 'article';
   title: string;
   text: string;
@@ -33,10 +34,11 @@ export function collectSearchDocs(): SearchDoc[] {
   for (const theme of getThemes()) {
     for (const scenario of getScenarios(theme.id)) {
       docs.push({
-        id: scenario.meta.id,
+        id: `scenario:${scenario.meta.id}`,
+        entityId: scenario.meta.id,
         type: 'scenario',
         title: scenario.meta.title,
-        text: `${scenario.meta.hook} ${scenario.meta.thinkPrompt ?? ''}`,
+        text: `${scenario.meta.hook} ${scenario.bodyText}`,
         themeId: theme.id,
       });
     }
@@ -44,10 +46,11 @@ export function collectSearchDocs(): SearchDoc[] {
 
   for (const kp of getKnowledgePoints()) {
     docs.push({
-      id: kp.meta.id,
+      id: `concept:${kp.meta.id}`,
+      entityId: kp.meta.id,
       type: 'concept',
       title: kp.meta.title,
-      text: kp.meta.oneLiner,
+      text: `${kp.meta.oneLiner} ${kp.bodyText}`,
       themeId: kp.meta.themeId,
     });
   }
@@ -55,7 +58,8 @@ export function collectSearchDocs(): SearchDoc[] {
   for (const law of getLaws()) {
     for (const article of getArticles(law.id)) {
       docs.push({
-        id: `${law.id}:${article.articleNo}`,
+        id: `article:${law.id}:${article.articleNo}`,
+        entityId: `${law.id}:${article.articleNo}`,
         type: 'article',
         title: `${law.shortTitle} ${article.articleNo}`,
         text: article.text,
@@ -75,6 +79,7 @@ export function buildSearchIndex(
     fields: ['title', 'text'],
     storeFields: [
       'id',
+      'entityId',
       'type',
       'title',
       'text',
@@ -86,7 +91,8 @@ export function buildSearchIndex(
     searchOptions: {
       boost: { title: 3 },
       prefix: true,
-      fuzzy: 0.2,
+      fuzzy: false,
+      combineWith: 'AND',
     },
   });
   index.addAll(docs);
@@ -117,6 +123,7 @@ export function searchContent(
     }
     results.push({
       id: doc.id,
+      entityId: doc.entityId,
       type: doc.type,
       title: doc.title,
       text: doc.text,

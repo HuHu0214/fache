@@ -60,6 +60,21 @@ test('空查询返回空数组', () => {
 
 test('从内容注册表收集文档', () => {
   expect(
-    collectSearchDocs().some((d) => d.id === 'contract-formation'),
+    collectSearchDocs().some(
+      (d) => d.entityId === 'contract-formation',
+    ),
+  ).toBe(true);
+});
+
+test('真实内容可以建立索引，跨类型同名 id 不冲突', () => {
+  expect(() => buildSearchIndex(collectSearchDocs())).not.toThrow();
+});
+
+test('场景正文可以被搜索到', () => {
+  const realIndex = buildSearchIndex(collectSearchDocs());
+  expect(
+    searchContent(realIndex, '收据', 'scenario').some(
+      (d) => d.entityId === 'contract-formation',
+    ),
   ).toBe(true);
 });

@@ -1,5 +1,9 @@
 import type { ComponentType } from 'react';
 import {
+  conceptBodies,
+  scenarioBodies,
+} from '../generated/body-text';
+import {
   knowledgePointFrontmatterSchema,
   lawFileSchema,
   scenarioFrontmatterSchema,
@@ -15,11 +19,13 @@ import {
 export type ScenarioEntry = {
   meta: ScenarioFrontmatter & { themeId: string };
   Content: ComponentType;
+  bodyText: string;
 };
 
 export type KnowledgePointEntry = {
   meta: KnowledgePointFrontmatter & { themeId: string };
   Content: ComponentType;
+  bodyText: string;
 };
 
 type MdxModule = {
@@ -72,33 +78,41 @@ const themes: Theme[] = Object.entries(themeModules)
   .sort((a, b) => a.order - b.order);
 
 const scenarios: ScenarioEntry[] = Object.entries(scenarioModules)
-  .map(([key, module]) => ({
-    meta: {
+  .map(([key, module]) => {
+    const meta = {
       ...parseOrThrow(
         key,
         scenarioFrontmatterSchema,
         module.frontmatter,
       ),
       themeId: themeIdOf(key),
-    },
-    Content: module.default,
-  }))
+    };
+    return {
+      meta,
+      Content: module.default,
+      bodyText: scenarioBodies[meta.id] ?? '',
+    };
+  })
   .sort((a, b) => a.meta.order - b.meta.order);
 
 const knowledgePoints: KnowledgePointEntry[] = Object.entries(
   conceptModules,
 )
-  .map(([key, module]) => ({
-    meta: {
+  .map(([key, module]) => {
+    const meta = {
       ...parseOrThrow(
         key,
         knowledgePointFrontmatterSchema,
         module.frontmatter,
       ),
       themeId: themeIdOf(key),
-    },
-    Content: module.default,
-  }))
+    };
+    return {
+      meta,
+      Content: module.default,
+      bodyText: conceptBodies[meta.id] ?? '',
+    };
+  })
   .sort((a, b) => a.meta.order - b.meta.order);
 
 const lawFiles: LawFile[] = Object.entries(lawModules)

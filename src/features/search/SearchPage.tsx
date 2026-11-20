@@ -19,10 +19,10 @@ const typeLabels: Record<SearchDoc['type'], string> = {
 
 function hrefFor(doc: SearchDoc): string {
   if (doc.type === 'scenario') {
-    return `/scenario/${doc.id}`;
+    return `/scenario/${doc.entityId}`;
   }
   if (doc.type === 'concept') {
-    return `/concept/${doc.id}`;
+    return `/concept/${doc.entityId}`;
   }
   return `/law/${doc.lawId}/${encodeURIComponent(doc.articleNo ?? '')}`;
 }
@@ -79,7 +79,11 @@ export default function SearchPage() {
             ))}
           </select>
           <span className="self-center text-xs text-[var(--muted)]">
-            {query.trim() ? `${results.length} 条结果` : ''}
+            {query.trim()
+              ? results.length >= 20
+                ? '前 20 条结果'
+                : `${results.length} 条结果`
+              : ''}
           </span>
         </div>
       </header>

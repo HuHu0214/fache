@@ -20,6 +20,8 @@ function applyTheme(theme: ThemeMode) {
   root.setAttribute('data-theme', theme);
 }
 
+const THEME_EVENT = 'fajing:theme';
+
 export function useTheme() {
   const [theme, setThemeState] = useState<ThemeMode>(readTheme);
 
@@ -27,9 +29,20 @@ export function useTheme() {
     applyTheme(theme);
   }, [theme]);
 
+  useEffect(() => {
+    const handler = (event: Event) => {
+      setThemeState((event as CustomEvent<ThemeMode>).detail);
+    };
+    window.addEventListener(THEME_EVENT, handler);
+    return () => window.removeEventListener(THEME_EVENT, handler);
+  }, []);
+
   const setTheme = (next: ThemeMode) => {
     localStorage.setItem(STORAGE_KEY, next);
     setThemeState(next);
+    window.dispatchEvent(
+      new CustomEvent<ThemeMode>(THEME_EVENT, { detail: next }),
+    );
   };
 
   return { theme, setTheme };

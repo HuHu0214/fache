@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet } from 'react-router-dom';
 import { Disclaimer } from '../components/Disclaimer';
 import { db } from '../lib/db';
 import { cn } from '../lib/cn';
+import { buildReviewQueue } from '../features/review/queue';
 import { useTheme } from '../features/settings/useTheme';
 
 const navItems = [
@@ -16,10 +17,7 @@ const navItems = [
 export default function AppLayout() {
   const { theme, setTheme } = useTheme();
   const progress = useLiveQuery(() => db.progress.toArray(), []) ?? [];
-  const now = new Date();
-  const dueCount = progress.filter(
-    (item) => item.due !== undefined && new Date(item.due) <= now,
-  ).length;
+  const dueCount = buildReviewQueue(progress, new Date()).length;
 
   return (
     <div className="min-h-dvh">

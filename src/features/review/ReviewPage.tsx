@@ -4,9 +4,9 @@ import { ArticleRef } from '../../components/mdx/article-ref';
 import { Button } from '../../components/ui/button';
 import { getKnowledgePoint } from '../../content/registry';
 import { db, type RatingInput } from '../../lib/db';
-import { dueProgress } from '../../lib/review';
 import { rateKnowledgePoint } from '../learning/rating';
 import { RatingButtons } from '../learning/rating-buttons';
+import { buildReviewQueue } from './queue';
 
 export default function ReviewPage() {
   const progress = useLiveQuery(() => db.progress.toArray(), []) ?? [];
@@ -14,7 +14,7 @@ export default function ReviewPage() {
     null,
   );
 
-  const queue = dueProgress(progress, new Date());
+  const queue = buildReviewQueue(progress, new Date());
   const current = queue[0];
   const entry = current
     ? getKnowledgePoint(current.kpId)

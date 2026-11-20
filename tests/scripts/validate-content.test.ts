@@ -10,6 +10,7 @@ async function writeFixture(
     duplicate?: boolean;
     draft?: boolean;
     scenarioId?: string;
+    body?: string;
   } = {},
 ) {
   const themeDir = join(root, 'content/themes/contracts');
@@ -22,7 +23,7 @@ async function writeFixture(
   );
   await writeFile(
     join(themeDir, 'concepts/contract-formation.mdx'),
-    `---\nid: contract-formation\ntitle: 合同成立\noneLiner: 双方意思表示一致\narticleRefs:\n  - lawId: civil-code\n    articleNo: 第四百六十九条\nrelatedKpIds: []\nconfusions: []\nreviewPrompt: 合同一定要书面吗\nreviewAnswer: 不一定\norder: 1\nreviewStatus: ${opts.draft ? 'draft' : 'checked'}\n---\n\n正文`,
+    `---\nid: contract-formation\ntitle: 合同成立\noneLiner: 双方意思表示一致\narticleRefs:\n  - lawId: civil-code\n    articleNo: 第四百六十九条\nrelatedKpIds: []\nconfusions: []\nreviewPrompt: 合同一定要书面吗\nreviewAnswer: 不一定\norder: 1\nreviewStatus: ${opts.draft ? 'draft' : 'checked'}\n---\n\n${opts.body ?? '正文'}`,
   );
   await writeFile(
     join(themeDir, 'scenarios/01.mdx'),
@@ -77,6 +78,37 @@ test('重复 id 报错', async () => {
   await writeFixture(root, { duplicate: true });
   expect(
     validateContent(root).some((i) => i.message.includes('重复 id')),
+  ).toBe(true);
+});
+
+test('Quote 引用的法条不存在时报错', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'fajing-'));
+  await writeFixture(root, {
+    body: '<Quote law="civil-code" no="第九百九十九条" />',
+  });
+  expect(
+    validateContent(root).some((i) => i.message.includes('第九百九十九条')),
+  ).toBe(true);
+});
+
+test('Quote 引用存在的法条时通过', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'fajing-'));
+  await writeFixture(root, {
+    body: '<Quote law="civil-code" no="第四百六十九条" />',
+  });
+  expect(validateContent(root)).toEqual([]);
+});
+
+test('Quote 不接受手写条文', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'fajing-'));
+  await writeFixture(root, {
+    body:
+      '<Quote law="civil-code" no="第四百六十九条">手写条文</Quote>',
+  });
+  expect(
+    validateContent(root).some((i) =>
+      i.message.includes('不能手写条文'),
+    ),
   ).toBe(true);
 });
 

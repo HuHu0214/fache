@@ -17,6 +17,7 @@ type AstNode = {
   name?: string;
   attributes?: Attribute[];
   value?: string;
+  children?: AstNode[];
 };
 
 export type MdxScan = {
@@ -95,6 +96,24 @@ export function scanMdx(source: string): MdxScan {
         throw new Error('<ConceptLink> 缺少 id 属性');
       }
       conceptLinks.push(id);
+    }
+
+    if (current.name === 'Quote') {
+      const lawId = readAttribute(current, 'law');
+      const articleNo = readAttribute(current, 'no');
+      if (!lawId || !articleNo) {
+        throw new Error('<Quote> 缺少 law 或 no 属性');
+      }
+      const handwritten = (current.children ?? []).some(
+        (child) =>
+          child.type === 'text' && (child.value ?? '').trim() !== '',
+      );
+      if (handwritten) {
+        throw new Error(
+          '<Quote> 不能手写条文，请只传 law 和 no，由法条库渲染原文',
+        );
+      }
+      articleRefs.push({ lawId, articleNo });
     }
   });
 

@@ -321,6 +321,183 @@ a {
   background: var(--accent);
 }
 
+/* Motion */
+
+@keyframes nodePulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent),
+      0 0 22px -8px var(--accent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 9px transparent,
+      0 0 32px -4px var(--accent);
+  }
+}
+
+@keyframes nodePop {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.3;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes floatArrow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes laneSweep {
+  0% {
+    transform: translateY(-130%);
+  }
+  100% {
+    transform: translateY(430%);
+  }
+}
+
+@keyframes bootBar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes toastUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes levelBurst {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes gridDrift {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      0 0,
+      40px 40px,
+      40px 40px;
+  }
+}
+
+.path-node-current {
+  animation: nodePulse 2.2s ease-in-out infinite;
+}
+
+.path-node-complete {
+  animation: nodePop 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.path-arrow {
+  animation: floatArrow 1.2s ease-in-out infinite;
+}
+
+.path-sweep {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 34%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 10%, transparent),
+    transparent
+  );
+}
+
+.path-lane:hover .path-sweep {
+  opacity: 1;
+  animation: laneSweep 2.8s linear infinite;
+}
+
+.boot-bar {
+  transform-origin: left;
+  animation: bootBar 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.page-enter {
+  animation: pageEnter 0.32s ease-out both;
+}
+
+.completion-toast {
+  transform: translate(-50%, 0);
+  animation: toastUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.level-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18rem;
+  height: 18rem;
+  margin: -9rem 0 0 -9rem;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 35%, transparent),
+    transparent 60%
+  );
+  animation: levelBurst 2.2s ease-out forwards;
+}
+
+body {
+  animation: gridDrift 26s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -43,4 +43,7 @@ test('自评写入主知识点的进度', async () => {
   await vi.waitFor(async () => {
     expect(await db.progress.get('contract-formation')).toBeTruthy();
   });
+  expect(
+    await screen.findByText(/NODE CLEARED/),
+  ).toBeInTheDocument();
 });

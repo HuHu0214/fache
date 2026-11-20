@@ -25,6 +25,7 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
   const entry = getScenario(id);
   const [revealed, setRevealed] = useState(false);
   const [rated, setRated] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
 
   if (!entry) {
     return <p className="text-sm text-[var(--muted)]">找不到这个场景。</p>;
@@ -51,6 +52,8 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
       await rateKnowledgePoint(entry.meta.primaryKpId, rating);
       await markScenarioRated(entry.meta.id);
       setRated(true);
+      setToastVisible(true);
+      setTimeout(() => setToastVisible(false), 3500);
     })();
   };
 
@@ -130,6 +133,23 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
           targetId={entry.meta.id}
         />
       </section>
+
+      {toastVisible && (
+        <div className="completion-toast hud-panel fixed bottom-6 left-1/2 z-50 w-[min(92vw,22rem)] border-[var(--accent)] px-5 py-3 text-center shadow-[0_0_30px_-10px_var(--accent)]">
+          <p className="hud-label text-[var(--accent)]">
+            [ NODE CLEARED ]
+          </p>
+          <p className="mt-1 text-sm">
+            +10 阅历 · 知识点已加入复习
+          </p>
+          <Link
+            to="/"
+            className="mt-2 inline-block font-mono text-[10px] tracking-[0.12em] text-[var(--amber)] hover:text-[var(--accent)]"
+          >
+            返回航线 →
+          </Link>
+        </div>
+      )}
     </article>
   );
 }

@@ -1,9 +1,19 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+} from 'react-router-dom';
+import { BootOverlay } from '../components/BootOverlay';
 import { Disclaimer } from '../components/Disclaimer';
+import { LevelUpOverlay } from '../components/LevelUpOverlay';
 import { db } from '../lib/db';
 import { cn } from '../lib/cn';
 import { buildReviewQueue } from '../features/review/queue';
+import { computeStreak } from '../features/learning/theme-progress';
+import { computeProfile } from '../features/settings/profile';
 import { useTheme } from '../features/settings/useTheme';
 
 const navItems = [
@@ -16,8 +26,44 @@ const navItems = [
 
 export default function AppLayout() {
   const { theme, setTheme } = useTheme();
+  const location = useLocation();
   const progress = useLiveQuery(() => db.progress.toArray(), []) ?? [];
+  const reads = useLiveQuery(() => db.reads.toArray(), []) ?? [];
+  const notes = useLiveQuery(() => db.notes.toArray(), []) ?? [];
+  const bookmarks =
+    useLiveQuery(() => db.bookmarks.toArray(), []) ?? [];
   const dueCount = buildReviewQueue(progress, new Date()).length;
+
+  const profile = computeProfile({
+    scenariosRead: reads.filter((read) => read.rated).length,
+    kpsMastered: progress.filter((item) => item.state === 'review')
+      .length,
+    notes: notes.length,
+    bookmarks: bookmarks.length,
+    streak: computeStreak(reads, new Date()),
+  });
+
+  const previousLevel = useRef<number | null>(null);
+  const [levelUp, setLevelUp] = useState<{
+    level: number;
+    title: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (previousLevel.current === null) {
+      previousLevel.current = profile.level;
+      return;
+    }
+    if (profile.level > previousLevel.current) {
+      setLevelUp({
+        level: profile.level,
+        title: profile.title,
+      });
+    }
+    previousLevel.current = profile.level;
+  }, [profile.level, profile.title]);
+
+  const dismissLevelUp = useCallback(() => setLevelUp(null), []);
 
   return (
     <div className="min-h-dvh">
@@ -73,7 +119,9 @@ export default function AppLayout() {
       </header>
 
       <main className="page-shell mx-auto w-full max-w-3xl px-4 py-8">
-        <Outlet />
+        <div key={location.pathname} className="page-enter">
+          <Outlet />
+        </div>
       </main>
 
       <footer className="mx-auto max-w-3xl px-4 pb-10 font-mono text-[10px] tracking-[0.14em] text-[var(--muted)]">
@@ -81,6 +129,14 @@ export default function AppLayout() {
       </footer>
 
       <Disclaimer />
+      <BootOverlay />
+      {levelUp && (
+        <LevelUpOverlay
+          level={levelUp.level}
+          title={levelUp.title}
+          onDone={dismissLevelUp}
+        />
+      )}
     </div>
   );
 }

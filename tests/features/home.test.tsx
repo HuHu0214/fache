@@ -7,13 +7,21 @@ beforeEach(async () => {
   await Promise.all([db.reads.clear(), db.progress.clear()]);
 });
 
-test('无学习数据时显示引导而不是空白', async () => {
+test('首页显示学习航线和当前节点', async () => {
   render(
     <MemoryRouter>
       <HomePage />
     </MemoryRouter>,
   );
+  expect(await screen.findByText(/学习航线/)).toBeInTheDocument();
   expect(
-    await screen.findByText(/从第一个场景开始/),
+    await screen.findByRole('link', {
+      name: '口头说好的事，算数吗？',
+    }),
   ).toBeInTheDocument();
+  expect(
+    screen.queryByRole('link', {
+      name: '对方收了钱不办事，我能怎么办？',
+    }),
+  ).not.toBeInTheDocument();
 });

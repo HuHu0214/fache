@@ -12,7 +12,7 @@ test('从首页学一个场景并加入复习', async ({ page }) => {
   await page.getByRole('link', { name: /口头说好的事/ }).click();
   await page.getByRole('button', { name: /展开答案/ }).click();
   await page.getByRole('button', { name: '大概懂了' }).click();
-  await expect(page.getByText('已加入复习')).toBeVisible();
+  await expect(page.getByText('已加入复习', { exact: true })).toBeVisible();
   await page.getByRole('link', { name: '复习' }).click();
   await expect(page.getByText(/今天没有要复习的/)).toBeVisible();
 });
@@ -21,7 +21,7 @@ test('到期卡片可在复习页完成自评', async ({ page }) => {
   await page.goto('/scenario/contract-formation');
   await page.getByRole('button', { name: /展开答案/ }).click();
   await page.getByRole('button', { name: '大概懂了' }).click();
-  await expect(page.getByText('已加入复习')).toBeVisible();
+  await expect(page.getByText('已加入复习', { exact: true })).toBeVisible();
 
   await page.evaluate(async () => {
     await new Promise<void>((resolve, reject) => {

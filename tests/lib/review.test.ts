@@ -13,7 +13,7 @@ test('首次自评创建卡片并排到未来', () => {
   );
 });
 
-test('没懂比很熟更早到期', () => {
+test('未掌握比熟练更早到期', () => {
   const again = scheduleProgress(undefined, 'kp-1', 'again', now);
   const easy = scheduleProgress(undefined, 'kp-1', 'easy', now);
   expect(new Date(again.card!.due).getTime()).toBeLessThan(
@@ -21,7 +21,7 @@ test('没懂比很熟更早到期', () => {
   );
 });
 
-test('连续很熟间隔变长', () => {
+test('连续熟练间隔变长', () => {
   const first = scheduleProgress(undefined, 'kp-1', 'easy', now);
   const second = scheduleProgress(
     first,

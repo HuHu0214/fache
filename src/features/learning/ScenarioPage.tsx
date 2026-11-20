@@ -4,6 +4,7 @@ import { mdxComponents } from '../../components/mdx';
 import { Reveal } from '../../components/mdx/reveal';
 import { ArticleRef } from '../../components/mdx/article-ref';
 import { ParticleBurst } from '../../components/ParticleBurst';
+import { ButtonLink } from '../../components/ui/button';
 import { playComplete } from '../../lib/sound';
 import { BookmarkButton } from '../bookmarks/BookmarkButton';
 import { NoteEditor } from '../notes/NoteEditor';
@@ -77,20 +78,31 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
         <h2 className="text-3xl font-black tracking-tight">
           {entry.meta.title}
         </h2>
-        <p className="hud-panel border-l-[9px] border-l-[var(--accent)] px-4 py-3 text-sm font-medium leading-7">
+        <p className="hud-panel border-l-[9px] border-l-[var(--accent)] p-4 text-sm font-medium leading-7">
           {entry.meta.hook}
         </p>
         {entry.meta.thinkPrompt && (
-          <p className="font-mono text-[11px] leading-6 text-[var(--amber)]">
+          <p className="font-mono text-[11px] leading-6 text-[var(--attention-ink)]">
             {entry.meta.thinkPrompt}
           </p>
         )}
-        <p className="font-mono text-[10px] tracking-[0.1em] text-[var(--muted)]">
-          约 {entry.meta.estimatedMinutes} 分钟
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="font-mono text-[10px] tracking-[0.1em] text-[var(--muted)]">
+            约 {entry.meta.estimatedMinutes} 分钟
+          </p>
+          {entry.meta.articleRefs[0] && (
+            <ButtonLink
+              to={`/law/${entry.meta.articleRefs[0].lawId}/${encodeURIComponent(entry.meta.articleRefs[0].articleNo)}`}
+              variant="outline"
+              size="sm"
+            >
+              查看法条原文
+            </ButtonLink>
+          )}
+        </div>
       </div>
 
-      <Reveal label="我想好了，展开答案" onOpenChange={handleReveal}>
+      <Reveal label="展开答案" onOpenChange={handleReveal}>
         <div className="text-[15px] leading-8">
           <Answer components={mdxComponents} />
         </div>
@@ -152,9 +164,9 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
           </p>
           <Link
             to="/"
-            className="mt-2 inline-block font-mono text-[10px] tracking-[0.12em] text-[var(--amber)] hover:text-[var(--accent)]"
+            className="mt-2 inline-block font-mono text-[10px] tracking-[0.12em] text-[var(--attention-ink)] hover:text-[var(--accent)]"
           >
-            返回航线 →
+            返回航线
           </Link>
         </div>
       )}

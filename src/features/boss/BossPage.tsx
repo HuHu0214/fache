@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ArticleRef } from '../../components/mdx/article-ref';
 import { ParticleBurst } from '../../components/ParticleBurst';
 import { Badge } from '../../components/ui/badge';
-import { Button } from '../../components/ui/button';
+import { Button, ButtonLink } from '../../components/ui/button';
 import { Progress } from '../../components/ui/progress';
 import { getBoss, getScenarios } from '../../content/registry';
 import { db } from '../../lib/db';
@@ -54,12 +54,11 @@ export default function BossPage({ themeId }: BossPageProps) {
 
   if (!unlocked) {
     return (
-      <div className="hud-panel space-y-4 px-6 py-10 text-center">
+      <div className="hud-panel space-y-4 px-6 py-8 text-center">
         <p className="hud-label">[ BOSS LOCKED ]</p>
         <h2 className="text-3xl font-black">{boss.title}</h2>
         <p className="text-sm text-[var(--muted)]">
-          先完成本章全部 {scenarios.length} 个场景并自评，Boss
-          才会解锁。
+          完成本章 {scenarios.length} 个场景并自评后解锁。
         </p>
         <Link
           to="/"
@@ -129,7 +128,7 @@ export default function BossPage({ themeId }: BossPageProps) {
     return (
       <div className="relative">
         {burst && <ParticleBurst count={40} />}
-        <div className="hud-panel space-y-4 px-6 py-10 text-center">
+        <div className="hud-panel space-y-4 px-6 py-8 text-center">
           <p className="hud-label">
             [ BOSS RESULT ] {boss.title}
           </p>
@@ -142,19 +141,14 @@ export default function BossPage({ themeId }: BossPageProps) {
               : `未通过：需要答对 ${boss.passScore} 题。`}
           </p>
           {result.passed && firstClear && (
-            <p className="font-mono text-sm text-[var(--amber)]">
+            <p className="font-mono text-sm text-[var(--attention-ink)]">
               +100 阅历 · +1 Boss 通关
             </p>
           )}
           <div className="flex flex-wrap justify-center gap-2">
-            <Link
-              to="/"
-              className="inline-flex h-10 items-center border-[3px] border-[var(--line)] bg-[var(--accent)] px-4 font-mono text-[11px] font-bold tracking-[0.12em] text-[var(--on-accent)] shadow-[4px_4px_0_var(--shadow)]"
-            >
-              返回航线
-            </Link>
+            <ButtonLink to="/">返回航线</ButtonLink>
             <Button variant="outline" onClick={retry}>
-              再挑战一次
+              重新挑战
             </Button>
           </div>
         </div>
@@ -222,7 +216,7 @@ export default function BossPage({ themeId }: BossPageProps) {
                     'border-[var(--line)] opacity-55',
                 )}
               >
-                <span className="font-mono text-[11px] text-[var(--amber)]">
+                <span className="font-mono text-[11px] text-[var(--attention-ink)]">
                   {String.fromCharCode(65 + optionIndex)}
                 </span>
                 <span>{option}</span>

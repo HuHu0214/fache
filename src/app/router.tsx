@@ -1,50 +1,40 @@
-import { createBrowserRouter } from 'react-router-dom';
-import BossPage from '../features/boss/BossPage';
+import {
+  createBrowserRouter,
+  createHashRouter,
+} from 'react-router-dom';
 import HomePage from '../features/home/HomePage';
-import KnowledgePointPage from '../features/learning/KnowledgePointPage';
-import ScenarioPage from '../features/learning/ScenarioPage';
-import ThemePage from '../features/learning/ThemePage';
 import ArticlePage from '../features/laws/ArticlePage';
 import LawPage from '../features/laws/LawPage';
-import NotesPage from '../features/notes/NotesPage';
-import ReviewPage from '../features/review/ReviewPage';
-import SearchPage from '../features/search/SearchPage';
+import LawsPage from '../features/laws/LawsPage';
+import StudyPage from '../features/laws/StudyPage';
 import SettingsPage from '../features/settings/SettingsPage';
 import AppLayout from './AppLayout';
 import NotFound from './NotFound';
 
-export const router = createBrowserRouter([
+const routes = [
   {
     path: '/',
     element: <AppLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      {
-        path: 'theme/:themeId',
-        element: <ThemePage />,
-      },
-      {
-        path: 'scenario/:scenarioId',
-        element: <ScenarioPage />,
-      },
-      {
-        path: 'concept/:kpId',
-        element: <KnowledgePointPage />,
-      },
+      { path: 'laws', element: <LawsPage /> },
       { path: 'law/:lawId', element: <LawPage /> },
       {
         path: 'law/:lawId/:articleNo',
         element: <ArticlePage />,
       },
-      {
-        path: 'boss/:themeId',
-        element: <BossPage />,
-      },
-      { path: 'review', element: <ReviewPage /> },
-      { path: 'search', element: <SearchPage /> },
-      { path: 'notes', element: <NotesPage /> },
+      { path: 'study', element: <StudyPage /> },
       { path: 'settings', element: <SettingsPage /> },
       { path: '*', element: <NotFound /> },
     ],
   },
-]);
+];
+
+const desktop =
+  typeof window !== 'undefined' &&
+  (window.fache?.isDesktop === true ||
+    window.location.protocol === 'file:');
+
+export const router = desktop
+  ? createHashRouter(routes)
+  : createBrowserRouter(routes);

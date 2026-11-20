@@ -14,7 +14,7 @@ export function Step({
   children: ReactNode;
 }) {
   return (
-    <li className="step-item hud-panel relative py-3 pl-14 pr-4">
+    <li className="step-item hud-panel relative p-[var(--space-4)] pl-[var(--space-7)]">
       <h3 className="text-base font-black">{title}</h3>
       <div className="mt-1 text-sm leading-7">{children}</div>
     </li>

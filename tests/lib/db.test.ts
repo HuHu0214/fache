@@ -16,6 +16,7 @@ beforeEach(async () => {
     db.bookmarks.clear(),
     db.reads.clear(),
     db.settings.clear(),
+    db.lawProgress.clear(),
   ]);
 });
 

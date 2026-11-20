@@ -1,30 +1,48 @@
 import { useLiveQuery } from 'dexie-react-hooks';
+import { getLaws } from '../../content/registry';
+import {
+  buildStudyDays,
+  computeStreakFromDays,
+} from '../../lib/ebbinghaus';
 import { db } from '../../lib/db';
-import { computeStreak } from '../learning/theme-progress';
 
 export function useProfileData() {
-  const reads = useLiveQuery(() => db.reads.toArray(), []) ?? [];
-  const progress =
-    useLiveQuery(() => db.progress.toArray(), []) ?? [];
-  const notes = useLiveQuery(() => db.notes.toArray(), []) ?? [];
-  const bookmarks =
-    useLiveQuery(() => db.bookmarks.toArray(), []) ?? [];
+  const lawProgress =
+    useLiveQuery(() => db.lawProgress.toArray(), []) ?? [];
   const setting = useLiveQuery(() => db.settings.get('app'), []);
   const bonusXp = setting?.bonusXp ?? 0;
 
+  const laws = getLaws();
+  const learnedByLaw = new Map<string, number>();
+  for (const record of lawProgress) {
+    learnedByLaw.set(
+      record.lawId,
+      (learnedByLaw.get(record.lawId) ?? 0) + 1,
+    );
+  }
+
+  const studyDays = buildStudyDays(lawProgress);
   const stats = {
-    scenariosRead: reads.filter((read) => read.rated).length,
-    kpsMastered: progress.filter((item) => item.state === 'review')
-      .length,
-    notes: notes.length,
-    bookmarks: bookmarks.length,
-    streak: computeStreak(
-      reads,
+    articlesLearned: lawProgress.length,
+    lawsStarted: learnedByLaw.size,
+    lawsCompleted: laws.filter(
+      (law) =>
+        (learnedByLaw.get(law.id) ?? 0) >= law.articleCount,
+    ).length,
+    stageTotal: lawProgress.reduce(
+      (sum, record) => sum + record.stage,
+      0,
+    ),
+    deepArticles: lawProgress.filter(
+      (record) => record.stage >= 5,
+    ).length,
+    streak: computeStreakFromDays(
+      studyDays,
       new Date(),
       setting?.frozenDates ?? [],
     ),
     bonusXp,
   };
 
-  return { reads, progress, notes, bookmarks, setting, bonusXp, stats };
+  return { lawProgress, setting, stats, studyDays, laws };
 }

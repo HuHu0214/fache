@@ -1,27 +1,25 @@
 import { useState } from 'react';
 import { Button } from '../../components/ui/button';
 import { localDateKey, shiftDays } from '../../lib/date';
-import type { Read, Setting } from '../../lib/db';
+import type { Setting } from '../../lib/db';
 import { streakXpPerDay } from '../settings/profile';
 import { freezeTokens, consumeStreakFreeze } from './streak-freeze';
 
 export type StreakPanelProps = {
   streak: number;
-  reads: Read[];
+  studyDays: string[];
   setting?: Setting;
 };
 
 export function StreakPanel({
   streak,
-  reads,
+  studyDays,
   setting,
 }: StreakPanelProps) {
   const [message, setMessage] = useState('');
   const tokens = freezeTokens(setting);
   const frozen = new Set(setting?.frozenDates ?? []);
-  const readDays = new Set(
-    reads.map((read) => localDateKey(new Date(read.readAt))),
-  );
+  const readDays = new Set(studyDays);
   const now = new Date();
   const yesterday = localDateKey(shiftDays(now, -1));
   const dayBefore = localDateKey(shiftDays(now, -2));
@@ -57,16 +55,15 @@ export function StreakPanel({
           </p>
         </div>
         {gap && (
-          <Button size="sm" onClick={handleFreeze}>
+          <Button
+            size="sm"
+            title="使用一枚护符补签昨天，连续记录不断。"
+            onClick={handleFreeze}
+          >
             断签保护
           </Button>
         )}
       </div>
-      {gap && (
-        <p className="mt-2 text-xs leading-6 text-[var(--muted)]">
-          昨天没有学习记录。使用一枚护符，可以把昨天补上，连续天数不断。
-        </p>
-      )}
       {message && (
         <p className="mt-2 text-xs text-[var(--accent)]">
           {message}

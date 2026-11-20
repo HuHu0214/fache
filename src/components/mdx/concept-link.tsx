@@ -12,7 +12,7 @@ export function ConceptLink({ id, children }: ConceptLinkProps) {
 
   if (!entry) {
     return (
-      <span role="alert" className="text-red-700">
+      <span role="alert" className="text-[var(--danger)]">
         {children ?? id}
       </span>
     );

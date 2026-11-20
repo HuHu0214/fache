@@ -1,5 +1,6 @@
 import { db } from '../../lib/db';
 import { localDateKey } from '../../lib/date';
+import { scheduleSqliteSave } from '../../lib/sqlite-sync';
 
 export { localDateKey };
 
@@ -30,6 +31,7 @@ export async function openDailyChest(
       (existing?.freezeTokens ?? 1) + (freeze ? 1 : 0),
     lastChestAt: today,
   });
+  scheduleSqliteSave();
 
   return { opened: true, bonus, freeze };
 }

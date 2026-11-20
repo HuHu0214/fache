@@ -28,13 +28,13 @@ export default function NotesPage() {
   const bookmarks = useLiveQuery(() => listBookmarks(), []) ?? [];
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <section className="space-y-4">
         <p className="hud-label">[ NOTES ]</p>
         <h2 className="text-3xl font-black tracking-tight">我的笔记</h2>
         {notes.length === 0 ? (
           <p className="text-sm text-[var(--muted)]">
-            还没有笔记，学习时随手记一句。
+            暂无笔记。
           </p>
         ) : (
           <ul className="space-y-2">
@@ -70,7 +70,7 @@ export default function NotesPage() {
         <h2 className="text-3xl font-black tracking-tight">收藏</h2>
         {bookmarks.length === 0 ? (
           <p className="text-sm text-[var(--muted)]">
-            还没有收藏，遇到想反复看的内容就收起来。
+            暂无收藏。
           </p>
         ) : (
           <ul className="space-y-2">

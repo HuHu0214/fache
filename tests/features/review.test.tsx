@@ -38,7 +38,7 @@ test('有到期卡片时显示问题，展开答案后自评进入下一张', as
     screen.getByRole('button', { name: /显示答案/ }),
   );
   await userEvent.click(
-    screen.getByRole('button', { name: '很熟' }),
+    screen.getByRole('button', { name: '熟练' }),
   );
   expect(
     await screen.findByText(/暂无到期复习/),

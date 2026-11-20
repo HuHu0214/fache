@@ -1,23 +1,82 @@
 {
-  "name": "fajing",
-  "private": true,
-  "version": "0.1.0",
+  "name": "fache",
+  "productName": "法册",
+  "description": "本地优先的中国法条学习与艾宾浩斯加深工具",
+  "author": "HuHu",
+  "license": "MIT",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
-    "predev": "npm run content:validate && npm run content:text",
+    "predev": "npm run content:validate && npm run content:text && npm run content:index",
     "build": "tsc -b && vite build",
-    "prebuild": "npm run content:validate && npm run content:text",
-    "build:release": "npm run content:validate -- --strict && npm run content:text && tsc -b && vite build",
-    "pretest": "npm run content:text",
+    "prebuild": "npm run content:validate && npm run content:text && npm run content:index",
+    "build:release": "npm run content:validate -- --strict && npm run content:text && npm run content:index && tsc -b && vite build",
+    "desktop:dev": "concurrently -k \"npm:dev\" \"npm:desktop:electron\"",
+    "desktop:electron": "wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "desktop:build": "npm run build && electron-builder --win nsis --x64",
+    "desktop:unpack": "npm run build && electron-builder --win dir --x64",
+    "pretest": "npm run content:text && npm run content:index",
     "content:validate": "tsx scripts/validate-content.ts",
     "content:text": "tsx scripts/build-body-text.ts",
-    "content:import": "tsx scripts/import-laws.ts",
+    "content:index": "tsx scripts/build-law-index.ts",
+    "content:import": "tsx scripts/import-all-laws.ts",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
     "e2e": "playwright test"
+  },
+  "build": {
+    "appId": "cn.fache.app",
+    "productName": "法册",
+    "copyright": "Copyright © 2026 HuHu",
+    "asar": true,
+    "compression": "normal",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/icon.ico",
+        "to": "icon.ico"
+      }
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Fache-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "法册",
+      "uninstallDisplayName": "法册",
+      "deleteAppDataOnUninstall": false
+    },
+    "electronLanguages": [
+      "zh-CN",
+      "en-US"
+    ]
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.2.1",
@@ -46,6 +105,10 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0",
     "eslint": "^10.15.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "fake-indexeddb": "^6.2.8",
@@ -64,6 +127,7 @@
     "unist-util-visit": "^5.2.0",
     "vite": "^8.3.8",
     "vitest": "^5.1.1",
+    "wait-on": "^9.0.1",
     "yaml": "^2.9.1"
   }
 }

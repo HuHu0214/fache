@@ -1,5 +1,6 @@
 import { localDateKey, shiftDays } from '../../lib/date';
 import { db, type Setting } from '../../lib/db';
+import { scheduleSqliteSave } from '../../lib/sqlite-sync';
 
 export function freezeTokens(
   setting: Setting | undefined,
@@ -30,6 +31,7 @@ export async function consumeStreakFreeze(
     freezeTokens: tokens - 1,
     frozenDates: [...frozen, date],
   });
+  scheduleSqliteSave();
 
   return { ok: true, date };
 }

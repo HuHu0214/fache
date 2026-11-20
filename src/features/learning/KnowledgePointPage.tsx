@@ -8,6 +8,7 @@ import {
   getTheme,
 } from '../../content/registry';
 import type { RatingInput } from '../../lib/db';
+import { ButtonLink } from '../../components/ui/button';
 import { BookmarkButton } from '../bookmarks/BookmarkButton';
 import { NoteEditor } from '../notes/NoteEditor';
 import { rateKnowledgePoint } from './rating';
@@ -56,6 +57,16 @@ export default function KnowledgePointPage({
         <p className="hud-panel px-4 py-3 text-sm leading-7">
           {entry.meta.oneLiner}
         </p>
+        {entry.meta.articleRefs[0] && (
+          <ButtonLink
+            to={`/law/${entry.meta.articleRefs[0].lawId}/${encodeURIComponent(entry.meta.articleRefs[0].articleNo)}`}
+            variant="outline"
+            size="sm"
+            className="w-fit"
+          >
+            查看法条原文
+          </ButtonLink>
+        )}
       </div>
 
       <div className="text-[15px] leading-8">

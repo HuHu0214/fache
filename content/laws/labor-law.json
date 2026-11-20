@@ -5,8 +5,10 @@
     "shortTitle": "劳动法",
     "effectiveAt": "1995-01-01",
     "sourceUrl": "https://flk.npc.gov.cn/",
-    "importedAt": "2026-11-18",
-    "articleCount": 107
+    "importedAt": "2026-11-20",
+    "articleCount": 107,
+    "category": "社会法",
+    "categoryOrder": 5
   },
   "articles": [
     {

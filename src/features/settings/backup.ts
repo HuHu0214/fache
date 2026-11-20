@@ -71,6 +71,21 @@ const backupSchema = z.object({
       bossCleared: z.array(z.string()).optional(),
     }),
   ),
+  lawProgress: z
+    .array(
+      z.object({
+        id: z.string(),
+        lawId: z.string(),
+        articleNo: z.string(),
+        stage: z.number().int().min(1).max(7),
+        learnCount: z.number().int().nonnegative(),
+        firstLearnedAt: z.string(),
+        lastStudiedAt: z.string(),
+        nextDueAt: z.string(),
+        studyDays: z.array(z.string()),
+      }),
+    )
+    .default([]),
 });
 
 export type SerializedProgress = z.infer<
@@ -125,13 +140,14 @@ function reviveProgress(item: SerializedProgress): Progress {
 }
 
 export async function exportBackup(): Promise<Backup> {
-  const [progress, notes, bookmarks, reads, settings] =
+  const [progress, notes, bookmarks, reads, settings, lawProgress] =
     await Promise.all([
       db.progress.toArray(),
       db.notes.toArray(),
       db.bookmarks.toArray(),
       db.reads.toArray(),
       db.settings.toArray(),
+      db.lawProgress.toArray(),
     ]);
 
   return {
@@ -142,6 +158,7 @@ export async function exportBackup(): Promise<Backup> {
     bookmarks,
     reads,
     settings,
+    lawProgress,
   };
 }
 
@@ -151,11 +168,14 @@ export async function importBackup(data: unknown): Promise<void> {
 
   await db.transaction(
     'rw',
-    db.progress,
-    db.notes,
-    db.bookmarks,
-    db.reads,
-    db.settings,
+    [
+      db.progress,
+      db.notes,
+      db.bookmarks,
+      db.reads,
+      db.settings,
+      db.lawProgress,
+    ],
     async () => {
       await Promise.all([
         db.progress.clear(),
@@ -163,6 +183,7 @@ export async function importBackup(data: unknown): Promise<void> {
         db.bookmarks.clear(),
         db.reads.clear(),
         db.settings.clear(),
+        db.lawProgress.clear(),
       ]);
       await db.progress.bulkPut(progress);
       if (parsed.notes.length > 0) {
@@ -176,6 +197,9 @@ export async function importBackup(data: unknown): Promise<void> {
       }
       if (parsed.settings.length > 0) {
         await db.settings.bulkPut(parsed.settings);
+      }
+      if (parsed.lawProgress.length > 0) {
+        await db.lawProgress.bulkPut(parsed.lawProgress);
       }
     },
   );

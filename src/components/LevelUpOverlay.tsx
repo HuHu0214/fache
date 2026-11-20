@@ -24,7 +24,7 @@ export function LevelUpOverlay({
       role="status"
       aria-live="polite"
       onClick={onDone}
-      className="fixed inset-0 z-[65] grid cursor-pointer place-items-center bg-black/70 backdrop-blur-sm"
+      className="fixed inset-0 z-[65] grid cursor-pointer place-items-center bg-[var(--overlay)] backdrop-blur-sm"
     >
       <ParticleBurst count={36} />
       <div className="relative text-center">
@@ -32,13 +32,10 @@ export function LevelUpOverlay({
         <p className="hud-label tracking-[0.4em] text-[var(--amber)]">
           [ LEVEL UP ]
         </p>
-        <p className="mt-2 font-mono text-6xl font-semibold text-[var(--accent)] [text-shadow:0_0_30px_rgba(0,229,255,0.6)]">
+        <p className="mt-2 font-mono text-6xl font-semibold text-[var(--accent)]">
           {level}
         </p>
         <p className="mt-1 text-lg text-[var(--ink)]">{title}</p>
-        <p className="mt-3 font-mono text-[10px] tracking-[0.18em] text-[var(--muted)]">
-          点击任意位置继续
-        </p>
       </div>
     </div>
   );

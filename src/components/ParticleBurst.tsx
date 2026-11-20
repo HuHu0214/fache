@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 const COLORS = [
   'var(--accent)',
   'var(--amber)',
-  '#ffffff',
+  'var(--yellow)',
 ];
 
 export function ParticleBurst({ count = 28 }: { count?: number }) {

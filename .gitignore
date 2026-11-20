@@ -4,6 +4,7 @@ dist
 .superpowers
 playwright-report
 test-results
+release
 *.local
 
 # local design preview pages served from public/

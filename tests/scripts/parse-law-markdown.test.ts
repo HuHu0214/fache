@@ -43,6 +43,20 @@ test('民法典的编作为路径第一级', () => {
   ]);
 });
 
+test('支持条号之一', () => {
+  const md = `## 第一章　总则
+
+**第十七条**　前条。
+
+**第十七条之一**　已满七十五周岁的人故意犯罪的，可以从轻或者减轻处罚。
+`;
+  const articles = parseLawMarkdown(md);
+  expect(articles.map((article) => article.articleNo)).toEqual([
+    '第十七条',
+    '第十七条之一',
+  ]);
+});
+
 test('中文数字转整数', () => {
   expect(chineseNumeralToInt('一')).toBe(1);
   expect(chineseNumeralToInt('十一')).toBe(11);

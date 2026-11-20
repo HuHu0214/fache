@@ -47,12 +47,25 @@ export type Setting = {
   bossCleared?: string[];
 };
 
+export type LawProgress = {
+  id: string;
+  lawId: string;
+  articleNo: string;
+  stage: number;
+  learnCount: number;
+  firstLearnedAt: string;
+  lastStudiedAt: string;
+  nextDueAt: string;
+  studyDays: string[];
+};
+
 class FajingDatabase extends Dexie {
   progress!: Table<Progress, string>;
   notes!: Table<Note, string>;
   bookmarks!: Table<Bookmark, string>;
   reads!: Table<Read, string>;
   settings!: Table<Setting, string>;
+  lawProgress!: Table<LawProgress, string>;
 
   constructor() {
     super('fajing');
@@ -62,6 +75,14 @@ class FajingDatabase extends Dexie {
       bookmarks: '&id, targetType, targetId, createdAt',
       reads: '&scenarioId, readAt',
       settings: '&id',
+    });
+    this.version(2).stores({
+      progress: '&kpId, due, state',
+      notes: '&id, targetType, targetId, updatedAt',
+      bookmarks: '&id, targetType, targetId, createdAt',
+      reads: '&scenarioId, readAt',
+      settings: '&id',
+      lawProgress: '&id, lawId, nextDueAt, lastStudiedAt',
     });
   }
 }

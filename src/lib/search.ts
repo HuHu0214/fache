@@ -5,12 +5,13 @@ import {
   getLaws,
   getScenarios,
   getThemes,
+  loadLawFiles,
 } from '../content/registry';
 
 export type SearchDoc = {
   id: string;
   entityId: string;
-  type: 'scenario' | 'concept' | 'article';
+  type: 'scenario' | 'concept' | 'law' | 'article';
   title: string;
   text: string;
   themeId?: string;
@@ -18,7 +19,12 @@ export type SearchDoc = {
   articleNo?: string;
 };
 
-export type SearchFilter = 'all' | 'scenario' | 'concept' | 'article';
+export type SearchFilter =
+  | 'all'
+  | 'scenario'
+  | 'concept'
+  | 'law'
+  | 'article';
 
 const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' });
 
@@ -56,6 +62,15 @@ export function collectSearchDocs(): SearchDoc[] {
   }
 
   for (const law of getLaws()) {
+    docs.push({
+      id: `law:${law.id}`,
+      entityId: law.id,
+      type: 'law',
+      title: law.title,
+      text: `${law.shortTitle} ${law.category ?? ''} ${law.effectiveAt}`,
+      lawId: law.id,
+    });
+
     for (const article of getArticles(law.id)) {
       docs.push({
         id: `article:${law.id}:${article.articleNo}`,
@@ -70,6 +85,37 @@ export function collectSearchDocs(): SearchDoc[] {
   }
 
   return docs;
+}
+
+export async function collectAllLawArticleDocs(): Promise<SearchDoc[]> {
+  const docs: SearchDoc[] = [];
+
+  for (const law of await loadLawFiles()) {
+    for (const article of law.articles) {
+      docs.push({
+        id: `article:${law.law.id}:${article.articleNo}`,
+        entityId: `${law.law.id}:${article.articleNo}`,
+        type: 'article',
+        title: `${law.law.shortTitle} ${article.articleNo}`,
+        text: article.text,
+        lawId: law.law.id,
+        articleNo: article.articleNo,
+      });
+    }
+  }
+
+  return docs;
+}
+
+let lawArticleIndexPromise:
+  | Promise<MiniSearch<SearchDoc>>
+  | undefined;
+
+export function getLawArticleIndex(): Promise<MiniSearch<SearchDoc>> {
+  lawArticleIndexPromise ??= collectAllLawArticleDocs().then(
+    buildSearchIndex,
+  );
+  return lawArticleIndexPromise;
 }
 
 export function buildSearchIndex(
@@ -118,7 +164,11 @@ export function searchContent(
     if (filter !== 'all' && doc.type !== filter) {
       continue;
     }
-    if (opts.themeId && doc.themeId !== opts.themeId) {
+    if (
+      opts.themeId &&
+      (doc.type === 'scenario' || doc.type === 'concept') &&
+      doc.themeId !== opts.themeId
+    ) {
       continue;
     }
     results.push({

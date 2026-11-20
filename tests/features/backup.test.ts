@@ -1,6 +1,7 @@
 import { db } from '../../src/lib/db';
 import { saveNote, getNote } from '../../src/features/notes/notes-repo';
 import { rateKnowledgePoint } from '../../src/features/learning/rating';
+import { createFirstLawProgress } from '../../src/lib/ebbinghaus';
 import {
   exportBackup,
   importBackup,
@@ -14,6 +15,7 @@ beforeEach(async () => {
     db.bookmarks.clear(),
     db.reads.clear(),
     db.settings.clear(),
+    db.lawProgress.clear(),
   ]);
 });
 
@@ -74,6 +76,26 @@ test('奖励与护符字段能随备份恢复', async () => {
     bossCleared: ['contracts'],
     lastChestAt: '2026-11-20',
     soundEnabled: false,
+  });
+});
+
+test('法条学习阶段能随备份恢复', async () => {
+  const record = createFirstLawProgress(
+    'civil-code',
+    '第一条',
+    new Date('2026-11-20T09:00:00'),
+  );
+  await db.lawProgress.put(record);
+
+  const backup = await exportBackup();
+  expect(backup.lawProgress).toHaveLength(1);
+
+  await db.lawProgress.clear();
+  await importBackup(backup);
+  expect(await db.lawProgress.get(record.id)).toMatchObject({
+    stage: 1,
+    learnCount: 1,
+    studyDays: ['2026-11-20'],
   });
 });
 

@@ -12,11 +12,11 @@ export function Dialog({ open, onOpenChange, title, children }: DialogProps) {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-black/70" />
+        <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-[var(--overlay)]" />
         <DialogPrimitive.Content className="hud-panel fixed left-1/2 top-1/2 z-50 w-[min(92vw,32rem)] -translate-x-1/2 -translate-y-1/2 p-6 focus:outline-none">
           <div className="mb-2 flex items-center justify-between gap-3">
             <p className="hud-label">[ NOTICE ]</p>
-            <span className="stamp">法径</span>
+            <span className="stamp">法册</span>
           </div>
           <DialogPrimitive.Title className="mt-1 text-xl font-black tracking-tight">
             {title}

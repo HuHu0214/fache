@@ -6,6 +6,7 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  base: './',
   plugins: [
     {
       enforce: 'pre',
@@ -21,6 +22,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './tests/setup.ts',
     globals: true,
-    exclude: ['**/node_modules/**', '**/dist/**', 'tests/e2e/**'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.cache/**',
+      'tests/e2e/**',
+    ],
   },
 });

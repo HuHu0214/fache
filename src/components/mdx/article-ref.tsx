@@ -14,7 +14,7 @@ export function ArticleRef({ law, no }: ArticleRefProps) {
     return (
       <span
         role="alert"
-        className="my-2 block rounded-lg border border-red-300 px-3 py-2 text-sm text-red-700"
+        className="my-2 block border-2 border-[var(--danger)] bg-[var(--danger-soft)] p-3 text-sm text-[var(--danger)]"
       >
         法条缺失：{law} {no}
       </span>
@@ -22,9 +22,12 @@ export function ArticleRef({ law, no }: ArticleRefProps) {
   }
 
   return (
-    <details className="hud-panel my-3 border-l-[9px] border-l-[var(--accent)] px-3 py-2 text-sm">
-      <summary className="cursor-pointer font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--accent)]">
-        条文 / {lawMeta?.shortTitle ?? law} · {no}
+    <details className="hud-panel my-3 border-l-[9px] border-l-[var(--accent)] p-[var(--space-3)] text-sm">
+      <summary className="flex cursor-pointer flex-wrap items-center justify-between gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--accent)]">
+        <span>法条原文 · {lawMeta?.shortTitle ?? law} · {no}</span>
+        <span className="border-2 border-[var(--line)] bg-[var(--accent)] px-2 py-0.5 text-[9px] text-[var(--on-accent)]">
+          展开
+        </span>
       </summary>
       <p className="mt-2 whitespace-pre-wrap break-words leading-7">
         {article.text}
@@ -33,7 +36,7 @@ export function ArticleRef({ law, no }: ArticleRefProps) {
         to={`/law/${law}/${no}`}
         className="mt-2 inline-block font-mono text-[10px] tracking-[0.1em] text-[var(--muted)] hover:text-[var(--accent)]"
       >
-        查看法条 →
+        在法条库中打开
       </Link>
     </details>
   );

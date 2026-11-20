@@ -6,7 +6,8 @@ export type ParsedArticle = {
   path: string[];
 };
 
-const ARTICLE_RE = /^\*\*(第[一二三四五六七八九十百千零〇两]+条)\*\*[　\s]*(.*)$/;
+const ARTICLE_RE =
+  /^\*\*(第[一二三四五六七八九十百千零〇两]+条(?:之[一二三四五六七八九十]+)?)\*\*[　\s]*(.*)$/;
 const H1_VOLUME_RE = /^#\s+(第[一二三四五六七八九十百千零〇两]+编.*)$/;
 const H2_RE = /^##\s+(.+)$/;
 const H3_RE = /^###\s+(.+)$/;

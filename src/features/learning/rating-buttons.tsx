@@ -3,9 +3,9 @@ import type { RatingInput } from '../../lib/db';
 import { Button } from '../../components/ui/button';
 
 const options: Array<{ value: RatingInput; label: string }> = [
-  { value: 'again', label: '没懂' },
-  { value: 'good', label: '大概懂了' },
-  { value: 'easy', label: '很熟' },
+  { value: 'again', label: '未掌握' },
+  { value: 'good', label: '基本掌握' },
+  { value: 'easy', label: '熟练' },
 ];
 
 export type RatingButtonsProps = {
@@ -23,7 +23,7 @@ export function RatingButtons({ onRate }: RatingButtonsProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="hud-label">这次看懂了吗？</span>
+      <span className="hud-label">掌握程度</span>
       {options.map((option) => (
         <Button
           key={option.value}

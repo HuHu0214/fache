@@ -30,7 +30,7 @@ export default function ReviewPage() {
 
   if (progress.length === 0 || queue.length === 0) {
     return (
-      <div className="space-y-3 py-10 text-center">
+      <div className="space-y-3 py-8 text-center">
         <p className="hud-label">[ REVIEW QUEUE ]</p>
         <h2 className="text-3xl font-black tracking-tight">
           复习
@@ -57,7 +57,7 @@ export default function ReviewPage() {
           <p className="hud-label">[ REVIEW QUEUE ]</p>
           <h2 className="text-3xl font-black tracking-tight">复习</h2>
         </div>
-        <span className="font-mono text-[10px] tracking-[0.12em] text-[var(--amber)]">
+        <span className="font-mono text-[10px] tracking-[0.12em] text-[var(--attention-ink)]">
           剩余 {queue.length} 张
         </span>
       </header>

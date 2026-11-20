@@ -8,7 +8,7 @@ function readTheme(): ThemeMode {
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored === 'light' || stored === 'dark' || stored === 'system'
     ? stored
-    : 'dark';
+    : 'light';
 }
 
 function resolveTheme(theme: ThemeMode): 'light' | 'dark' {

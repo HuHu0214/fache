@@ -31,14 +31,14 @@ export function BootOverlay() {
         <p className="hud-label tracking-[0.4em] text-[var(--accent)]">
           LEGAL DATABASE // BOOT
         </p>
-        <h2 className="font-mono text-2xl tracking-[0.3em] text-[var(--accent)] [text-shadow:0_0_20px_rgba(0,229,255,0.5)]">
-          法径
+        <h2 className="font-mono text-2xl tracking-[0.3em] text-[var(--accent)]">
+          法册
         </h2>
         <div className="h-[3px] w-full bg-[var(--line)]">
-          <div className="boot-bar h-full bg-[var(--accent)] shadow-[0_0_12px_var(--accent)]" />
+          <div className="boot-bar h-full bg-[var(--accent)]" />
         </div>
         <p className="font-mono text-[10px] tracking-[0.2em] text-[var(--muted)]">
-          LOADING STATUTES · CALIBRATING HUD
+          LOADING
         </p>
       </div>
     </div>

@@ -13,7 +13,7 @@ export function Quote({ law, no }: QuoteProps) {
     return (
       <span
         role="alert"
-        className="my-2 block rounded-lg border border-red-300 px-3 py-2 text-sm text-red-700"
+        className="my-2 block border-2 border-[var(--danger)] bg-[var(--danger-soft)] p-3 text-sm text-[var(--danger)]"
       >
         法条缺失：{law} {no}
       </span>

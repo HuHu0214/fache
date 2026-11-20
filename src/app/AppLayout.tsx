@@ -6,27 +6,24 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { BootOverlay } from '../components/BootOverlay';
+import { DesktopZoom } from '../components/DesktopZoom';
 import { Disclaimer } from '../components/Disclaimer';
 import { LevelUpOverlay } from '../components/LevelUpOverlay';
 import { cn } from '../lib/cn';
-import { buildReviewQueue } from '../features/review/queue';
 import { computeProfile } from '../features/settings/profile';
 import { useProfileData } from '../features/settings/useProfileData';
 import { useTheme } from '../features/settings/useTheme';
 
 const navItems = [
   { to: '/', label: '首页', end: true },
-  { to: '/review', label: '复习' },
-  { to: '/search', label: '搜索' },
-  { to: '/notes', label: '笔记' },
+  { to: '/laws', label: '法律' },
   { to: '/settings', label: '设置' },
 ];
 
 export default function AppLayout() {
   const { theme, setTheme } = useTheme();
   const location = useLocation();
-  const { progress, stats } = useProfileData();
-  const dueCount = buildReviewQueue(progress, new Date()).length;
+  const { stats } = useProfileData();
   const profile = computeProfile(stats);
 
   const previousLevel = useRef<number | null>(null);
@@ -51,9 +48,14 @@ export default function AppLayout() {
 
   const dismissLevelUp = useCallback(() => setLevelUp(null), []);
 
+  const isHome = location.pathname === '/';
   const isReading =
-    /^\/(scenario|concept|law)/.test(location.pathname) ||
-    location.pathname === '/review';
+    /^\/law(\/|$)/.test(location.pathname) ||
+    location.pathname === '/study';
+  const isWide =
+    isHome ||
+    /^\/(laws?|study)(\/|$)/.test(location.pathname);
+  const frameWidth = isWide ? 'max-w-[1500px]' : 'max-w-6xl';
 
   return (
     <div
@@ -63,18 +65,17 @@ export default function AppLayout() {
       )}
     >
       <header className="border-b-[3px] border-[var(--line)] bg-[var(--paper)]">
-        <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
+        <div
+          className={cn(
+            'mx-auto flex flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3',
+            frameWidth,
+          )}
+        >
           <Link
             to="/"
-            className="flex items-baseline gap-2 focus-visible:outline-none"
+            className="flex items-baseline gap-2 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]"
           >
-            <h1 className="text-xl font-black tracking-tight">法径</h1>
-            <span
-              className="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--muted)]"
-              aria-hidden="true"
-            >
-              法律学习
-            </span>
+            <h1 className="text-xl font-black tracking-tight">法册</h1>
           </Link>
 
           <nav
@@ -89,44 +90,59 @@ export default function AppLayout() {
                 className={({ isActive }) =>
                   cn(
                     'border-2 border-transparent px-2 py-1 text-[var(--muted)] transition-colors hover:border-[var(--line)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]',
-                    isActive &&
+                    (isActive ||
+                      (item.to === '/laws' &&
+                        /^\/(laws?|study)(\/|$)/.test(
+                          location.pathname,
+                        ))) &&
                       'border-[var(--line)] bg-[var(--accent)] text-[var(--on-accent)]',
                   )
                 }
               >
                 {item.label}
-                {item.to === '/review' && dueCount > 0 && (
-                  <span
-                    aria-hidden="true"
-                    className="ml-1 border border-[var(--line)] bg-[var(--pink)] px-1 text-[9px] text-[var(--ink)]"
-                  >
-                    {dueCount}
-                  </span>
-                )}
               </NavLink>
             ))}
           </nav>
 
-          <button
-            type="button"
-            aria-label="切换深色模式"
-            onClick={() =>
-              setTheme(theme === 'dark' ? 'light' : 'dark')
-            }
-            className="ml-auto border-2 border-[var(--line)] bg-[var(--card)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--ink)] hover:bg-[var(--pink-soft)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]"
-          >
-            {theme === 'dark' ? '浅色' : '深色'}
-          </button>
+          <div className="ml-auto flex items-center gap-2">
+            <DesktopZoom />
+            <button
+              type="button"
+              aria-label={
+                theme === 'dark' ? '切换浅色模式' : '切换深色模式'
+              }
+              onClick={() =>
+                setTheme(theme === 'dark' ? 'light' : 'dark')
+              }
+              className="border-2 border-[var(--line)] bg-[var(--card)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--ink)] hover:bg-[var(--pink-soft)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]"
+            >
+              {theme === 'dark' ? '浅色' : '深色'}
+            </button>
+          </div>
         </div>
       </header>
 
-      <main className="page-shell mx-auto w-full max-w-3xl px-4 py-8">
+      <main
+        className={cn(
+          'page-shell mx-auto w-full px-4 py-8',
+          isWide
+            ? 'max-w-[1500px]'
+            : isReading
+              ? 'max-w-4xl'
+              : 'max-w-6xl',
+        )}
+      >
         <div key={location.pathname} className="page-enter">
           <Outlet />
         </div>
       </main>
 
-      <footer className="mx-auto mt-8 max-w-3xl border-t-[3px] border-[var(--line)] bg-[var(--band-bg)] px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--band-fg)]">
+      <footer
+        className={cn(
+          'mx-auto mt-8 border-t-[3px] border-[var(--line)] bg-[var(--band-bg)] px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--band-fg)]',
+          frameWidth,
+        )}
+      >
         仅供学习，不构成法律意见。
       </footer>
 

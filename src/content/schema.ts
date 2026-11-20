@@ -3,7 +3,9 @@ import { z } from 'zod';
 export const idSchema = z.string().regex(/^[a-z][a-z0-9-]*$/);
 export const articleNoSchema = z
   .string()
-  .regex(/^第[一二三四五六七八九十百千零〇两]+条$/);
+  .regex(
+    /^第[一二三四五六七八九十百千零〇两]+条(?:之[一二三四五六七八九十]+)?$/,
+  );
 export const reviewStatusSchema = z.enum(['draft', 'checked']).default('draft');
 
 export const articleRefSchema = z.object({
@@ -62,6 +64,8 @@ export const lawSchema = z.object({
   sourceUrl: z.string().url(),
   importedAt: z.string().min(1),
   articleCount: z.number().int().positive(),
+  category: z.string().min(1).optional(),
+  categoryOrder: z.number().int().nonnegative().optional(),
   note: z.string().optional(),
 });
 

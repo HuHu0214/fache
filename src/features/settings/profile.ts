@@ -1,8 +1,9 @@
 export type ProfileStats = {
-  scenariosRead: number;
-  kpsMastered: number;
-  notes: number;
-  bookmarks: number;
+  articlesLearned: number;
+  lawsStarted: number;
+  lawsCompleted: number;
+  stageTotal: number;
+  deepArticles: number;
   streak: number;
   bonusXp?: number;
 };
@@ -51,11 +52,13 @@ export function streakXpPerDay(streak: number): number {
 }
 
 export function computeProfile(stats: ProfileStats): Profile {
+  const depthXp =
+    Math.max(0, stats.stageTotal - stats.articlesLearned) * 5;
   const xp =
-    stats.scenariosRead * 10 +
-    stats.kpsMastered * 25 +
-    stats.notes * 5 +
-    stats.bookmarks * 3 +
+    stats.articlesLearned * 10 +
+    stats.lawsStarted * 5 +
+    stats.lawsCompleted * 50 +
+    depthXp +
     stats.streak * streakXpPerDay(stats.streak) +
     (stats.bonusXp ?? 0);
 
@@ -93,39 +96,53 @@ export function computeAchievements(
 ): Achievement[] {
   return [
     {
-      id: 'first-read',
-      title: '开卷一读',
-      description: '读完第一个场景',
-      mark: '卷',
-      unlocked: stats.scenariosRead >= 1,
+      id: 'first-article',
+      title: '开卷有得',
+      description: '标记第一条法条',
+      mark: '条',
+      unlocked: stats.articlesLearned >= 1,
     },
     {
-      id: 'three-reads',
-      title: '渐入佳境',
-      description: '读完三个场景',
-      mark: '读',
-      unlocked: stats.scenariosRead >= 3,
+      id: 'ten-articles',
+      title: '十条规定',
+      description: '学过十条法条',
+      mark: '十',
+      unlocked: stats.articlesLearned >= 10,
     },
     {
-      id: 'ten-mastered',
-      title: '十法入心',
-      description: '掌握十个知识点',
-      mark: '心',
-      unlocked: stats.kpsMastered >= 10,
+      id: 'hundred-articles',
+      title: '百条入眼',
+      description: '学过一百条法条',
+      mark: '百',
+      unlocked: stats.articlesLearned >= 100,
     },
     {
-      id: 'first-note',
-      title: '笔下有记',
-      description: '写下第一条笔记',
-      mark: '记',
-      unlocked: stats.notes >= 1,
+      id: 'thousand-articles',
+      title: '千条成册',
+      description: '学过一千条法条',
+      mark: '千',
+      unlocked: stats.articlesLearned >= 1000,
     },
     {
-      id: 'first-bookmark',
-      title: '藏卷于匣',
-      description: '收藏一个场景或知识点',
-      mark: '藏',
-      unlocked: stats.bookmarks >= 1,
+      id: 'first-law',
+      title: '一法通',
+      description: '学完一部法律的全部条文',
+      mark: '通',
+      unlocked: stats.lawsCompleted >= 1,
+    },
+    {
+      id: 'three-laws',
+      title: '三法通',
+      description: '学完三部法律',
+      mark: '三',
+      unlocked: stats.lawsCompleted >= 3,
+    },
+    {
+      id: 'deep-article',
+      title: '温故知新',
+      description: '把一条法条推进到第五阶',
+      mark: '深',
+      unlocked: stats.deepArticles >= 1,
     },
     {
       id: 'streak-3',

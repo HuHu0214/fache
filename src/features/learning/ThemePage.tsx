@@ -77,11 +77,11 @@ export default function ThemePage({ themeId }: ThemePageProps) {
           <Link
             key={scenario.meta.id}
             to={`/scenario/${scenario.meta.id}`}
-            className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            className="block rounded-[var(--radius-card)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]"
           >
             <Card className="transition-colors hover:border-[var(--accent)] hover:shadow-[0_0_24px_-14px_var(--accent)]">
               <CardContent className="flex items-start gap-4">
-                <span className="mt-0.5 font-mono text-[10px] tracking-[0.1em] text-[var(--amber)]">
+                <span className="mt-0.5 font-mono text-[10px] tracking-[0.1em] text-[var(--muted)]">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <div className="min-w-0 flex-1 space-y-1">

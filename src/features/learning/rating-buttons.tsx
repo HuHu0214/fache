@@ -23,7 +23,7 @@ export function RatingButtons({ onRate }: RatingButtonsProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs text-[var(--muted)]">这次看懂了吗？</span>
+      <span className="hud-label">这次看懂了吗？</span>
       {options.map((option) => (
         <Button
           key={option.value}

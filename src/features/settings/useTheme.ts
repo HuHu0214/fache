@@ -8,16 +8,23 @@ function readTheme(): ThemeMode {
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored === 'light' || stored === 'dark' || stored === 'system'
     ? stored
-    : 'system';
+    : 'dark';
+}
+
+function resolveTheme(theme: ThemeMode): 'light' | 'dark' {
+  if (theme !== 'system') {
+    return theme;
+  }
+  return window.matchMedia('(prefers-color-scheme: light)').matches
+    ? 'light'
+    : 'dark';
 }
 
 function applyTheme(theme: ThemeMode) {
-  const root = document.documentElement;
-  if (theme === 'system') {
-    root.removeAttribute('data-theme');
-    return;
-  }
-  root.setAttribute('data-theme', theme);
+  document.documentElement.setAttribute(
+    'data-theme',
+    resolveTheme(theme),
+  );
 }
 
 const THEME_EVENT = 'fajing:theme';
@@ -27,6 +34,15 @@ export function useTheme() {
 
   useEffect(() => {
     applyTheme(theme);
+    if (theme !== 'system') {
+      return;
+    }
+    const media = window.matchMedia(
+      '(prefers-color-scheme: light)',
+    );
+    const handler = () => applyTheme('system');
+    media.addEventListener('change', handler);
+    return () => media.removeEventListener('change', handler);
   }, [theme]);
 
   useEffect(() => {

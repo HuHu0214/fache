@@ -45,7 +45,7 @@ export default function KnowledgePointPage({
         {theme && (
           <Link
             to={`/theme/${theme.id}`}
-            className="text-xs text-[var(--muted)] underline-offset-4 hover:underline"
+            className="font-mono text-[10px] tracking-[0.14em] text-[var(--muted)] hover:text-[var(--accent)]"
           >
             ← {theme.title}
           </Link>
@@ -53,7 +53,7 @@ export default function KnowledgePointPage({
         <h2 className="text-2xl font-semibold tracking-tight">
           {entry.meta.title}
         </h2>
-        <p className="rounded-lg bg-[var(--card)] px-4 py-3 text-sm leading-7">
+        <p className="hud-panel px-4 py-3 text-sm leading-7">
           {entry.meta.oneLiner}
         </p>
       </div>
@@ -64,7 +64,13 @@ export default function KnowledgePointPage({
 
       {entry.meta.articleRefs.length > 0 && (
         <section className="space-y-2">
-          <h3 className="text-sm font-medium">法条原文</h3>
+          <h3 className="flex items-center gap-2 text-sm font-medium">
+            <span
+              className="h-2.5 w-1 bg-[var(--accent)]"
+              aria-hidden="true"
+            />
+            法条原文
+          </h3>
           {entry.meta.articleRefs.map((ref) => (
             <ArticleRef
               key={`${ref.lawId}-${ref.articleNo}`}
@@ -77,7 +83,13 @@ export default function KnowledgePointPage({
 
       {entry.meta.confusions.length > 0 && (
         <section className="space-y-2">
-          <h3 className="text-sm font-medium">容易混淆</h3>
+          <h3 className="flex items-center gap-2 text-sm font-medium">
+            <span
+              className="h-2.5 w-1 bg-[var(--amber)]"
+              aria-hidden="true"
+            />
+            容易混淆
+          </h3>
           <ul className="list-disc space-y-1 pl-5 text-sm leading-7">
             {entry.meta.confusions.map((item) => (
               <li key={item}>{item}</li>
@@ -88,7 +100,13 @@ export default function KnowledgePointPage({
 
       {entry.meta.relatedKpIds.length > 0 && (
         <section className="space-y-2">
-          <h3 className="text-sm font-medium">相关概念</h3>
+          <h3 className="flex items-center gap-2 text-sm font-medium">
+            <span
+              className="h-2.5 w-1 bg-[var(--accent)]"
+              aria-hidden="true"
+            />
+            相关概念
+          </h3>
           <div className="flex flex-wrap gap-3 text-sm">
             {entry.meta.relatedKpIds.map((relatedId) => (
               <ConceptLink key={relatedId} id={relatedId} />
@@ -103,7 +121,7 @@ export default function KnowledgePointPage({
 
       <section className="space-y-3 border-t border-[var(--line)] pt-5">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-medium">笔记与收藏</h3>
+          <h3 className="hud-label">笔记与收藏</h3>
           <BookmarkButton targetType="kp" targetId={entry.meta.id} />
         </div>
         <NoteEditor

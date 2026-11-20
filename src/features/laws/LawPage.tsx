@@ -32,24 +32,30 @@ export default function LawPage({ lawId }: LawPageProps) {
       <header className="space-y-2">
         <Link
           to="/"
-          className="text-xs text-[var(--muted)] underline-offset-4 hover:underline"
+          className="font-mono text-[10px] tracking-[0.14em] text-[var(--muted)] hover:text-[var(--accent)]"
         >
           ← 返回首页
         </Link>
         <h2 className="text-2xl font-semibold tracking-tight">
           {law.title}
         </h2>
-        <p className="text-xs text-[var(--muted)]">
+        <p className="font-mono text-[10px] tracking-[0.1em] text-[var(--muted)]">
           施行日期：{law.effectiveAt} · 收录 {law.articleCount} 条
         </p>
         {law.note && (
-          <p className="text-xs text-[var(--muted)]">{law.note}</p>
+          <p className="font-mono text-[10px] text-[var(--muted)]">
+            {law.note}
+          </p>
         )}
       </header>
 
       {[...groups.entries()].map(([path, group]) => (
         <section key={path} className="space-y-2">
-          <h3 className="text-sm font-medium text-[var(--muted)]">
+          <h3 className="flex items-center gap-2 font-mono text-[10px] tracking-[0.1em] text-[var(--muted)]">
+            <span
+              className="h-2.5 w-1 bg-[var(--accent)]"
+              aria-hidden="true"
+            />
             {path}
           </h3>
           <ul className="space-y-1">
@@ -57,9 +63,9 @@ export default function LawPage({ lawId }: LawPageProps) {
               <li key={article.articleNo}>
                 <Link
                   to={`/law/${id}/${encodeURIComponent(article.articleNo)}`}
-                  className="flex gap-3 rounded-md px-2 py-1.5 text-sm hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] dark:hover:bg-white/5"
+                  className="flex gap-3 rounded-[2px] border border-transparent px-2 py-1.5 text-sm hover:border-[var(--line)] hover:bg-[var(--accent-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                 >
-                  <span className="w-24 shrink-0 text-[var(--accent)]">
+                  <span className="w-24 shrink-0 font-mono text-[11px] text-[var(--amber)]">
                     {article.articleNo}
                   </span>
                   <span className="truncate text-[var(--muted)]">

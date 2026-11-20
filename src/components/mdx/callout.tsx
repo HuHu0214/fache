@@ -6,9 +6,9 @@ export type CalloutProps = {
 };
 
 const styles = {
-  tip: 'border-[var(--accent)]/30 bg-[var(--accent)]/5',
-  warning: 'border-amber-400/40 bg-amber-50/60 dark:bg-amber-900/10',
-  info: 'border-[var(--line)] bg-[var(--card)]',
+  tip: 'border-[var(--amber)]/50 bg-[var(--amber-soft)]',
+  warning: 'border-[var(--danger)]/50 bg-[var(--danger)]/10',
+  info: 'border-[var(--line)] bg-[var(--panel)]',
 } as const;
 
 const labels: Record<'tip' | 'warning' | 'info', string | undefined> = {
@@ -21,12 +21,10 @@ export function Callout({ type = 'info', children }: CalloutProps) {
   const label = labels[type];
 
   return (
-    <aside className={`my-4 rounded-lg border px-4 py-3 text-sm leading-7 ${styles[type]}`}>
-      {label && (
-        <span className="mb-1 block text-xs font-medium text-[var(--muted)]">
-          {label}
-        </span>
-      )}
+    <aside
+      className={`my-4 rounded-[2px] border px-4 py-3 text-sm leading-7 ${styles[type]}`}
+    >
+      {label && <span className="hud-label mb-1 block">{label}</span>}
       {children}
     </aside>
   );

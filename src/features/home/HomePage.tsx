@@ -33,6 +33,7 @@ export default function HomePage() {
   return (
     <div className="space-y-8">
       <section className="space-y-3">
+        <p className="hud-label">[ SYS ] 学习终端</p>
         <h2 className="text-2xl font-semibold tracking-tight">
           今天学点什么
         </h2>
@@ -44,7 +45,7 @@ export default function HomePage() {
           <Badge tone="muted">连续学习 {streak} 天</Badge>
           <Link
             to="/search"
-            className="rounded-full border border-[var(--line)] px-2.5 py-0.5 text-[var(--muted)] underline-offset-4 hover:underline"
+            className="rounded-[2px] border border-[var(--line)] px-2 py-0.5 font-mono text-[10px] tracking-[0.12em] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
             搜索法条和概念
           </Link>
@@ -52,7 +53,7 @@ export default function HomePage() {
       </section>
 
       {!hasData && (
-        <p className="rounded-xl border border-dashed border-[var(--line)] px-4 py-5 text-sm text-[var(--muted)]">
+        <p className="hud-panel px-4 py-5 text-sm text-[var(--muted)]">
           从第一个场景开始，选一个你最想弄明白的问题。
         </p>
       )}
@@ -78,7 +79,7 @@ export default function HomePage() {
               to={`/theme/${theme.id}`}
               className="rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             >
-              <Card className="h-full transition-shadow hover:shadow-md">
+              <Card className="h-full transition-colors hover:border-[var(--accent)] hover:shadow-[0_0_28px_-14px_var(--accent)]">
                 <CardHeader>
                   <CardTitle>{theme.title}</CardTitle>
                 </CardHeader>
@@ -91,7 +92,7 @@ export default function HomePage() {
                       value={percent}
                       label={`${theme.title}阅读进度`}
                     />
-                    <div className="flex justify-between text-xs text-[var(--muted)]">
+                    <div className="flex justify-between font-mono text-[10px] tracking-[0.08em] text-[var(--muted)]">
                       <span>
                         已读 {stats.scenariosRead}/{stats.scenariosTotal}{' '}
                         个场景

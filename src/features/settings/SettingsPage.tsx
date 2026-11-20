@@ -164,10 +164,10 @@ export default function SettingsPage() {
             </svg>
             <div className="absolute inset-0 grid place-items-center text-center">
               <div>
-                <span className="block text-3xl font-semibold text-[#f6ead4]">
+                <span className="block font-mono text-3xl font-semibold text-[#d7e6f2]">
                   {profile.level}
                 </span>
-                <span className="text-[10px] tracking-[0.35em] text-white/50">
+                <span className="font-mono text-[10px] tracking-[0.35em] text-[#7c93a8]">
                   LV
                 </span>
               </div>
@@ -175,13 +175,13 @@ export default function SettingsPage() {
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] tracking-[0.35em] text-white/45">
-              法修档案
+            <p className="font-mono text-[10px] tracking-[0.35em] text-[#7c93a8]">
+              [ DOSSIER ] 法修档案
             </p>
-            <h2 className="mt-1 text-2xl font-semibold text-[#f6ead4]">
+            <h2 className="mt-1 text-2xl font-semibold text-[#d7e6f2]">
               {profile.title}
             </h2>
-            <p className="mt-1 text-xs leading-6 text-white/60">
+            <p className="mt-1 text-xs leading-6 text-[#9db1c4]">
               {profile.xp} 阅历
               {profile.nextTitle
                 ? ` · 距「${profile.nextTitle}」还差 ${profile.xpToNext}`
@@ -203,12 +203,12 @@ export default function SettingsPage() {
           ].map(([label, value]) => (
             <div
               key={label}
-              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2"
+              className="rounded-[2px] border border-[var(--accent)]/20 bg-[var(--accent-soft)] px-3 py-2"
             >
-              <dt className="text-[10px] tracking-[0.2em] text-white/45">
+              <dt className="font-mono text-[10px] tracking-[0.2em] text-[#7c93a8]">
                 {label}
               </dt>
-              <dd className="mt-0.5 text-lg font-medium text-[#f6ead4]">
+              <dd className="mt-0.5 font-mono text-lg font-medium text-[#d7e6f2]">
                 {value}
               </dd>
             </div>
@@ -218,8 +218,14 @@ export default function SettingsPage() {
 
       <section className="space-y-4">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="text-lg font-medium">成就</h3>
-          <span className="text-xs text-[var(--muted)]">
+          <h3 className="flex items-center gap-2 text-lg font-medium">
+            <span
+              className="h-3 w-1 bg-[var(--accent)]"
+              aria-hidden="true"
+            />
+            成就
+          </h3>
+          <span className="font-mono text-[10px] tracking-[0.12em] text-[var(--amber)]">
             {unlocked}/{achievements.length} 已解锁
           </span>
         </div>
@@ -228,10 +234,10 @@ export default function SettingsPage() {
             <div
               key={item.id}
               className={cn(
-                'achievement rounded-xl border bg-[var(--card)] p-3',
+                'achievement hud-panel p-3',
                 item.unlocked
-                  ? 'border-[var(--accent)]/35'
-                  : 'border-[var(--line)] opacity-55',
+                  ? 'border-[var(--accent)]/50'
+                  : 'opacity-55',
               )}
             >
               <div
@@ -256,7 +262,13 @@ export default function SettingsPage() {
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-medium">外观</h3>
+        <h3 className="flex items-center gap-2 text-lg font-medium">
+          <span
+            className="h-3 w-1 bg-[var(--amber)]"
+            aria-hidden="true"
+          />
+          外观
+        </h3>
         <div className="grid grid-cols-3 gap-2">
           {themeOptions.map((option) => (
             <button
@@ -265,10 +277,10 @@ export default function SettingsPage() {
               aria-pressed={theme === option.value}
               onClick={() => setTheme(option.value)}
               className={cn(
-                'rounded-xl border px-3 py-3 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
+                'rounded-[2px] border px-3 py-3 font-mono text-[11px] tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
                 theme === option.value
-                  ? 'border-[var(--accent)] bg-[var(--accent-soft)] font-medium'
-                  : 'border-[var(--line)] bg-[var(--card)] text-[var(--muted)] hover:text-[var(--ink)]',
+                  ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]'
+                  : 'border-[var(--line)] bg-[var(--panel)] text-[var(--muted)] hover:text-[var(--ink)]',
               )}
             >
               {option.label}
@@ -278,7 +290,13 @@ export default function SettingsPage() {
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-medium">卷宗管理</h3>
+        <h3 className="flex items-center gap-2 text-lg font-medium">
+          <span
+            className="h-3 w-1 bg-[var(--accent)]"
+            aria-hidden="true"
+          />
+          卷宗管理
+        </h3>
         <p className="text-xs leading-6 text-[var(--muted)]">
           学习数据只存在本机浏览器。建议定期封存一份 JSON 存档。
         </p>
@@ -289,7 +307,7 @@ export default function SettingsPage() {
           <Button variant="outline" onClick={handleExportNotes}>
             抄录笔记（Markdown）
           </Button>
-          <label className="inline-flex h-10 cursor-pointer items-center justify-center rounded-lg border border-[var(--line)] bg-[var(--card)] px-4 text-sm font-medium hover:bg-black/5 focus-within:ring-2 focus-within:ring-[var(--accent)] dark:hover:bg-white/5">
+          <label className="inline-flex h-10 cursor-pointer items-center justify-center rounded-[2px] border border-[var(--line-strong)] bg-transparent px-4 text-sm font-medium hover:border-[var(--accent)] hover:text-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent)]">
             载入存档
             <input
               type="file"

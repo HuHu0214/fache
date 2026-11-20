@@ -71,6 +71,12 @@ test('离开页面时立即保存未完成的编辑', async () => {
   );
 });
 
+test('刚打开时不会误显示已保存', async () => {
+  render(<NoteEditor targetType="kp" targetId="fresh-target" />);
+  await new Promise((resolve) => setTimeout(resolve, 650));
+  expect(screen.getByText('自动保存')).toBeInTheDocument();
+});
+
 test('收藏按钮可切换并带 aria-pressed', async () => {
   render(
     <BookmarkButton

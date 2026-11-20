@@ -16,12 +16,12 @@ export function Progress({ value, className, label }: ProgressProps) {
       aria-valuenow={clamped}
       aria-label={label}
       className={cn(
-        'h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10',
+        'h-[3px] w-full overflow-hidden bg-[var(--line)]',
         className,
       )}
     >
       <div
-        className="h-full rounded-full bg-[var(--accent)] transition-[width]"
+        className="h-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)] transition-[width]"
         style={{ width: `${clamped}%` }}
       />
     </div>

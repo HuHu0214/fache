@@ -31,6 +31,7 @@ export default function ReviewPage() {
   if (progress.length === 0 || queue.length === 0) {
     return (
       <div className="space-y-3 py-10 text-center">
+        <p className="hud-label">[ REVIEW QUEUE ]</p>
         <h2 className="text-2xl font-semibold tracking-tight">
           复习
         </h2>
@@ -52,14 +53,23 @@ export default function ReviewPage() {
   return (
     <div className="space-y-6">
       <header className="flex items-baseline justify-between gap-3">
-        <h2 className="text-2xl font-semibold tracking-tight">复习</h2>
-        <span className="text-xs text-[var(--muted)]">
+        <div>
+          <p className="hud-label">[ REVIEW QUEUE ]</p>
+          <h2 className="text-2xl font-semibold tracking-tight">复习</h2>
+        </div>
+        <span className="font-mono text-[10px] tracking-[0.12em] text-[var(--amber)]">
           剩余 {queue.length} 张
         </span>
       </header>
 
-      <section className="space-y-4 rounded-xl border border-[var(--line)] bg-[var(--card)] px-5 py-5">
-        <h3 className="text-lg font-medium">{entry.meta.title}</h3>
+      <section className="hud-panel space-y-4 px-5 py-5">
+        <h3 className="flex items-center gap-2 text-lg font-medium">
+          <span
+            className="h-3 w-1 bg-[var(--accent)]"
+            aria-hidden="true"
+          />
+          {entry.meta.title}
+        </h3>
         <p className="text-sm leading-7">{entry.meta.reviewPrompt}</p>
 
         {!revealed ? (

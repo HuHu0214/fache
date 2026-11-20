@@ -60,7 +60,7 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
         {theme && (
           <Link
             to={`/theme/${theme.id}`}
-            className="text-xs text-[var(--muted)] underline-offset-4 hover:underline"
+            className="font-mono text-[10px] tracking-[0.14em] text-[var(--muted)] hover:text-[var(--accent)]"
           >
             ← {theme.title}
           </Link>
@@ -68,15 +68,15 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
         <h2 className="text-2xl font-semibold tracking-tight">
           {entry.meta.title}
         </h2>
-        <p className="rounded-xl border-l-2 border-[var(--accent)] bg-[var(--card)] px-4 py-3 text-sm leading-7">
+        <p className="hud-panel border-l-2 border-l-[var(--accent)] px-4 py-3 text-sm leading-7">
           {entry.meta.hook}
         </p>
         {entry.meta.thinkPrompt && (
-          <p className="text-sm text-[var(--muted)]">
+          <p className="font-mono text-[11px] leading-6 text-[var(--amber)]">
             {entry.meta.thinkPrompt}
           </p>
         )}
-        <p className="text-xs text-[var(--muted)]">
+        <p className="font-mono text-[10px] tracking-[0.1em] text-[var(--muted)]">
           约 {entry.meta.estimatedMinutes} 分钟
         </p>
       </div>
@@ -91,7 +91,13 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
         <section className="space-y-4 border-t border-[var(--line)] pt-5">
           {entry.meta.articleRefs.length > 0 && (
             <div className="space-y-2">
-              <h3 className="text-sm font-medium">涉及的法条</h3>
+              <h3 className="flex items-center gap-2 text-sm font-medium">
+                <span
+                  className="h-2.5 w-1 bg-[var(--accent)]"
+                  aria-hidden="true"
+                />
+                涉及的法条
+              </h3>
               {entry.meta.articleRefs.map((ref) => (
                 <ArticleRef
                   key={`${ref.lawId}-${ref.articleNo}`}
@@ -112,7 +118,7 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
 
       <section className="space-y-3 border-t border-[var(--line)] pt-5">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-medium">笔记与收藏</h3>
+          <h3 className="hud-label">笔记与收藏</h3>
           <BookmarkButton
             targetType="scenario"
             targetId={entry.meta.id}

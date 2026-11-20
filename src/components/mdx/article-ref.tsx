@@ -22,8 +22,8 @@ export function ArticleRef({ law, no }: ArticleRefProps) {
   }
 
   return (
-    <details className="my-2 rounded-lg border border-[var(--line)] bg-[var(--card)] px-3 py-2 text-sm">
-      <summary className="cursor-pointer text-[var(--accent)]">
+    <details className="hud-panel my-2 px-3 py-2 text-sm">
+      <summary className="cursor-pointer font-mono text-[11px] tracking-[0.06em] text-[var(--accent)]">
         {lawMeta?.shortTitle ?? law} · {no}
       </summary>
       <p className="mt-2 whitespace-pre-wrap break-words leading-7">
@@ -31,9 +31,9 @@ export function ArticleRef({ law, no }: ArticleRefProps) {
       </p>
       <Link
         to={`/law/${law}/${no}`}
-        className="mt-2 inline-block text-xs text-[var(--muted)] underline underline-offset-4"
+        className="mt-2 inline-block font-mono text-[10px] tracking-[0.1em] text-[var(--muted)] hover:text-[var(--accent)]"
       >
-        查看法条
+        查看法条 →
       </Link>
     </details>
   );

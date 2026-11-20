@@ -41,7 +41,7 @@ export default function ArticlePage({
       <header className="space-y-2">
         <Link
           to={`/law/${id}`}
-          className="text-xs text-[var(--muted)] underline-offset-4 hover:underline"
+          className="font-mono text-[10px] tracking-[0.14em] text-[var(--muted)] hover:text-[var(--accent)]"
         >
           ← {law.title}
         </Link>
@@ -49,17 +49,17 @@ export default function ArticlePage({
           {article.articleNo}
         </h2>
         {article.path.length > 0 && (
-          <p className="text-xs text-[var(--muted)]">
+          <p className="font-mono text-[10px] tracking-[0.1em] text-[var(--muted)]">
             {article.path.join(' / ')}
           </p>
         )}
       </header>
 
-      <p className="whitespace-pre-wrap break-words rounded-xl border border-[var(--line)] bg-[var(--card)] px-5 py-4 text-[15px] leading-8">
+      <p className="hud-panel whitespace-pre-wrap break-words px-5 py-4 text-[15px] leading-8">
         {article.text}
       </p>
 
-      <dl className="grid gap-2 text-xs text-[var(--muted)]">
+      <dl className="grid gap-2 font-mono text-[10px] tracking-[0.08em] text-[var(--muted)]">
         <div className="flex gap-3">
           <dt className="w-16 shrink-0">法律</dt>
           <dd>{law.title}</dd>
@@ -75,7 +75,7 @@ export default function ArticlePage({
               href={law.sourceUrl}
               target="_blank"
               rel="noreferrer"
-              className="underline underline-offset-4"
+              className="text-[var(--accent)] underline decoration-[var(--accent)]/40 underline-offset-4"
             >
               国家法律法规数据库
             </a>

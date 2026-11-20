@@ -12,8 +12,14 @@ export function Step({
   children: ReactNode;
 }) {
   return (
-    <li className="rounded-lg border border-[var(--line)] bg-[var(--card)] px-4 py-3">
-      <h3 className="text-base font-medium">{title}</h3>
+    <li className="hud-panel px-4 py-3">
+      <h3 className="flex items-center gap-2 text-base font-medium">
+        <span
+          className="h-2.5 w-1 bg-[var(--accent)]"
+          aria-hidden="true"
+        />
+        {title}
+      </h3>
       <div className="mt-1 text-sm leading-7">{children}</div>
     </li>
   );

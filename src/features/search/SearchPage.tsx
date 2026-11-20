@@ -43,6 +43,7 @@ export default function SearchPage() {
   return (
     <div className="space-y-6">
       <header className="space-y-3">
+        <p className="hud-label">[ SEARCH INDEX ]</p>
         <h2 className="text-2xl font-semibold tracking-tight">搜索</h2>
         <Input
           type="search"
@@ -58,7 +59,7 @@ export default function SearchPage() {
             onChange={(event) =>
               setFilter(event.target.value as SearchFilter)
             }
-            className="h-9 rounded-lg border border-[var(--line)] bg-[var(--card)] px-2 text-sm"
+            className="h-9 rounded-[2px] border border-[var(--line-strong)] bg-[var(--bg-elev)] px-2 font-mono text-[11px] tracking-[0.06em]"
           >
             <option value="all">全部类型</option>
             <option value="scenario">场景</option>
@@ -69,7 +70,7 @@ export default function SearchPage() {
             aria-label="按主题筛选"
             value={themeId}
             onChange={(event) => setThemeId(event.target.value)}
-            className="h-9 rounded-lg border border-[var(--line)] bg-[var(--card)] px-2 text-sm"
+            className="h-9 rounded-[2px] border border-[var(--line-strong)] bg-[var(--bg-elev)] px-2 font-mono text-[11px] tracking-[0.06em]"
           >
             <option value="">全部主题</option>
             {getThemes().map((theme) => (
@@ -99,10 +100,12 @@ export default function SearchPage() {
           <li key={`${doc.type}:${doc.id}`}>
             <Link
               to={hrefFor(doc)}
-              className="block rounded-lg border border-[var(--line)] bg-[var(--card)] px-4 py-3 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              className="hud-panel block px-4 py-3 transition-colors hover:border-[var(--accent)] hover:shadow-[0_0_24px_-14px_var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             >
               <div className="flex items-center gap-2">
-                <Badge tone="muted">{typeLabels[doc.type]}</Badge>
+                <Badge tone={doc.type === 'article' ? 'accent' : 'muted'}>
+                  {typeLabels[doc.type]}
+                </Badge>
                 <span className="text-sm font-medium">{doc.title}</span>
               </div>
               <p className="mt-1 line-clamp-2 text-xs leading-6 text-[var(--muted)]">

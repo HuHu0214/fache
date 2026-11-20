@@ -49,7 +49,7 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
   }, [targetType, targetId]);
 
   useEffect(() => {
-    if (!loaded) {
+    if (!loaded || !dirtyRef.current) {
       return;
     }
     const timer = setTimeout(() => {
@@ -71,7 +71,7 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
     <div className="space-y-2">
       <label
         htmlFor={`note-${targetType}-${targetId}`}
-        className="block text-sm font-medium"
+        className="hud-label block"
       >
         我的笔记
       </label>
@@ -87,9 +87,9 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
         }}
         rows={4}
         placeholder="用自己的话记一句，下次回来更容易想起来。"
-        className="w-full rounded-lg border border-[var(--line)] bg-[var(--card)] p-3 text-sm leading-6 text-[var(--ink)] placeholder:text-[var(--muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+        className="w-full rounded-[2px] border border-[var(--line-strong)] bg-[var(--bg-elev)] p-3 text-sm leading-6 text-[var(--ink)] placeholder:text-[var(--muted)] focus-visible:border-[var(--accent)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
       />
-      <p className="text-xs text-[var(--muted)]">
+      <p className="font-mono text-[10px] tracking-[0.12em] text-[var(--muted)]">
         {saved ? '已保存' : '自动保存'}
       </p>
     </div>

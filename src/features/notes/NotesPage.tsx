@@ -30,6 +30,7 @@ export default function NotesPage() {
   return (
     <div className="space-y-10">
       <section className="space-y-4">
+        <p className="hud-label">[ NOTES ]</p>
         <h2 className="text-2xl font-semibold tracking-tight">我的笔记</h2>
         {notes.length === 0 ? (
           <p className="text-sm text-[var(--muted)]">
@@ -43,13 +44,13 @@ export default function NotesPage() {
                 <li key={note.id}>
                   <Link
                     to={meta.to}
-                    className="block rounded-lg border border-[var(--line)] bg-[var(--card)] px-4 py-3 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                    className="hud-panel block px-4 py-3 transition-colors hover:border-[var(--accent)] hover:shadow-[0_0_24px_-14px_var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                   >
                     <div className="flex items-baseline justify-between gap-3">
                       <span className="text-sm font-medium">
                         {meta.title}
                       </span>
-                      <span className="text-xs text-[var(--muted)]">
+                      <span className="font-mono text-[10px] tracking-[0.08em] text-[var(--muted)]">
                         {note.updatedAt.slice(0, 10)}
                       </span>
                     </div>
@@ -65,6 +66,7 @@ export default function NotesPage() {
       </section>
 
       <section className="space-y-4">
+        <p className="hud-label">[ BOOKMARKS ]</p>
         <h2 className="text-2xl font-semibold tracking-tight">收藏</h2>
         {bookmarks.length === 0 ? (
           <p className="text-sm text-[var(--muted)]">
@@ -81,7 +83,7 @@ export default function NotesPage() {
                 <li key={bookmark.id}>
                   <Link
                     to={meta.to}
-                    className="block rounded-lg border border-[var(--line)] bg-[var(--card)] px-4 py-3 text-sm hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                    className="hud-panel block px-4 py-3 text-sm transition-colors hover:border-[var(--accent)] hover:shadow-[0_0_24px_-14px_var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                   >
                     {meta.title}
                   </Link>

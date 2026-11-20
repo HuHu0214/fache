@@ -21,15 +21,18 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-dvh">
-      <header className="border-b border-[var(--line)] bg-[var(--card)]/80 backdrop-blur">
+      <header className="border-b border-[var(--line)] bg-[var(--bg)]/85 shadow-[0_1px_0_var(--accent-soft)] backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-4">
           <Link to="/" className="focus-visible:outline-none">
-            <h1 className="text-2xl font-semibold tracking-[0.18em]">
+            <h1 className="font-mono text-xl font-semibold tracking-[0.32em] text-[var(--accent)] [text-shadow:0_0_18px_rgba(0,229,255,0.35)]">
               法径
             </h1>
           </Link>
 
-          <nav aria-label="主导航" className="flex flex-wrap gap-4 text-sm">
+          <nav
+            aria-label="主导航"
+            className="flex flex-wrap gap-3 font-mono text-[11px] tracking-[0.18em]"
+          >
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -37,8 +40,9 @@ export default function AppLayout() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'rounded-md px-1 py-0.5 text-[var(--muted)] transition-colors hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
-                    isActive && 'font-medium text-[var(--accent)]',
+                    'rounded-[2px] border border-transparent px-1.5 py-1 text-[var(--muted)] transition-colors hover:border-[var(--line)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
+                    isActive &&
+                      'border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)]',
                   )
                 }
               >
@@ -46,7 +50,7 @@ export default function AppLayout() {
                 {item.to === '/review' && dueCount > 0 && (
                   <span
                     aria-hidden="true"
-                    className="ml-1 text-[10px] text-[var(--accent)]"
+                    className="ml-1 text-[10px] text-[var(--amber)]"
                   >
                     {dueCount}
                   </span>
@@ -61,7 +65,7 @@ export default function AppLayout() {
             onClick={() =>
               setTheme(theme === 'dark' ? 'light' : 'dark')
             }
-            className="ml-auto rounded-md border border-[var(--line)] px-2 py-1 text-xs text-[var(--muted)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            className="ml-auto rounded-[2px] border border-[var(--line-strong)] px-2 py-1 font-mono text-[10px] tracking-[0.15em] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
             {theme === 'dark' ? '浅色' : '深色'}
           </button>
@@ -72,7 +76,7 @@ export default function AppLayout() {
         <Outlet />
       </main>
 
-      <footer className="mx-auto max-w-3xl px-4 pb-10 text-xs text-[var(--muted)]">
+      <footer className="mx-auto max-w-3xl px-4 pb-10 font-mono text-[10px] tracking-[0.14em] text-[var(--muted)]">
         仅供学习，不构成法律意见。
       </footer>
 

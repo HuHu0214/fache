@@ -81,12 +81,15 @@ test('笔记和收藏在刷新后保留', async ({ page }) => {
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
-test('深色模式切换生效', async ({ page }) => {
+test('主题切换生效', async ({ page }) => {
   await page.goto('/');
+  const initial = await page
+    .locator('html')
+    .getAttribute('data-theme');
   await page.getByRole('button', { name: '切换深色模式' }).click();
   await expect(page.locator('html')).toHaveAttribute(
     'data-theme',
-    'dark',
+    initial === 'dark' ? 'light' : 'dark',
   );
 });
 

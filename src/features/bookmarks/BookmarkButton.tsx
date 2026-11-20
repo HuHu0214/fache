@@ -32,7 +32,7 @@ export function BookmarkButton({
       onClick={() => {
         void toggleBookmark(targetType, targetId).then(setBookmarked);
       }}
-      className="rounded-md border border-[var(--line)] px-3 py-1 text-xs text-[var(--muted)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+      className="rounded-[2px] border border-[var(--line-strong)] px-3 py-1 font-mono text-[10px] tracking-[0.1em] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
     >
       {bookmarked ? '已收藏' : '收藏'}
     </button>

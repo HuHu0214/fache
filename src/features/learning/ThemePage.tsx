@@ -47,7 +47,7 @@ export default function ThemePage({ themeId }: ThemePageProps) {
       <header className="space-y-3">
         <Link
           to="/"
-          className="text-xs text-[var(--muted)] underline-offset-4 hover:underline"
+          className="font-mono text-[10px] tracking-[0.14em] text-[var(--muted)] hover:text-[var(--accent)]"
         >
           ← 全部主题
         </Link>
@@ -59,7 +59,7 @@ export default function ThemePage({ themeId }: ThemePageProps) {
         </p>
         <div className="space-y-2">
           <Progress value={percent} label={`${theme.title}阅读进度`} />
-          <div className="flex gap-3 text-xs text-[var(--muted)]">
+          <div className="flex gap-3 font-mono text-[10px] tracking-[0.08em] text-[var(--muted)]">
             <span>
               已读 {stats.scenariosRead}/{stats.scenariosTotal} 个场景
             </span>
@@ -69,16 +69,19 @@ export default function ThemePage({ themeId }: ThemePageProps) {
       </header>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-medium">场景</h3>
+        <h3 className="flex items-center gap-2 text-lg font-medium">
+          <span className="h-3 w-1 bg-[var(--accent)]" aria-hidden="true" />
+          场景
+        </h3>
         {scenarios.map((scenario, index) => (
           <Link
             key={scenario.meta.id}
             to={`/scenario/${scenario.meta.id}`}
             className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
-            <Card className="transition-shadow hover:shadow-md">
+            <Card className="transition-colors hover:border-[var(--accent)] hover:shadow-[0_0_24px_-14px_var(--accent)]">
               <CardContent className="flex items-start gap-4">
-                <span className="mt-0.5 font-mono text-xs text-[var(--muted)]">
+                <span className="mt-0.5 font-mono text-[10px] tracking-[0.1em] text-[var(--amber)]">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <div className="min-w-0 flex-1 space-y-1">
@@ -102,14 +105,17 @@ export default function ThemePage({ themeId }: ThemePageProps) {
       </section>
 
       <section className="space-y-3">
-        <h3 className="text-lg font-medium">知识点</h3>
+        <h3 className="flex items-center gap-2 text-lg font-medium">
+          <span className="h-3 w-1 bg-[var(--amber)]" aria-hidden="true" />
+          知识点
+        </h3>
         <div className="grid gap-2 sm:grid-cols-2">
           {kps.map((kp) => (
             <Link
               key={kp.meta.id}
               to={`/concept/${kp.meta.id}`}
               aria-label={kp.meta.title}
-              className="rounded-lg border border-[var(--line)] bg-[var(--card)] px-4 py-3 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+              className="hud-panel px-4 py-3 transition-colors hover:border-[var(--accent)] hover:shadow-[0_0_24px_-14px_var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             >
               <span className="block text-sm font-medium">
                 {kp.meta.title}

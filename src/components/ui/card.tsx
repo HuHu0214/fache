@@ -4,10 +4,7 @@ import { cn } from '../../lib/cn';
 export function Card({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
-      className={cn(
-        'rounded-xl border border-[var(--line)] bg-[var(--card)] shadow-sm',
-        className,
-      )}
+      className={cn('hud-panel', className)}
       {...props}
     />
   );

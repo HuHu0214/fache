@@ -12,7 +12,9 @@
 
 ## 启动
 
-桌面版：下载 Release 中的 `Fache-Setup-1.0.0.exe`，双击安装，不需要 Node.js。
+桌面版：从 [GitHub Releases](https://github.com/HuHu0214/fache/releases/latest) 下载 `Fache-Setup-1.0.0.exe`，双击安装，不需要 Node.js。
+
+源码仓库：https://github.com/HuHu0214/fache
 
 开发模式：
 

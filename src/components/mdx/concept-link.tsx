@@ -21,7 +21,7 @@ export function ConceptLink({ id, children }: ConceptLinkProps) {
   return (
     <Link
       to={`/concept/${id}`}
-      className="text-[var(--accent)] underline decoration-[var(--accent)]/40 underline-offset-4 hover:decoration-[var(--accent)]"
+      className="font-medium text-[var(--accent)] underline decoration-2 underline-offset-2 hover:bg-[var(--accent-soft)]"
     >
       {children ?? entry.meta.title}
     </Link>

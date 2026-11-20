@@ -162,10 +162,10 @@ export default function SettingsPage() {
             </svg>
             <div className="absolute inset-0 grid place-items-center text-center">
               <div>
-                <span className="block font-mono text-3xl font-semibold text-[#d7e6f2]">
+                <span className="block font-mono text-3xl font-semibold text-[var(--ink)]">
                   {profile.level}
                 </span>
-                <span className="font-mono text-[10px] tracking-[0.35em] text-[#7c93a8]">
+                <span className="font-mono text-[10px] tracking-[0.35em] text-[var(--muted)]">
                   LV
                 </span>
               </div>
@@ -173,13 +173,13 @@ export default function SettingsPage() {
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="font-mono text-[10px] tracking-[0.35em] text-[#7c93a8]">
+            <p className="font-mono text-[10px] tracking-[0.35em] text-[var(--muted)]">
               [ DOSSIER ] 法修档案
             </p>
-            <h2 className="mt-1 text-2xl font-semibold text-[#d7e6f2]">
+            <h2 className="mt-1 text-3xl font-black text-[var(--ink)]">
               {profile.title}
             </h2>
-            <p className="mt-1 text-xs leading-6 text-[#9db1c4]">
+            <p className="mt-1 text-xs leading-6 text-[var(--muted)]">
               {profile.xp} 阅历
               {profile.nextTitle
                 ? ` · 距「${profile.nextTitle}」还差 ${profile.xpToNext}`
@@ -201,12 +201,12 @@ export default function SettingsPage() {
           ].map(([label, value]) => (
             <div
               key={label}
-              className="rounded-[2px] border border-[var(--accent)]/20 bg-[var(--accent-soft)] px-3 py-2"
+              className="border-2 border-[var(--line)] bg-[var(--card)] px-3 py-2"
             >
-              <dt className="font-mono text-[10px] tracking-[0.2em] text-[#7c93a8]">
+              <dt className="font-mono text-[10px] tracking-[0.2em] text-[var(--muted)]">
                 {label}
               </dt>
-              <dd className="mt-0.5 font-mono text-lg font-medium text-[#d7e6f2]">
+              <dd className="mt-0.5 font-mono text-lg font-black text-[var(--ink)]">
                 {value}
               </dd>
             </div>
@@ -216,7 +216,7 @@ export default function SettingsPage() {
 
       <section className="space-y-4">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="flex items-center gap-2 text-lg font-medium">
+          <h3 className="flex items-center gap-2 text-lg font-black">
             <span
               className="h-3 w-1 bg-[var(--accent)]"
               aria-hidden="true"
@@ -260,7 +260,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="space-y-3">
-        <h3 className="flex items-center gap-2 text-lg font-medium">
+        <h3 className="flex items-center gap-2 text-lg font-black">
           <span
             className="h-3 w-1 bg-[var(--amber)]"
             aria-hidden="true"
@@ -275,7 +275,7 @@ export default function SettingsPage() {
               aria-pressed={theme === option.value}
               onClick={() => setTheme(option.value)}
               className={cn(
-                'rounded-[2px] border px-3 py-3 font-mono text-[11px] tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
+                'border-2 px-3 py-3 font-mono text-[11px] font-bold tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
                 theme === option.value
                   ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]'
                   : 'border-[var(--line)] bg-[var(--panel)] text-[var(--muted)] hover:text-[var(--ink)]',
@@ -290,7 +290,7 @@ export default function SettingsPage() {
           aria-pressed={soundOn}
           onClick={toggleSound}
           className={cn(
-            'w-full rounded-[2px] border px-3 py-2 font-mono text-[11px] tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
+            'w-full border-2 px-3 py-2 font-mono text-[11px] font-bold tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
             soundOn
               ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]'
               : 'border-[var(--line)] bg-[var(--panel)] text-[var(--muted)]',
@@ -301,7 +301,7 @@ export default function SettingsPage() {
       </section>
 
       <section className="space-y-3">
-        <h3 className="flex items-center gap-2 text-lg font-medium">
+        <h3 className="flex items-center gap-2 text-lg font-black">
           <span
             className="h-3 w-1 bg-[var(--accent)]"
             aria-hidden="true"
@@ -318,7 +318,7 @@ export default function SettingsPage() {
           <Button variant="outline" onClick={handleExportNotes}>
             抄录笔记（Markdown）
           </Button>
-          <label className="inline-flex h-10 cursor-pointer items-center justify-center rounded-[2px] border border-[var(--line-strong)] bg-transparent px-4 text-sm font-medium hover:border-[var(--accent)] hover:text-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent)]">
+          <label className="inline-flex h-10 cursor-pointer items-center justify-center border-2 border-[var(--line)] bg-[var(--card)] px-4 text-sm font-bold hover:border-[var(--accent)] hover:text-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent)]">
             载入存档
             <input
               type="file"

@@ -14,7 +14,7 @@ test('从首页学一个场景并加入复习', async ({ page }) => {
   await page.getByRole('button', { name: '大概懂了' }).click();
   await expect(page.getByText('已加入复习', { exact: true })).toBeVisible();
   await page.getByRole('link', { name: '复习' }).click();
-  await expect(page.getByText(/今天没有要复习的/)).toBeVisible();
+  await expect(page.getByText(/暂无到期复习/)).toBeVisible();
 });
 
 test('到期卡片可在复习页完成自评', async ({ page }) => {
@@ -62,7 +62,7 @@ test('到期卡片可在复习页完成自评', async ({ page }) => {
   ).toBeVisible();
   await page.getByRole('button', { name: '显示答案' }).click();
   await page.getByRole('button', { name: '很熟' }).click();
-  await expect(page.getByText(/今天没有要复习的/)).toBeVisible();
+  await expect(page.getByText(/暂无到期复习/)).toBeVisible();
 });
 
 test('笔记和收藏在刷新后保留', async ({ page }) => {

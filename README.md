@@ -85,6 +85,10 @@ npm run content:import
 - 导入备份（会覆盖当前数据）
 - 清除全部数据
 
+## 界面
+
+采用「公告 × 法律图解」：首页、设置和程序页是公告栏风格；场景、知识点、法条、复习使用纸白阅读模式。颜色语义固定：黄 = 信息底，蓝 = 流程与主行动，品红 = 当前与注意，红 = 时限与危险。所有组件共享同一套颜色、圆角、间距和字号令牌。
+
 ## 技术栈
 
 React 19、Vite、TypeScript、Tailwind CSS 4、React Router 7、Zod、Dexie、MiniSearch、ts-fsrs、Vitest、Playwright。

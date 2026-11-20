@@ -36,7 +36,7 @@ export default function LawPage({ lawId }: LawPageProps) {
         >
           ← 返回首页
         </Link>
-        <h2 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-3xl font-black tracking-tight">
           {law.title}
         </h2>
         <p className="font-mono text-[10px] tracking-[0.1em] text-[var(--muted)]">
@@ -63,7 +63,7 @@ export default function LawPage({ lawId }: LawPageProps) {
               <li key={article.articleNo}>
                 <Link
                   to={`/law/${id}/${encodeURIComponent(article.articleNo)}`}
-                  className="flex gap-3 rounded-[2px] border border-transparent px-2 py-1.5 text-sm hover:border-[var(--line)] hover:bg-[var(--accent-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                  className="flex gap-3 border-2 border-transparent px-2 py-1.5 text-sm hover:border-[var(--line)] hover:bg-[var(--accent-soft)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]"
                 >
                   <span className="w-24 shrink-0 font-mono text-[11px] text-[var(--amber)]">
                     {article.articleNo}

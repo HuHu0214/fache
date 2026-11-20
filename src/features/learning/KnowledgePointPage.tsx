@@ -50,7 +50,7 @@ export default function KnowledgePointPage({
             ← {theme.title}
           </Link>
         )}
-        <h2 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-3xl font-black tracking-tight">
           {entry.meta.title}
         </h2>
         <p className="hud-panel px-4 py-3 text-sm leading-7">
@@ -64,7 +64,7 @@ export default function KnowledgePointPage({
 
       {entry.meta.articleRefs.length > 0 && (
         <section className="space-y-2">
-          <h3 className="flex items-center gap-2 text-sm font-medium">
+          <h3 className="flex items-center gap-2 text-sm font-black">
             <span
               className="h-2.5 w-1 bg-[var(--accent)]"
               aria-hidden="true"
@@ -83,7 +83,7 @@ export default function KnowledgePointPage({
 
       {entry.meta.confusions.length > 0 && (
         <section className="space-y-2">
-          <h3 className="flex items-center gap-2 text-sm font-medium">
+          <h3 className="flex items-center gap-2 text-sm font-black">
             <span
               className="h-2.5 w-1 bg-[var(--amber)]"
               aria-hidden="true"
@@ -100,7 +100,7 @@ export default function KnowledgePointPage({
 
       {entry.meta.relatedKpIds.length > 0 && (
         <section className="space-y-2">
-          <h3 className="flex items-center gap-2 text-sm font-medium">
+          <h3 className="flex items-center gap-2 text-sm font-black">
             <span
               className="h-2.5 w-1 bg-[var(--accent)]"
               aria-hidden="true"

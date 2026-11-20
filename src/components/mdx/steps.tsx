@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 
 export function Steps({ children }: { children: ReactNode }) {
-  return <ol className="my-4 space-y-4">{children}</ol>;
+  return (
+    <ol className="steps-list my-4 space-y-4">{children}</ol>
+  );
 }
 
 export function Step({
@@ -12,14 +14,8 @@ export function Step({
   children: ReactNode;
 }) {
   return (
-    <li className="hud-panel px-4 py-3">
-      <h3 className="flex items-center gap-2 text-base font-medium">
-        <span
-          className="h-2.5 w-1 bg-[var(--accent)]"
-          aria-hidden="true"
-        />
-        {title}
-      </h3>
+    <li className="step-item hud-panel relative py-3 pl-14 pr-4">
+      <h3 className="text-base font-black">{title}</h3>
       <div className="mt-1 text-sm leading-7">{children}</div>
     </li>
   );

@@ -51,19 +51,35 @@ export default function AppLayout() {
 
   const dismissLevelUp = useCallback(() => setLevelUp(null), []);
 
+  const isReading =
+    /^\/(scenario|concept|law)/.test(location.pathname) ||
+    location.pathname === '/review';
+
   return (
-    <div className="min-h-dvh">
-      <header className="border-b border-[var(--line)] bg-[var(--bg)]/85 shadow-[0_1px_0_var(--accent-soft)] backdrop-blur-md">
-        <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-4">
-          <Link to="/" className="focus-visible:outline-none">
-            <h1 className="font-mono text-xl font-semibold tracking-[0.32em] text-[var(--accent)] [text-shadow:0_0_18px_rgba(0,229,255,0.35)]">
-              法径
-            </h1>
+    <div
+      className={cn(
+        'min-h-dvh',
+        isReading ? 'surface-reading' : 'surface-notice',
+      )}
+    >
+      <header className="border-b-[3px] border-[var(--line)] bg-[var(--paper)]">
+        <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3">
+          <Link
+            to="/"
+            className="flex items-baseline gap-2 focus-visible:outline-none"
+          >
+            <h1 className="text-xl font-black tracking-tight">法径</h1>
+            <span
+              className="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--muted)]"
+              aria-hidden="true"
+            >
+              法律学习
+            </span>
           </Link>
 
           <nav
             aria-label="主导航"
-            className="flex flex-wrap gap-3 font-mono text-[11px] tracking-[0.18em]"
+            className="flex flex-wrap gap-1 font-mono text-[10px] uppercase tracking-[0.12em]"
           >
             {navItems.map((item) => (
               <NavLink
@@ -72,9 +88,9 @@ export default function AppLayout() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'rounded-[2px] border border-transparent px-1.5 py-1 text-[var(--muted)] transition-colors hover:border-[var(--line)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
+                    'border-2 border-transparent px-2 py-1 text-[var(--muted)] transition-colors hover:border-[var(--line)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]',
                     isActive &&
-                      'border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)]',
+                      'border-[var(--line)] bg-[var(--accent)] text-[var(--on-accent)]',
                   )
                 }
               >
@@ -82,7 +98,7 @@ export default function AppLayout() {
                 {item.to === '/review' && dueCount > 0 && (
                   <span
                     aria-hidden="true"
-                    className="ml-1 text-[10px] text-[var(--amber)]"
+                    className="ml-1 border border-[var(--line)] bg-[var(--pink)] px-1 text-[9px] text-[var(--ink)]"
                   >
                     {dueCount}
                   </span>
@@ -97,7 +113,7 @@ export default function AppLayout() {
             onClick={() =>
               setTheme(theme === 'dark' ? 'light' : 'dark')
             }
-            className="ml-auto rounded-[2px] border border-[var(--line-strong)] px-2 py-1 font-mono text-[10px] tracking-[0.15em] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            className="ml-auto border-2 border-[var(--line)] bg-[var(--card)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--ink)] hover:bg-[var(--pink-soft)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]"
           >
             {theme === 'dark' ? '浅色' : '深色'}
           </button>
@@ -110,7 +126,7 @@ export default function AppLayout() {
         </div>
       </main>
 
-      <footer className="mx-auto max-w-3xl px-4 pb-10 font-mono text-[10px] tracking-[0.14em] text-[var(--muted)]">
+      <footer className="mx-auto mt-8 max-w-3xl border-t-[3px] border-[var(--line)] bg-[var(--band-bg)] px-4 py-3 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--band-fg)]">
         仅供学习，不构成法律意见。
       </footer>
 

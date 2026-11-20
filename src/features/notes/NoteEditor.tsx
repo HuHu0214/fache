@@ -87,7 +87,7 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
         }}
         rows={4}
         placeholder="用自己的话记一句，下次回来更容易想起来。"
-        className="w-full rounded-[2px] border border-[var(--line-strong)] bg-[var(--bg-elev)] p-3 text-sm leading-6 text-[var(--ink)] placeholder:text-[var(--muted)] focus-visible:border-[var(--accent)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
+        className="w-full border-2 border-[var(--line)] bg-[var(--card)] p-3 text-sm leading-6 text-[var(--ink)] placeholder:text-[var(--muted)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)]"
       />
       <p className="font-mono text-[10px] tracking-[0.12em] text-[var(--muted)]">
         {saved ? '已保存' : '自动保存'}

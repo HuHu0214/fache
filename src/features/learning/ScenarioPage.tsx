@@ -74,10 +74,10 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
             ← {theme.title}
           </Link>
         )}
-        <h2 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-3xl font-black tracking-tight">
           {entry.meta.title}
         </h2>
-        <p className="hud-panel border-l-2 border-l-[var(--accent)] px-4 py-3 text-sm leading-7">
+        <p className="hud-panel border-l-[9px] border-l-[var(--accent)] px-4 py-3 text-sm font-medium leading-7">
           {entry.meta.hook}
         </p>
         {entry.meta.thinkPrompt && (
@@ -100,7 +100,7 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
         <section className="space-y-4 border-t border-[var(--line)] pt-5">
           {entry.meta.articleRefs.length > 0 && (
             <div className="space-y-2">
-              <h3 className="flex items-center gap-2 text-sm font-medium">
+              <h3 className="flex items-center gap-2 text-sm font-black">
                 <span
                   className="h-2.5 w-1 bg-[var(--accent)]"
                   aria-hidden="true"
@@ -143,7 +143,7 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
       {burst && <ParticleBurst />}
 
       {toastVisible && (
-        <div className="completion-toast hud-panel fixed bottom-6 left-1/2 z-50 w-[min(92vw,22rem)] border-[var(--accent)] px-5 py-3 text-center shadow-[0_0_30px_-10px_var(--accent)]">
+        <div className="completion-toast hud-panel fixed bottom-6 left-1/2 z-50 w-[min(92vw,22rem)] px-5 py-3 text-center">
           <p className="hud-label text-[var(--accent)]">
             [ NODE CLEARED ]
           </p>

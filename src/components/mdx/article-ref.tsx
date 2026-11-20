@@ -22,9 +22,9 @@ export function ArticleRef({ law, no }: ArticleRefProps) {
   }
 
   return (
-    <details className="hud-panel my-2 px-3 py-2 text-sm">
-      <summary className="cursor-pointer font-mono text-[11px] tracking-[0.06em] text-[var(--accent)]">
-        {lawMeta?.shortTitle ?? law} · {no}
+    <details className="hud-panel my-3 border-l-[9px] border-l-[var(--accent)] px-3 py-2 text-sm">
+      <summary className="cursor-pointer font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--accent)]">
+        条文 / {lawMeta?.shortTitle ?? law} · {no}
       </summary>
       <p className="mt-2 whitespace-pre-wrap break-words leading-7">
         {article.text}

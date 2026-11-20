@@ -31,7 +31,7 @@ export default function NotesPage() {
     <div className="space-y-10">
       <section className="space-y-4">
         <p className="hud-label">[ NOTES ]</p>
-        <h2 className="text-2xl font-semibold tracking-tight">我的笔记</h2>
+        <h2 className="text-3xl font-black tracking-tight">我的笔记</h2>
         {notes.length === 0 ? (
           <p className="text-sm text-[var(--muted)]">
             还没有笔记，学习时随手记一句。
@@ -67,7 +67,7 @@ export default function NotesPage() {
 
       <section className="space-y-4">
         <p className="hud-label">[ BOOKMARKS ]</p>
-        <h2 className="text-2xl font-semibold tracking-tight">收藏</h2>
+        <h2 className="text-3xl font-black tracking-tight">收藏</h2>
         {bookmarks.length === 0 ? (
           <p className="text-sm text-[var(--muted)]">
             还没有收藏，遇到想反复看的内容就收起来。

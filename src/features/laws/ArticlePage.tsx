@@ -45,7 +45,7 @@ export default function ArticlePage({
         >
           ← {law.title}
         </Link>
-        <h2 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-3xl font-black tracking-tight">
           {article.articleNo}
         </h2>
         {article.path.length > 0 && (

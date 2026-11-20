@@ -56,7 +56,7 @@ export default function BossPage({ themeId }: BossPageProps) {
     return (
       <div className="hud-panel space-y-4 px-6 py-10 text-center">
         <p className="hud-label">[ BOSS LOCKED ]</p>
-        <h2 className="text-2xl font-semibold">{boss.title}</h2>
+        <h2 className="text-3xl font-black">{boss.title}</h2>
         <p className="text-sm text-[var(--muted)]">
           先完成本章全部 {scenarios.length} 个场景并自评，Boss
           才会解锁。
@@ -149,7 +149,7 @@ export default function BossPage({ themeId }: BossPageProps) {
           <div className="flex flex-wrap justify-center gap-2">
             <Link
               to="/"
-              className="inline-flex h-10 items-center rounded-[2px] border border-[var(--accent)] bg-[var(--accent)] px-4 font-mono text-[11px] tracking-[0.12em] text-[var(--on-accent)]"
+              className="inline-flex h-10 items-center border-[3px] border-[var(--line)] bg-[var(--accent)] px-4 font-mono text-[11px] font-bold tracking-[0.12em] text-[var(--on-accent)] shadow-[4px_4px_0_var(--shadow)]"
             >
               返回航线
             </Link>
@@ -174,7 +174,7 @@ export default function BossPage({ themeId }: BossPageProps) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="hud-label">[ BOSS ENCOUNTER ]</p>
-            <h2 className="mt-1 text-2xl font-semibold tracking-tight">
+            <h2 className="mt-1 text-3xl font-black tracking-tight">
               {boss.title}
             </h2>
           </div>
@@ -206,7 +206,7 @@ export default function BossPage({ themeId }: BossPageProps) {
                 disabled={revealed}
                 onClick={() => choose(optionIndex)}
                 className={cn(
-                  'flex items-start gap-3 rounded-[2px] border px-4 py-3 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] disabled:cursor-default',
+                  'flex items-start gap-3 border-2 border-[var(--line)] px-4 py-3 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[var(--accent)] disabled:cursor-default',
                   !revealed &&
                     'border-[var(--line-strong)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)]',
                   revealed &&

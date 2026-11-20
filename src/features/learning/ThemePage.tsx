@@ -51,7 +51,7 @@ export default function ThemePage({ themeId }: ThemePageProps) {
         >
           ← 全部主题
         </Link>
-        <h2 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-3xl font-black tracking-tight">
           {theme.title}
         </h2>
         <p className="text-sm leading-7 text-[var(--muted)]">
@@ -69,7 +69,7 @@ export default function ThemePage({ themeId }: ThemePageProps) {
       </header>
 
       <section className="space-y-3">
-        <h3 className="flex items-center gap-2 text-lg font-medium">
+        <h3 className="flex items-center gap-2 text-lg font-black">
           <span className="h-3 w-1 bg-[var(--accent)]" aria-hidden="true" />
           场景
         </h3>
@@ -85,7 +85,7 @@ export default function ThemePage({ themeId }: ThemePageProps) {
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <div className="min-w-0 flex-1 space-y-1">
-                  <h3 className="text-base font-medium">
+                  <h3 className="text-base font-black">
                     {scenario.meta.title}
                   </h3>
                   <p className="text-sm text-[var(--muted)]">
@@ -105,7 +105,7 @@ export default function ThemePage({ themeId }: ThemePageProps) {
       </section>
 
       <section className="space-y-3">
-        <h3 className="flex items-center gap-2 text-lg font-medium">
+        <h3 className="flex items-center gap-2 text-lg font-black">
           <span className="h-3 w-1 bg-[var(--amber)]" aria-hidden="true" />
           知识点
         </h3>

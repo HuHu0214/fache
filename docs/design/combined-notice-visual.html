@@ -1,0 +1,365 @@
+<title>法径公告图解</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  :root {
+    color-scheme: light;
+    --shell-bg: #ECEAE4;
+    --shell-surface: #F8F6F1;
+    --shell-raised: #FFFFFF;
+    --shell-ink: #1B1A17;
+    --shell-muted: #6C675E;
+    --shell-line: #D3CEC4;
+    --shell-accent: #2F5BFF;
+    --shell-good: #2F6B4F;
+    --shell-bad: #A33A32;
+    --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    --yellow: #FFE85C;
+    --paper: #FFFDF5;
+    --ink: #0E0E0E;
+    --blue: #2F5BFF;
+    --pink: #FF3B7F;
+    --red: #D7263D;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --shell-bg: #131210;
+      --shell-surface: #1C1A16;
+      --shell-raised: #252219;
+      --shell-ink: #ECE6D9;
+      --shell-muted: #A59C8D;
+      --shell-line: #393429;
+      --shell-accent: #8FA8FF;
+      --shell-good: #7FB59A;
+      --shell-bad: #E08A80;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --shell-bg: #131210;
+    --shell-surface: #1C1A16;
+    --shell-raised: #252219;
+    --shell-ink: #ECE6D9;
+    --shell-muted: #A59C8D;
+    --shell-line: #393429;
+    --shell-accent: #8FA8FF;
+    --shell-good: #7FB59A;
+    --shell-bad: #E08A80;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--shell-bg);
+    color: var(--shell-ink);
+    font-family: var(--sans);
+    line-height: 1.65;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 64px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    background: color-mix(in srgb, var(--shell-bg) 92%, transparent);
+    border-bottom: 1px solid var(--shell-line);
+    backdrop-filter: blur(10px);
+  }
+
+  .topbar-inner {
+    max-width: 1220px; margin: 0 auto; padding-block: 12px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px;
+  }
+
+  .wordmark { display: flex; align-items: baseline; gap: 8px; font-size: 19px; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+  .wordmark span { font-size: 10px; font-weight: 400; letter-spacing: .16em; color: var(--shell-muted); }
+  .topbar-note { margin-left: auto; font-size: 11px; letter-spacing: .08em; color: var(--shell-muted); }
+
+  .wrap { max-width: 1220px; margin: 0 auto; padding-top: 28px; display: grid; gap: 20px; }
+
+  .page-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: 8px 24px; padding-bottom: 12px; border-bottom: 1px solid var(--shell-line);
+  }
+  .page-head h1 { margin: 0; font-size: clamp(28px, 3.4vw, 42px); font-weight: 800; letter-spacing: -.035em; }
+  .page-head p { margin: 0; max-width: 64ch; font-size: 13px; color: var(--shell-muted); }
+
+  .combo-note { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; font-size: 12px; color: var(--shell-muted); }
+  .combo-note strong { color: var(--shell-ink); font-weight: 600; }
+
+  /* The combined direction */
+  .notice-frame {
+    background: var(--yellow);
+    color: var(--ink);
+    border: 3px solid var(--ink);
+    box-shadow: 10px 10px 0 var(--ink);
+    font-family: var(--sans);
+  }
+
+  .notice-top {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+    background: var(--paper); border-bottom: 3px solid var(--ink); padding: 12px 18px;
+  }
+  .notice-brand { font-size: 20px; font-weight: 900; letter-spacing: -.05em; }
+  .notice-issue { background: var(--blue); color: #fff; border: 2px solid var(--ink); padding: 2px 7px; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; }
+  .notice-nav { display: flex; flex-wrap: wrap; gap: 4px 12px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+  .notice-nav .on { color: var(--blue); }
+  .notice-top .spacer { flex: 1; }
+  .notice-top .toplink { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+
+  .notice-masthead {
+    background: var(--ink); color: var(--yellow);
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: 6px 20px; padding: 8px 18px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .notice-masthead .right { color: var(--paper); }
+
+  .notice-body { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(230px,.65fr); gap: 16px; padding: 18px; }
+
+  .notice-main { display: grid; gap: 14px; align-content: start; min-width: 0; }
+  .notice-main > *, .notice-side > * { min-width: 0; }
+  .notice-side { display: grid; gap: 14px; align-content: start; min-width: 0; }
+
+  .kicker { margin: 0; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
+
+  .notice-hero {
+    position: relative; background: var(--paper); border: 3px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink); padding: 22px;
+  }
+  .notice-hero h2 {
+    margin: 6px 0 10px; font-size: clamp(34px, 5.2vw, 62px); line-height: .98;
+    letter-spacing: -.06em; font-weight: 900; max-width: 13em;
+  }
+  .notice-hero p { margin: 0; max-width: 46ch; font-size: 13px; font-weight: 500; line-height: 1.75; }
+  .notice-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+  .n-btn {
+    appearance: none; border: 3px solid var(--ink); background: var(--blue); color: #fff;
+    padding: 9px 15px; font: inherit; font-size: 13px; font-weight: 800;
+    box-shadow: 4px 4px 0 var(--ink); cursor: pointer;
+  }
+  .n-btn.alt { background: var(--paper); color: var(--ink); }
+  .n-btn:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink); }
+
+  .notice-stamp {
+    position: absolute; top: 16px; right: 16px;
+    border: 3px solid var(--red); color: var(--red);
+    padding: 4px 9px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+    transform: rotate(7deg); background: transparent;
+  }
+
+  .conclusion {
+    background: var(--paper); border: 3px solid var(--ink);
+    border-left-width: 9px; border-left-color: var(--blue); padding: 14px 16px;
+  }
+  .conclusion .label { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--blue); margin-bottom: 4px; }
+  .conclusion p { margin: 0; font-size: 13px; font-weight: 700; line-height: 1.75; }
+
+  .flow-wrap { background: var(--paper); border: 3px solid var(--ink); padding: 14px; }
+  .flow-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; margin-bottom: 10px; }
+  .flow-head h3 { margin: 0; font-size: 15px; font-weight: 900; letter-spacing: -.01em; }
+  .flow-head span { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+  .flow { display: flex; align-items: stretch; overflow-x: auto; }
+  .flow-step {
+    position: relative; flex: 1 1 0; min-width: 150px;
+    border: 3px solid var(--ink); background: #fff; padding: 10px;
+  }
+  .flow-step .n { display: inline-grid; place-items: center; width: 26px; height: 22px; background: var(--blue); color: #fff; border: 2px solid var(--ink); font-family: var(--mono); font-size: 10px; margin-bottom: 6px; }
+  .flow-step h4 { margin: 0 0 3px; font-size: 13px; font-weight: 900; }
+  .flow-step p { margin: 0; font-size: 10px; line-height: 1.6; color: #3A3A3A; }
+  .flow-step.done .n { background: var(--ink); }
+  .flow-step.now { border-color: var(--pink); box-shadow: 0 0 0 3px var(--pink); }
+  .flow-step.now .n { background: var(--pink); }
+  .flow-step.now::after {
+    content: "你在这里"; position: absolute; top: -15px; left: 8px;
+    background: var(--pink); color: var(--ink); border: 2px solid var(--ink);
+    font-family: var(--mono); font-size: 8px; letter-spacing: .06em; padding: 1px 5px;
+    transform: rotate(-3deg);
+  }
+  .flow-arrow { flex: none; width: 24px; display: grid; place-items: center; font-size: 20px; font-weight: 900; }
+
+  .deadlines { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+  .deadline { background: var(--paper); border: 3px solid var(--ink); padding: 10px 12px; }
+  .deadline .label { display: block; font-family: var(--mono); font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: #5A5A5A; }
+  .deadline b { display: block; font-family: var(--mono); font-size: 26px; line-height: 1.1; margin: 2px 0; }
+  .deadline span { font-size: 10px; font-weight: 600; }
+  .deadline.warn { border-left-width: 9px; border-left-color: var(--red); }
+  .deadline.warn b { color: var(--red); }
+
+  .side-card { background: var(--paper); border: 3px solid var(--ink); padding: 14px; }
+  .side-card h3 { margin: 0 0 8px; font-size: 14px; font-weight: 900; }
+  .side-card p { margin: 0; font-size: 11px; line-height: 1.7; }
+  .checklist { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+  .checklist li { position: relative; padding-left: 19px; font-size: 11px; line-height: 1.6; }
+  .checklist li::before { content: ""; position: absolute; left: 0; top: 5px; width: 10px; height: 10px; border: 2px solid var(--ink); background: #fff; }
+  .article-ref { border-left: 6px solid var(--pink); }
+  .article-ref .no { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--blue); }
+  .article-ref p { margin-top: 5px; }
+  .side-link { display: inline-block; margin-top: 8px; font-size: 10px; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+
+  .notice-foot {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 18px;
+    background: var(--ink); color: var(--paper); padding: 8px 18px;
+    font-family: var(--mono); font-size: 9px; letter-spacing: .1em;
+  }
+
+  /* rationale */
+  .rationale { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+  .rationale .card { background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 12px; padding: 16px; }
+  .rationale h3 { margin: 0 0 6px; font-size: 15px; }
+  .rationale p { margin: 0; font-size: 12px; color: var(--shell-muted); line-height: 1.8; }
+
+  .specs { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; }
+  .spec-card { background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 12px; padding: 14px; min-width: 0; }
+  .spec-card h3 { margin: 0 0 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--shell-muted); font-weight: 500; }
+  .swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+  .swatch { width: 28px; height: 28px; border-radius: 2px; border: 1px solid rgba(0,0,0,.14); }
+  .swatch-label { font-family: var(--mono); font-size: 9px; color: var(--shell-muted); margin-top: 8px; display: block; letter-spacing: .04em; }
+  .type-sample { font-size: 24px; line-height: 1.3; font-weight: 900; letter-spacing: -.04em; }
+  .type-sample small { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; letter-spacing: 0; color: var(--shell-muted); }
+  .radius-row { display: flex; gap: 8px; align-items: end; }
+  .radius-box { width: 38px; height: 38px; background: var(--shell-raised); border: 2px solid var(--shell-ink); }
+  .space-row { display: grid; gap: 6px; }
+  .space-bar { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; color: var(--shell-muted); }
+  .space-bar i { display: block; height: 6px; background: var(--blue); }
+
+  .rules { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+  .rule { background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 12px; padding: 16px; }
+  .rule h3 { margin: 6px 0 4px; font-size: 14px; }
+  .rule p { margin: 0; font-size: 12px; color: var(--shell-muted); line-height: 1.8; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; padding: 2px 6px; border-radius: 3px; }
+  .tag.do { background: color-mix(in srgb, var(--shell-good) 14%, transparent); color: var(--shell-good); border: 1px solid color-mix(in srgb, var(--shell-good) 40%, transparent); }
+  .tag.dont { background: color-mix(in srgb, var(--shell-bad) 12%, transparent); color: var(--shell-bad); border: 1px solid color-mix(in srgb, var(--shell-bad) 40%, transparent); }
+
+  @media (max-width: 900px) {
+    .notice-body { grid-template-columns: minmax(0,1fr); }
+    .notice-side { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .rationale { grid-template-columns: minmax(0,1fr); }
+    .specs { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .rules { grid-template-columns: minmax(0,1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .notice-frame { box-shadow: 5px 5px 0 var(--ink); }
+    .notice-body { padding: 12px; }
+    .notice-hero { padding: 16px; }
+    .notice-stamp { position: static; display: inline-block; margin-bottom: 8px; }
+    .notice-side { grid-template-columns: minmax(0,1fr); }
+    .deadlines { grid-template-columns: minmax(0,1fr); }
+    .specs { grid-template-columns: minmax(0,1fr); }
+    .flow { flex-direction: column; overflow: visible; }
+    .flow-step { min-width: 0; }
+    .flow-arrow { height: 22px; width: 100%; transform: rotate(90deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="wordmark">法径 <span>公告 × 法律图解</span></div>
+    <p class="topbar-note">组合方向 01 · 公共信息 + 可行动地图</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <h1>公告图解</h1>
+    <p>用公告栏的公共信息力量，承载法律图解的结论、流程、时限和清单。重点不是“更花”，而是让人一眼知道现在该做什么。</p>
+  </div>
+  <ul class="combo-note"><li><strong>公告提供</strong> 边框、硬投影、荧光黄、贴纸、印章</li><li><strong>图解提供</strong> 一句话结论、五步流程、时限、证据清单</li><li><strong>合并规则</strong> 颜色只编码状态，不编码装饰</li></ul>
+
+  <div class="notice-frame">
+    <div class="notice-top">
+      <span class="notice-brand">法径</span>
+      <span class="notice-issue">LEGAL NOTICE / 03</span>
+      <nav class="notice-nav"><span class="on">今日指引</span><span>法条</span><span>复习</span><span>档案</span></nav>
+      <span class="spacer"></span>
+      <span class="toplink">检索</span><span class="toplink">设置</span>
+    </div>
+    <div class="notice-masthead"><span>公共法律信息 · 劳动争议 · 程序指引</span><span class="right">NO. 2026-11-20 / 劳动-03</span></div>
+
+    <div class="notice-body">
+      <div class="notice-main">
+        <div class="notice-hero">
+          <p class="kicker">你现在的位置：被辞退 / 劳动关系</p>
+          <h2>被公司辞退，<br>我该怎么办？</h2>
+          <p>先判断是不是违法解除，再决定协商、仲裁还是诉讼。每一步都有时限。</p>
+          <div class="notice-actions"><button class="n-btn">开始检查我的情况</button><button class="n-btn alt">打印清单</button></div>
+          <span class="notice-stamp">示例指引</span>
+        </div>
+
+        <div class="conclusion"><span class="label">一句话结论</span><p>先拿书面解除通知，保留工资、考勤和聊天记录；不要先签“个人原因离职”。</p></div>
+
+        <div class="flow-wrap">
+          <div class="flow-head"><h3>你的处理路径</h3><span>5 步 / 按顺序</span></div>
+          <div class="flow">
+            <div class="flow-step done"><span class="n">01</span><h4>判断性质</h4><p>合法解除、协商解除，还是违法解除？</p></div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-step now"><span class="n">02</span><h4>收集证据</h4><p>合同、工资、考勤、通知、聊天记录。</p></div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-step"><span class="n">03</span><h4>协商</h4><p>明确补偿金额与支付时间。</p></div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-step"><span class="n">04</span><h4>仲裁</h4><p>一般时效一年，向履行地或单位所在地申请。</p></div>
+            <div class="flow-arrow" aria-hidden="true">→</div>
+            <div class="flow-step"><span class="n">05</span><h4>诉讼</h4><p>对仲裁裁决不服，再向法院起诉。</p></div>
+          </div>
+        </div>
+
+        <div class="deadlines">
+          <div class="deadline warn"><span class="label">先看这个</span><b>1 年</b><span>劳动仲裁一般时效</span></div>
+          <div class="deadline"><span class="label">裁决后</span><b>15 日</b><span>不服仲裁起诉</span></div>
+          <div class="deadline"><span class="label">普通民事</span><b>3 年</b><span>诉讼时效</span></div>
+        </div>
+      </div>
+
+      <aside class="notice-side">
+        <div class="side-card">
+          <h3>你需要准备</h3>
+          <ul class="checklist"><li>劳动合同 / 入职通知</li><li>工资流水 / 工资条</li><li>考勤 / 加班记录</li><li>解除通知 / 聊天记录</li></ul>
+        </div>
+        <div class="side-card article-ref">
+          <span class="no">第 469 条 · 民法典</span>
+          <p>当事人订立合同，可以采用书面形式、口头形式或者其他形式。</p>
+          <span class="side-link">展开原文 →</span>
+        </div>
+        <div class="side-card">
+          <h3>别急着做</h3>
+          <p>不要先签“个人原因离职”，不要在没看清补偿条款前交回工牌或电脑。</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="notice-foot"><span>本页仅供学习，不构成法律意见</span><span>本地存档 · 示例数据</span></div>
+  </div>
+
+  <section class="rationale">
+    <div class="card"><h3>公告的贡献</h3><p>公共信息感、强对比、硬边框、贴纸和印章，让“这是给普通人看的法律指引”一眼成立。</p></div>
+    <div class="card"><h3>图解的贡献</h3><p>结论先行、五步流程、时限和证据清单，把“知道”变成“知道下一步做什么”。</p></div>
+    <div class="card"><h3>合并的边界</h3><p>黄色只做信息底，蓝色只做流程，品红只做“当前/注意”，红色只做时限警告。颜色不承担装饰。</p></div>
+  </section>
+
+  <div class="specs">
+    <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#FFE85C"></i><i class="swatch" style="background:#FFFDF5"></i><i class="swatch" style="background:#0E0E0E"></i><i class="swatch" style="background:#2F5BFF"></i><i class="swatch" style="background:#FF3B7F"></i><i class="swatch" style="background:#D7263D"></i></div><span class="swatch-label">信息黄 / 纸白 / 墨黑 / 流程蓝 / 当前品红 / 时限红</span></div>
+    <div class="spec-card"><h3>TYPE</h3><div class="type-sample">法 469<small>超粗标题 / 等宽标签与数字 / 无衬线正文</small></div></div>
+    <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:0"></i></div><span class="swatch-label">0 / 0 / 0 · 公告栏直角</span></div>
+    <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:4px"></i>4</div><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div><div class="space-bar"><i style="width:32px"></i>32</div></div></div>
+  </div>
+
+  <section class="rules">
+    <div class="rule"><span class="tag do">Do</span><h3>用颜色编码状态</h3><p>蓝色 = 流程阶段，品红 = 你在这里/注意，红色 = 时限警告。用户不需要读图例也能跟上。</p></div>
+    <div class="rule"><span class="tag dont">Don't</span><h3>把贴纸当装饰</h3><p>“你在这里”“示例指引”这类贴纸只在承载状态时出现。贴纸一多，公告栏会变成噪音。</p></div>
+    <div class="rule"><span class="tag do">Do</span><h3>大字给小标题，正文留白</h3><p>公告式大标题负责抓注意力，正文保持 13–14px 和足够行距，别让粗野主义吃掉可读性。</p></div>
+    <div class="rule"><span class="tag dont">Don't</span><h3>不要把每个区块都做成卡片</h3><p>只有流程、清单、时限这些需要区分的块加边框；整页都是粗边框会失去层级。</p></div>
+  </section>
+</main>

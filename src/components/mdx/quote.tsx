@@ -21,11 +21,11 @@ export function Quote({ law, no }: QuoteProps) {
   }
 
   return (
-    <blockquote className="my-4 border-l-2 border-[var(--accent)] bg-[var(--accent-soft)] px-4 py-2">
-      <p className="whitespace-pre-wrap break-words text-sm leading-7">
+    <blockquote className="my-4 border-2 border-[var(--line)] border-l-[10px] border-l-[var(--accent)] bg-[var(--accent-soft)] px-4 py-2">
+      <p className="whitespace-pre-wrap break-words text-sm font-medium leading-7">
         {article.text}
       </p>
-      <cite className="mt-2 block font-mono text-[10px] not-italic tracking-[0.1em] text-[var(--muted)]">
+      <cite className="mt-2 block font-mono text-[9px] font-bold not-italic uppercase tracking-[0.1em] text-[var(--muted)]">
         {lawMeta?.title ?? law} · {no}
       </cite>
     </blockquote>

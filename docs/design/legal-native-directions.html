@@ -1,0 +1,624 @@
+<title>法径法律原生五案</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  :root {
+    color-scheme: light;
+    --shell-bg: #ECEAE4;
+    --shell-surface: #F8F6F1;
+    --shell-raised: #FFFFFF;
+    --shell-ink: #1B1A17;
+    --shell-muted: #6C675E;
+    --shell-line: #D3CEC4;
+    --shell-accent: #1D70B8;
+    --shell-good: #2F6B4F;
+    --shell-bad: #A33A32;
+    --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --serif: "Songti SC", "STSong", "Noto Serif SC", "SimSun", Georgia, serif;
+    --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --shell-bg: #131210;
+      --shell-surface: #1C1A16;
+      --shell-raised: #252219;
+      --shell-ink: #ECE6D9;
+      --shell-muted: #A59C8D;
+      --shell-line: #393429;
+      --shell-accent: #7DB7E8;
+      --shell-good: #7FB59A;
+      --shell-bad: #E08A80;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --shell-bg: #131210;
+    --shell-surface: #1C1A16;
+    --shell-raised: #252219;
+    --shell-ink: #ECE6D9;
+    --shell-muted: #A59C8D;
+    --shell-line: #393429;
+    --shell-accent: #7DB7E8;
+    --shell-good: #7FB59A;
+    --shell-bad: #E08A80;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--shell-bg);
+    color: var(--shell-ink);
+    font-family: var(--sans);
+    line-height: 1.65;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 64px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    background: color-mix(in srgb, var(--shell-bg) 92%, transparent);
+    border-bottom: 1px solid var(--shell-line);
+    backdrop-filter: blur(10px);
+  }
+
+  .topbar-inner {
+    max-width: 1240px; margin: 0 auto; padding-block: 12px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px;
+  }
+
+  .wordmark { display: flex; align-items: baseline; gap: 8px; font-size: 19px; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+  .wordmark span { font-size: 10px; font-weight: 400; letter-spacing: .16em; color: var(--shell-muted); }
+
+  .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    appearance: none; border: 1px solid transparent; background: transparent;
+    color: var(--shell-muted); border-radius: 6px; padding: 6px 11px;
+    font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap;
+  }
+  .tab:hover { color: var(--shell-ink); border-color: var(--shell-line); }
+  .tab[aria-selected="true"] { color: var(--shell-ink); background: var(--shell-raised); border-color: var(--shell-line); }
+
+  .topbar-note { margin-left: auto; font-size: 11px; letter-spacing: .08em; color: var(--shell-muted); }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding-top: 28px; }
+  .panel { display: grid; gap: 16px; }
+  .panel[hidden] { display: none; }
+
+  .panel-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: 8px 24px; padding-bottom: 12px; border-bottom: 1px solid var(--shell-line);
+  }
+  .panel-head h1 { margin: 0; font-size: clamp(26px, 3.2vw, 38px); font-weight: 800; letter-spacing: -.03em; text-wrap: balance; }
+  .panel-head p { margin: 0; max-width: 66ch; font-size: 13px; color: var(--shell-muted); }
+
+  .style-note { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; font-size: 12px; color: var(--shell-muted); }
+  .style-note strong { color: var(--shell-ink); font-weight: 600; }
+
+  .specs { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+  .spec-card { background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 12px; padding: 14px; min-width: 0; }
+  .spec-card h3 { margin: 0 0 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--shell-muted); font-weight: 500; }
+  .swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+  .swatch { width: 28px; height: 28px; border-radius: 4px; border: 1px solid rgba(0,0,0,.12); }
+  .swatch-label { font-family: var(--mono); font-size: 9px; color: var(--shell-muted); margin-top: 8px; display: block; letter-spacing: .04em; }
+  .type-sample { font-size: 24px; line-height: 1.3; font-weight: 700; }
+  .type-sample small { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; color: var(--shell-muted); }
+  .radius-row { display: flex; gap: 8px; align-items: end; }
+  .radius-box { width: 38px; height: 38px; background: var(--shell-raised); border: 1px solid var(--shell-line); }
+  .space-row { display: grid; gap: 6px; }
+  .space-bar { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; color: var(--shell-muted); }
+  .space-bar i { display: block; height: 6px; background: var(--shell-accent); opacity: .8; }
+
+  .specimen { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 14px; background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 12px; }
+  .chip { border: 1px solid var(--shell-line); background: var(--shell-raised); border-radius: 999px; padding: 4px 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: var(--shell-muted); }
+
+  /* 1. Legal press / legal tech editorial */
+  .s-press { --p-ink:#0F0E0D; --p-paper:#FAF8F3; --p-line:#E4DED2; --p-green:#005032; --p-sage:#DCEFE2; --p-muted:#6E6A60; }
+  .press-frame { background: var(--p-paper); color: var(--p-ink); border: 1px solid var(--p-line); font-family: var(--sans); }
+  .press-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding: 14px 22px; border-bottom: 1px solid var(--p-line); }
+  .press-brand { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: .04em; }
+  .press-links { display: flex; gap: 14px; font-size: 12px; color: var(--p-muted); }
+  .press-links .on { color: var(--p-ink); }
+  .press-login { margin-left: auto; font-size: 11px; color: var(--p-green); border: 1px solid var(--p-green); padding: 4px 12px; border-radius: 2px; }
+  .press-hero { position: relative; background: var(--p-ink); color: var(--p-paper); padding: clamp(28px,5vw,54px) 22px; overflow: hidden; }
+  .press-hero .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; color: #A9D9BA; margin: 0 0 12px; }
+  .press-hero h2 { margin: 0; font-family: var(--serif); font-size: clamp(34px, 5.4vw, 64px); line-height: 1.02; letter-spacing: -.03em; max-width: 12em; font-weight: 500; }
+  .press-hero p { margin: 16px 0 0; max-width: 48ch; font-size: 13px; color: #CFC9BE; }
+  .press-hero .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .p-btn { appearance: none; border: 1px solid var(--p-green); background: var(--p-green); color: #fff; padding: 9px 16px; font: inherit; font-size: 12px; border-radius: 2px; cursor: pointer; }
+  .p-btn.ghost { background: transparent; color: var(--p-paper); border-color: #5C6B62; }
+  .press-§ { position: absolute; right: 18px; bottom: -28px; font-family: var(--serif); font-size: 180px; line-height: 1; color: rgba(255,255,255,.06); pointer-events: none; }
+  .press-proof { display: flex; flex-wrap: wrap; gap: 10px 24px; padding: 10px 22px; border-bottom: 1px solid var(--p-line); font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--p-muted); }
+  .press-features { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); padding: 0 22px; }
+  .press-feature { padding: 22px 18px; border-right: 1px solid var(--p-line); }
+  .press-feature:last-child { border-right: 0; }
+  .press-feature .num { font-family: var(--mono); font-size: 10px; color: var(--p-green); }
+  .press-feature h3 { margin: 6px 0 4px; font-family: var(--serif); font-size: 21px; font-weight: 500; }
+  .press-feature p { margin: 0; font-size: 12px; color: var(--p-muted); line-height: 1.8; }
+  .press-stats { display: flex; flex-wrap: wrap; border-top: 1px solid var(--p-line); background: var(--p-sage); }
+  .press-stat { flex: 1 1 160px; padding: 14px 22px; border-right: 1px solid rgba(0,80,50,.15); }
+  .press-stat:last-child { border-right: 0; }
+  .press-stat b { display: block; font-family: var(--mono); font-size: 20px; font-weight: 500; color: var(--p-green); }
+  .press-stat span { font-size: 10px; color: #345B4A; }
+
+  /* 2. International counsel / annual report */
+  .s-counsel { --c-navy:#0B1B2B; --c-ivory:#F3EFE6; --c-oxblood:#7A1F2B; --c-line:#CFC6B6; --c-muted:#77705F; }
+  .counsel-frame { background: var(--c-ivory); color: var(--c-navy); border-top: 6px solid var(--c-navy); border-bottom: 1px solid var(--c-line); font-family: var(--sans); }
+  .counsel-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 12px 20px; border-bottom: 1px solid var(--c-line); }
+  .counsel-crest { width: 32px; height: 32px; border: 1px solid var(--c-navy); border-radius: 50%; display: grid; place-items: center; font-family: var(--serif); font-size: 14px; }
+  .counsel-brand { font-family: var(--serif); font-size: 20px; letter-spacing: .08em; }
+  .counsel-links { display: flex; gap: 12px; font-size: 11px; color: var(--c-muted); }
+  .counsel-top .right { margin-left: auto; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; color: var(--c-muted); }
+  .counsel-hero { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(180px,.55fr); background: var(--c-navy); color: var(--c-ivory); }
+  .counsel-hero .left { padding: clamp(24px,4vw,44px) 22px; }
+  .counsel-hero .kicker { margin: 0 0 14px; font-family: var(--mono); font-size: 9px; letter-spacing: .16em; color: #B9A98E; }
+  .counsel-hero h2 { margin: 0; font-family: var(--serif); font-size: clamp(30px,4.5vw,54px); line-height: 1.04; letter-spacing: -.02em; max-width: 12em; font-weight: 500; }
+  .counsel-hero p { margin: 14px 0 0; max-width: 46ch; font-size: 12px; color: #C9C2B2; }
+  .counsel-hero .right { border-left: 1px solid rgba(255,255,255,.18); padding: 22px; display: grid; gap: 14px; align-content: start; }
+  .counsel-hero .right .row { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px solid rgba(255,255,255,.14); padding-bottom: 8px; font-family: var(--mono); font-size: 9px; color: #C9C2B2; }
+  .counsel-hero .right b { color: var(--c-ivory); font-weight: 500; }
+  .counsel-index { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); padding: 18px 22px; gap: 0 22px; }
+  .counsel-index .head { grid-column: 1 / -1; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 9px; letter-spacing: .14em; color: var(--c-muted); border-bottom: 1px solid var(--c-line); padding-bottom: 6px; }
+  .counsel-item { grid-column: span 4; display: grid; grid-template-columns: 34px minmax(0,1fr) auto; gap: 10px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--c-line); }
+  .counsel-item .num { font-family: var(--mono); font-size: 10px; color: var(--c-oxblood); }
+  .counsel-item h3 { margin: 0; font-family: var(--serif); font-size: 18px; font-weight: 500; }
+  .counsel-item p { grid-column: 2 / -1; margin: 4px 0 0; font-size: 11px; color: var(--c-muted); }
+  .counsel-item .arrow { color: var(--c-oxblood); font-size: 12px; }
+  .counsel-quote { margin: 0 22px 18px; border-top: 1px solid var(--c-line); padding-top: 12px; font-family: var(--serif); font-size: 14px; color: var(--c-muted); }
+  .counsel-quote cite { display: block; margin-top: 4px; font-family: var(--mono); font-size: 9px; font-style: normal; letter-spacing: .1em; }
+
+  /* 3. Court service / GOV.UK-MOJ */
+  .s-service { --v-ink:#0B0C0C; --v-blue:#1D70B8; --v-green:#00703C; --v-red:#D4351C; --v-grey:#505A5F; --v-line:#B1B4B6; --v-light:#F3F2F1; }
+  .service-frame { background: #fff; color: var(--v-ink); border: 1px solid var(--v-line); font-family: var(--sans); }
+  .phase { background: var(--v-blue); color: #fff; text-align: center; font-size: 11px; padding: 7px 14px; }
+  .phase b { border: 1px solid #fff; padding: 1px 5px; margin-right: 6px; font-size: 9px; letter-spacing: .08em; }
+  .service-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 12px 18px; border-bottom: 1px solid var(--v-line); }
+  .service-brand { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+  .service-brand span { color: var(--v-blue); }
+  .service-nav { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; color: var(--v-blue); }
+  .service-nav .on { color: var(--v-ink); font-weight: 700; border-bottom: 2px solid var(--v-ink); }
+  .service-body { display: grid; grid-template-columns: minmax(0,1.7fr) minmax(200px,.7fr); gap: 26px; padding: 22px 18px; }
+  .breadcrumb { font-size: 11px; color: var(--v-grey); margin: 0 0 12px; }
+  .breadcrumb span { color: var(--v-blue); }
+  .service-body h2 { margin: 0; font-size: clamp(28px,4vw,42px); line-height: 1.12; font-weight: 700; letter-spacing: -.02em; }
+  .service-lead { margin: 10px 0 0; font-size: 14px; color: var(--v-grey); max-width: 56ch; }
+  .service-start { margin-top: 18px; appearance: none; border: 0; background: var(--v-green); color: #fff; padding: 10px 18px; font: inherit; font-size: 13px; font-weight: 700; box-shadow: 0 2px 0 #002d18; cursor: pointer; }
+  .service-warning { margin-top: 18px; border-left: 4px solid var(--v-red); padding: 8px 12px; background: #fff; font-size: 12px; }
+  .service-warning strong { display: block; margin-bottom: 2px; }
+  .service-task { margin-top: 18px; border: 1px solid var(--v-line); }
+  .service-task h3 { margin: 0; padding: 10px 12px; background: var(--v-light); font-size: 13px; border-bottom: 1px solid var(--v-line); }
+  .service-task ul { margin: 0; padding: 0; list-style: none; }
+  .service-task li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; border-bottom: 1px solid var(--v-line); font-size: 12px; }
+  .service-task li:last-child { border-bottom: 0; }
+  .service-task .done { color: var(--v-green); font-weight: 700; }
+  .service-task .todo { color: var(--v-red); font-weight: 700; }
+  .service-side h3 { margin: 0 0 8px; font-size: 13px; }
+  .service-side ul { margin: 0; padding-left: 16px; font-size: 11px; color: var(--v-blue); }
+  .service-side li { margin-bottom: 6px; }
+  .service-progress { display: grid; gap: 0; margin-top: 18px; border-left: 2px solid var(--v-line); padding-left: 14px; }
+  .v-step { position: relative; padding: 0 0 14px; font-size: 11px; color: var(--v-grey); }
+  .v-step::before { content: ""; position: absolute; left: -20px; top: 2px; width: 8px; height: 8px; border-radius: 50%; background: #fff; border: 2px solid var(--v-line); }
+  .v-step.done { color: var(--v-ink); }
+  .v-step.done::before { background: var(--v-green); border-color: var(--v-green); }
+  .v-step.now { color: var(--v-ink); font-weight: 700; }
+  .v-step.now::before { background: var(--v-blue); border-color: var(--v-blue); }
+
+  /* 4. Legal research workspace */
+  .s-research { --r-bg:#F7F8FA; --r-ink:#1B1F24; --r-blue:#2B5C8A; --r-red:#C0392B; --r-amber:#E3A008; --r-green:#2F7D4E; --r-line:#D7DCE2; --r-muted:#6B7280; }
+  .research-frame { background: #fff; color: var(--r-ink); border: 1px solid var(--r-line); font-family: var(--sans); }
+  .research-search { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: #1B1F24; color: #fff; padding: 8px 10px; }
+  .research-search .bar { flex: 1 1 260px; display: flex; align-items: center; gap: 8px; background: #fff; color: var(--r-ink); padding: 6px 10px; font-size: 11px; }
+  .research-search .bar span { color: var(--r-muted); }
+  .research-search button { appearance: none; border: 1px solid #5A626C; background: transparent; color: #fff; padding: 5px 10px; font: inherit; font-size: 10px; }
+  .research-tabs { display: flex; flex-wrap: wrap; gap: 2px 16px; padding: 0 12px; border-bottom: 1px solid var(--r-line); font-size: 11px; color: var(--r-muted); }
+  .research-tabs .on { color: var(--r-blue); border-bottom: 2px solid var(--r-blue); padding: 8px 0 6px; }
+  .research-body { display: grid; grid-template-columns: 170px minmax(0,1fr) 210px; min-height: 420px; }
+  .research-outline { border-right: 1px solid var(--r-line); padding: 12px; font-size: 10px; color: var(--r-muted); background: var(--r-bg); }
+  .research-outline h3 { margin: 0 0 8px; font-size: 9px; letter-spacing: .12em; color: var(--r-ink); }
+  .research-outline .item { padding: 5px 0 5px 10px; border-left: 2px solid var(--r-line); }
+  .research-outline .item.on { border-left-color: var(--r-blue); color: var(--r-blue); font-weight: 700; }
+  .research-doc { padding: 16px 18px; font-family: var(--serif); font-size: 13px; line-height: 1.85; min-width: 0; }
+  .research-doc .meta { font-family: var(--mono); font-size: 9px; letter-spacing: .08em; color: var(--r-muted); }
+  .research-doc h2 { margin: 4px 0 8px; font-family: var(--sans); font-size: 19px; line-height: 1.3; }
+  .headnote { margin: 12px 0; border-left: 3px solid var(--r-blue); background: #F0F4F8; padding: 8px 10px; font-family: var(--sans); font-size: 11px; line-height: 1.7; }
+  .headnote b { color: var(--r-blue); }
+  .research-doc mark { background: #FFF2B8; padding: 0 2px; }
+  .research-doc .case-cite { font-family: var(--mono); font-size: 9px; color: var(--r-muted); }
+  .citator { border-left: 1px solid var(--r-line); padding: 12px; font-size: 10px; background: var(--r-bg); }
+  .citator h3 { margin: 0 0 8px; font-size: 9px; letter-spacing: .12em; color: var(--r-ink); }
+  .flag { display: inline-block; padding: 1px 6px; color: #fff; font-family: var(--mono); font-size: 8px; letter-spacing: .06em; }
+  .flag.red { background: var(--r-red); }
+  .flag.amber { background: var(--r-amber); }
+  .flag.green { background: var(--r-green); }
+  .citator .row { border-bottom: 1px solid var(--r-line); padding: 7px 0; color: var(--r-muted); }
+  .citator .row b { color: var(--r-ink); font-weight: 500; }
+
+  /* 5. Visual law */
+  .s-visual { --w-bg:#FFF9F0; --w-ink:#1F2937; --w-teal:#0F766E; --w-amber:#F59E0B; --w-coral:#EF4444; --w-line:#E7DCCB; --w-muted:#6B7280; }
+  .visual-frame { background: var(--w-bg); color: var(--w-ink); border: 1px solid var(--w-line); border-radius: 24px; padding: 20px; font-family: var(--sans); }
+  .visual-kicker { margin: 0 0 6px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--w-teal); }
+  .visual-frame h2 { margin: 0; font-size: clamp(28px,4.4vw,44px); line-height: 1.1; letter-spacing: -.03em; font-weight: 800; max-width: 16em; }
+  .visual-lead { margin: 8px 0 0; max-width: 52ch; font-size: 13px; color: var(--w-muted); }
+  .visual-answer { margin-top: 16px; border-radius: 18px; background: var(--w-teal); color: #fff; padding: 14px 16px; font-size: 13px; }
+  .visual-answer b { display: block; font-size: 10px; letter-spacing: .14em; margin-bottom: 4px; color: #CCFBF1; }
+  .flow { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; margin-top: 16px; }
+  .flow-step { position: relative; background: #fff; border: 1px solid var(--w-line); border-radius: 18px; padding: 12px; min-width: 0; }
+  .flow-step .n { font-family: var(--mono); font-size: 9px; color: var(--w-muted); }
+  .flow-step h3 { margin: 4px 0; font-size: 13px; }
+  .flow-step p { margin: 0; font-size: 10px; line-height: 1.6; color: var(--w-muted); }
+  .flow-step.now { border-color: var(--w-teal); box-shadow: 0 0 0 3px rgba(15,118,110,.14); }
+  .flow-step.now::after { content: "你在这里"; position: absolute; top: -10px; left: 10px; background: var(--w-teal); color: #fff; font-size: 8px; padding: 1px 6px; border-radius: 99px; }
+  .flow-step.warn { border-color: var(--w-amber); }
+  .visual-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(220px,.8fr); gap: 14px; margin-top: 16px; }
+  .visual-card { background: #fff; border: 1px solid var(--w-line); border-radius: 18px; padding: 14px; }
+  .visual-card h3 { margin: 0 0 8px; font-size: 13px; }
+  .visual-card p { margin: 0; font-size: 11px; line-height: 1.7; color: var(--w-muted); }
+  .visual-timeline { display: grid; gap: 8px; }
+  .visual-timeline .row { display: grid; grid-template-columns: 72px 1fr; gap: 10px; font-size: 11px; }
+  .visual-timeline .row b { color: var(--w-coral); font-family: var(--mono); font-size: 10px; }
+  .checklist { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  .checklist li { position: relative; padding-left: 18px; font-size: 11px; color: var(--w-muted); }
+  .checklist li::before { content: ""; position: absolute; left: 0; top: 6px; width: 9px; height: 9px; border: 1.5px solid var(--w-teal); border-radius: 3px; }
+
+  /* Spec */
+  .spec-tab { display: grid; gap: 24px; }
+  .spec-section { background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 16px; padding: clamp(18px,3vw,28px); }
+  .spec-section h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+  .spec-section > p { margin: 0 0 18px; max-width: 78ch; color: var(--shell-muted); font-size: 13px; }
+  .code { margin: 0; padding: 16px; overflow-x: auto; background: #171512; color: #E9DFCC; border-radius: 8px; font-family: var(--mono); font-size: 11px; line-height: 1.8; }
+  .scale-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .scale-table th, .scale-table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--shell-line); vertical-align: top; }
+  .scale-table th { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--shell-muted); font-weight: 500; }
+  .scale-table code { font-family: var(--mono); font-size: 11px; }
+  .dodont-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin-top: 16px; }
+  .dodont { border: 1px solid var(--shell-line); border-radius: 12px; padding: 14px; background: var(--shell-raised); }
+  .dodont h3 { margin: 8px 0 4px; font-size: 14px; }
+  .dodont p { margin: 0; font-size: 12px; color: var(--shell-muted); }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; padding: 2px 6px; border-radius: 3px; }
+  .tag.do { background: color-mix(in srgb, var(--shell-good) 14%, transparent); color: var(--shell-good); border: 1px solid color-mix(in srgb, var(--shell-good) 40%, transparent); }
+  .tag.dont { background: color-mix(in srgb, var(--shell-bad) 12%, transparent); color: var(--shell-bad); border: 1px solid color-mix(in srgb, var(--shell-bad) 40%, transparent); }
+  .mini { padding: 12px; border: 1px dashed var(--shell-line); border-radius: 8px; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .mini .btn { border: 1px solid var(--shell-line); border-radius: 4px; background: transparent; color: var(--shell-ink); padding: 6px 10px; font: inherit; font-size: 12px; }
+  .mini .btn-primary { background: var(--shell-accent); border-color: var(--shell-accent); color: #fff; }
+  .footnote { font-size: 11px; color: var(--shell-muted); max-width: 80ch; }
+  .sources { margin: 8px 0 0; padding-left: 18px; font-size: 11px; color: var(--shell-muted); }
+  .sources a { color: var(--shell-accent); }
+
+  @media (max-width: 900px) {
+    .press-features { grid-template-columns: minmax(0,1fr); padding: 0 22px; }
+    .press-feature { border-right: 0; border-bottom: 1px solid var(--p-line); }
+    .press-feature:last-child { border-bottom: 0; }
+    .counsel-hero { grid-template-columns: minmax(0,1fr); }
+    .counsel-hero .right { border-left: 0; border-top: 1px solid rgba(255,255,255,.18); }
+    .counsel-item { grid-column: span 6; }
+    .service-body { grid-template-columns: minmax(0,1fr); }
+    .research-body { grid-template-columns: 150px minmax(0,1fr); }
+    .citator { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--r-line); }
+    .flow { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .visual-grid { grid-template-columns: minmax(0,1fr); }
+    .specs { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .dodont-grid { grid-template-columns: minmax(0,1fr); }
+    .topbar-note { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .press-nav, .counsel-top { gap: 8px 12px; }
+    .press-links, .counsel-links { font-size: 10px; }
+    .counsel-item { grid-column: span 12; }
+    .research-body { grid-template-columns: minmax(0,1fr); }
+    .research-outline { border-right: 0; border-bottom: 1px solid var(--r-line); }
+    .citator { border-top: 1px solid var(--r-line); }
+    .flow { grid-template-columns: minmax(0,1fr); }
+    .specs { grid-template-columns: minmax(0,1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="wordmark">法径 <span>法律原生五案</span></div>
+    <div class="tabs" role="tablist" aria-label="法律原生设计方向">
+      <button class="tab" role="tab" id="tab-press" aria-selected="true" aria-controls="panel-press" data-panel="press">法务刊</button>
+      <button class="tab" role="tab" id="tab-counsel" aria-selected="false" aria-controls="panel-counsel" data-panel="counsel">国际律所</button>
+      <button class="tab" role="tab" id="tab-service" aria-selected="false" aria-controls="panel-service" data-panel="service">诉讼服务</button>
+      <button class="tab" role="tab" id="tab-research" aria-selected="false" aria-controls="panel-research" data-panel="research">判例检索</button>
+      <button class="tab" role="tab" id="tab-visual" aria-selected="false" aria-controls="panel-visual" data-panel="visual">法律图解</button>
+      <button class="tab" role="tab" id="tab-spec" aria-selected="false" aria-controls="panel-spec" data-panel="spec">规范</button>
+    </div>
+    <p class="topbar-note">参考国外律所 / 法律科技 / 法院 / 检索工具</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 法务刊 -->
+  <section class="panel s-press" id="panel-press" role="tabpanel" aria-labelledby="tab-press">
+    <div class="panel-head">
+      <h1>法务刊</h1>
+      <p>参考 Legora / Harvey 一类法律科技品牌：大字号衬线标题、暖白纸面、深绿单色强调、细线分栏、品牌背书与数据证明。不是“律所官网”，更像一本关于法律学习的编辑刊物。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 全幅暗色 hero + 三栏编辑</li><li><strong>关键词</strong> 编辑感 / 克制 / 可信</li><li><strong>参考</strong> Legora、Harvey 的编辑式法律科技站</li></ul>
+
+    <div class="press-frame">
+      <div class="press-nav"><span class="press-brand">法径</span><nav class="press-links"><span class="on">研读</span><span>法条</span><span>复习</span><span>档案</span></nav><span class="press-login">进入学习</span></div>
+      <div class="press-hero">
+        <p class="eyebrow">LEGAL LEARNING / EDITED</p>
+        <h2>把法律<br>读成清晰的判断。</h2>
+        <p>从场景进入，沿条文回溯，用复习把知识留下来。不是把法条堆给你。</p>
+        <div class="actions"><button class="p-btn">开始研读</button><button class="p-btn ghost">查看本期目录</button></div>
+        <span class="press-§" aria-hidden="true">§</span>
+      </div>
+      <div class="press-proof"><span>法条库 7 部</span><span>场景 36</span><span>知识点 56</span><span>Boss 3</span><span>本地存储</span></div>
+      <div class="press-features">
+        <div class="press-feature"><span class="num">01</span><h3>场景</h3><p>从真实问题进入，先判断，再展开。</p></div>
+        <div class="press-feature"><span class="num">02</span><h3>条文</h3><p>每个结论都能回到法条原文。</p></div>
+        <div class="press-feature"><span class="num">03</span><h3>复习</h3><p>间隔重复，把知识留下来。</p></div>
+      </div>
+      <div class="press-stats"><div class="press-stat"><b>36</b><span>场景</span></div><div class="press-stat"><b>56</b><span>知识点</span></div><div class="press-stat"><b>03</b><span>章节 Boss</span></div><div class="press-stat"><b>1,272</b><span>法条</span></div></div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#0F0E0D"></i><i class="swatch" style="background:#FAF8F3"></i><i class="swatch" style="background:#005032"></i><i class="swatch" style="background:#DCEFE2"></i><i class="swatch" style="background:#E4DED2"></i></div><span class="swatch-label">墨 / 暖白 / 深绿 / 鼠尾草 / 细线</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-family:var(--serif);font-weight:500">法 第四百六十九条<small>衬线标题 / 无衬线正文 / 等宽数据</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:2px"></i><i class="radius-box" style="border-radius:4px"></i></div><span class="swatch-label">0 / 2 / 4</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div><div class="space-bar"><i style="width:40px"></i>40</div></div></div>
+    </div>
+  </section>
+
+  <!-- 国际律所 -->
+  <section class="panel s-counsel" id="panel-counsel" role="tabpanel" aria-labelledby="tab-counsel" hidden>
+    <div class="panel-head">
+      <h1>国际律所</h1>
+      <p>参考 Clifford Chance / Mishcon de Reya / PGS 一类国际律所官网与年报：海军蓝、象牙白、牛血红、衬线大标题、非对称 12 列网格、索引式业务目录和脚注。权威来自版式，不来自金色渐变。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 年报式非对称网格</li><li><strong>关键词</strong> 克制 / 权威 / 编辑设计</li><li><strong>参考</strong> 国际律所年报与品牌站</li></ul>
+
+    <div class="counsel-frame">
+      <div class="counsel-top"><span class="counsel-crest">法</span><span class="counsel-brand">法径</span><nav class="counsel-links"><span>研读</span><span>业务</span><span>档案</span></nav><span class="right">LEGAL EDUCATION / EST. 2026</span></div>
+      <div class="counsel-hero">
+        <div class="left"><p class="kicker">ANNUAL REVIEW / 2026</p><h2>把复杂的法律，<br>读成清晰的判断。</h2><p>从场景、条文到复习，一套可以长期积累的个人法律知识系统。</p></div>
+        <div class="right"><div class="row"><span>场景</span><b>36</b></div><div class="row"><span>知识点</span><b>56</b></div><div class="row"><span>章节</span><b>03</b></div><div class="row"><span>法条</span><b>1,272</b></div></div>
+      </div>
+      <div class="counsel-index">
+        <div class="head"><span>PRACTICE / 学习领域</span><span>INDEX 01—03</span></div>
+        <div class="counsel-item"><span class="num">01</span><div><h3>合同</h3><p>成立、履行、违约、担保与买卖。</p></div><span class="arrow">↗</span></div>
+        <div class="counsel-item"><span class="num">02</span><div><h3>婚姻</h3><p>财产、离婚、抚养、债务与保护令。</p></div><span class="arrow">↗</span></div>
+        <div class="counsel-item"><span class="num">03</span><div><h3>劳动</h3><p>试用、加班、辞退、工伤与仲裁。</p></div><span class="arrow">↗</span></div>
+      </div>
+      <p class="counsel-quote">“法律不是一堆条文，而是一套判断方法。”<cite>法径 · 编辑说明</cite></p>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#0B1B2B"></i><i class="swatch" style="background:#F3EFE6"></i><i class="swatch" style="background:#7A1F2B"></i><i class="swatch" style="background:#CFC6B6"></i><i class="swatch" style="background:#77705F"></i></div><span class="swatch-label">海军蓝 / 象牙 / 牛血红 / 细线 / 灰</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-family:var(--serif);font-weight:500">法 第四百六十九条<small>宋体大标题 / 无衬线正文 / 等宽索引</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:0;border-width:2px"></i><i class="radius-box" style="border-radius:50%"></i></div><span class="swatch-label">0 / 0 / 圆形徽记</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div><div class="space-bar"><i style="width:40px"></i>40</div></div></div>
+    </div>
+  </section>
+
+  <!-- 诉讼服务 -->
+  <section class="panel s-service" id="panel-service" role="tabpanel" aria-labelledby="tab-service" hidden>
+    <div class="panel-head">
+      <h1>诉讼服务</h1>
+      <p>参考 GOV.UK / MOJ / HMCTS 的法院与仲裁服务：白底黑字、蓝色链接、阶段横幅、服务导航、任务清单、进度追踪和时限警告。没有装饰，所有视觉都在帮助用户完成一件事。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 公共服务页面 + 任务清单</li><li><strong>关键词</strong> 清晰 / 可达 / 无装饰</li><li><strong>参考</strong> GOV.UK Design System、MOJ Patterns</li></ul>
+
+    <div class="service-frame">
+      <div class="phase"><b>BETA</b>这是新服务，你的反馈会帮助我们改进。</div>
+      <div class="service-top"><span class="service-brand">法径 <span>诉讼服务</span></span><nav class="service-nav"><span class="on">开始</span><span>案件</span><span>证据</span><span>帮助</span></nav></div>
+      <div class="service-body">
+        <div>
+          <p class="breadcrumb"><span>首页</span> › <span>劳动争议</span> › 被辞退</p>
+          <h2>被辞退后，<br>你可以做什么</h2>
+          <p class="service-lead">先判断解除是否合法，再决定协商、仲裁或诉讼。每一步都有时限。</p>
+          <button class="service-start">开始检查我的情况</button>
+          <div class="service-warning"><strong>注意</strong>劳动争议申请仲裁的一般时效为一年，从你知道或应当知道权利被侵害之日起计算。</div>
+          <div class="service-task"><h3>你需要准备</h3><ul><li><span>劳动合同与工资流水</span><span class="done">已有</span></li><li><span>解除通知或聊天记录</span><span class="todo">待补</span></li><li><span>考勤与加班记录</span><span class="todo">待补</span></li></ul></div>
+        </div>
+        <aside class="service-side">
+          <h3>案件进度</h3>
+          <div class="service-progress"><div class="v-step done">确认劳动关系</div><div class="v-step done">判断解除性质</div><div class="v-step now">准备证据</div><div class="v-step">申请仲裁</div><div class="v-step">开庭与裁决</div></div>
+          <h3 style="margin-top:18px">相关服务</h3>
+          <ul><li>申请劳动仲裁</li><li>计算经济补偿</li><li>查找法律援助</li><li>下载材料清单</li></ul>
+        </aside>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#FFFFFF"></i><i class="swatch" style="background:#0B0C0C"></i><i class="swatch" style="background:#1D70B8"></i><i class="swatch" style="background:#00703C"></i><i class="swatch" style="background:#D4351C"></i></div><span class="swatch-label">白 / 黑 / 链接蓝 / 行动绿 / 警告红</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-family:var(--sans);font-weight:700">法 469<small>系统无衬线 / 大标题 / 无衬线正文</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:0;border-width:2px"></i><i class="radius-box" style="border-radius:2px"></i></div><span class="swatch-label">0 / 0 / 2 · 无装饰圆角</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div><div class="space-bar"><i style="width:32px"></i>32</div></div></div>
+    </div>
+  </section>
+
+  <!-- 判例检索 -->
+  <section class="panel s-research" id="panel-research" role="tabpanel" aria-labelledby="tab-research" hidden>
+    <div class="panel-head">
+      <h1>判例检索</h1>
+      <p>参考 Westlaw / LexisNexis 的法律检索工作台：三栏布局、目录树、headnote、key number、引用分析（红黄旗）和等宽引注。它不追求好看，追求像律师一样工作。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 三栏检索工作台</li><li><strong>关键词</strong> 密度 / 引注 / 专业工具</li><li><strong>参考</strong> Westlaw、LexisNexis 的 headnote 与 citator</li></ul>
+
+    <div class="research-frame">
+      <div class="research-search"><div class="bar"><span>检索</span>试用期 解除 劳动合同</div><button>检索</button><button>高级</button></div>
+      <div class="research-tabs"><span class="on">文献</span><span>判例</span><span>法条</span><span>笔记</span><span style="margin-left:auto">本地库 · 1,272 条</span></div>
+      <div class="research-body">
+        <div class="research-outline"><h3>文档目录</h3><div class="item">案件事实</div><div class="item on">争议焦点</div><div class="item">裁判理由</div><div class="item">相关法条</div><div class="item">类案检索</div><h3 style="margin-top:14px">KEY NUMBERS</h3><div class="item">劳动合同 · 解除</div><div class="item">试用期 · 录用条件</div></div>
+        <div class="research-doc"><p class="meta">劳动合同法 / 第二十一条 / 现行有效</p><h2>在试用期中，用人单位不得随意解除劳动合同</h2><div class="headnote"><b>HEADNOTE 1</b><br>试用期内，除劳动者有法定情形外，用人单位不得解除劳动合同。以不符合录用条件解除的，用人单位需证明录用条件与不符合的事实。</div><p>在试用期中，除劳动者有本法第三十九条和第四十条第一项、第二项规定的情形外，用人单位不得解除劳动合同。用人单位在试用期解除劳动合同的，应当向劳动者说明理由。</p><p class="case-cite">参见：劳动合同法 第二十一条；劳动争议调解仲裁法 第六条。</p><p>本案中，用人单位仅以“<mark>不合适</mark>”为由解除，未提供录用条件与考核记录，举证不足。</p></div>
+        <div class="citator"><h3>引用分析</h3><div class="row"><span class="flag red">RED</span> 被后续裁判限缩适用</div><div class="row"><span class="flag amber">AMBER</span> 存在相反观点</div><div class="row"><span class="flag green">GREEN</span> 现行有效</div><h3 style="margin-top:14px">引用文献</h3><div class="row"><b>（2024）京 01 民终 1234 号</b><br>试用期解除 · 举证责任</div><div class="row"><b>（2023）沪 01 民终 567 号</b><br>录用条件 · 公示</div></div>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#F7F8FA"></i><i class="swatch" style="background:#1B1F24"></i><i class="swatch" style="background:#2B5C8A"></i><i class="swatch" style="background:#C0392B"></i><i class="swatch" style="background:#E3A008"></i></div><span class="swatch-label">灰白 / 墨 / 检索蓝 / 红旗 / 黄旗</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-family:var(--serif);font-weight:500">法 469<small>正文衬线 / UI 无衬线 / 引注等宽</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:2px"></i><i class="radius-box" style="border-radius:4px"></i></div><span class="swatch-label">0 / 2 / 4 · 工具型</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:4px"></i>4</div><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:12px"></i>12</div><div class="space-bar"><i style="width:16px"></i>16</div></div></div>
+    </div>
+  </section>
+
+  <!-- 法律图解 -->
+  <section class="panel s-visual" id="panel-visual" role="tabpanel" aria-labelledby="tab-visual" hidden>
+    <div class="panel-head">
+      <h1>法律图解</h1>
+      <p>参考 Margaret Hagan 的 Legal Design / Visual Law：先给一句话结论，再把流程、时限、证据和选择画成图。法律不是文本墙，而是一条可以走的路。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 结论 + 流程图 + 时限 + 清单</li><li><strong>关键词</strong> 白话 / 可视化 / 可行动</li><li><strong>参考</strong> Legal Design Lab、Visual Law</li></ul>
+
+    <div class="visual-frame">
+      <p class="visual-kicker">LEGAL MAP / 劳动争议</p>
+      <h2>被公司辞退，我该怎么办？</h2>
+      <p class="visual-lead">先判断是不是违法解除，再决定协商、仲裁还是诉讼。下面是你可以走的路。</p>
+      <div class="visual-answer"><b>一句话结论</b>先拿书面解除通知，保留工资、考勤和聊天记录；判断公司是否说明理由、是否有证据。不要先签“个人原因离职”。</div>
+      <div class="flow">
+        <div class="flow-step"><span class="n">01</span><h3>判断性质</h3><p>合法解除、协商解除，还是违法解除？</p></div>
+        <div class="flow-step now"><span class="n">02</span><h3>收集证据</h3><p>合同、工资、考勤、通知、聊天记录。</p></div>
+        <div class="flow-step"><span class="n">03</span><h3>协商</h3><p>明确补偿金额与支付时间。</p></div>
+        <div class="flow-step warn"><span class="n">04</span><h3>仲裁</h3><p>一般时效一年，向劳动合同履行地或单位所在地申请。</p></div>
+        <div class="flow-step"><span class="n">05</span><h3>诉讼</h3><p>对仲裁裁决不服，再向法院起诉。</p></div>
+      </div>
+      <div class="visual-grid">
+        <div class="visual-card"><h3>关键时限</h3><div class="visual-timeline"><div class="row"><b>1 年</b><span>劳动仲裁一般时效</span></div><div class="row"><b>15 日</b><span>对仲裁裁决不服起诉</span></div><div class="row"><b>3 年</b><span>普通民事诉讼时效</span></div></div></div>
+        <div class="visual-card"><h3>证据清单</h3><ul class="checklist"><li>劳动合同 / 入职通知</li><li>工资流水 / 工资条</li><li>考勤 / 加班记录</li><li>解除通知 / 聊天记录</li></ul></div>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#FFF9F0"></i><i class="swatch" style="background:#1F2937"></i><i class="swatch" style="background:#0F766E"></i><i class="swatch" style="background:#F59E0B"></i><i class="swatch" style="background:#EF4444"></i></div><span class="swatch-label">暖白 / 墨 / 青 / 琥珀 / 珊瑚</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-family:var(--sans);font-weight:800">法 469<small>人文无衬线 / 大标题 / 白话正文</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:8px"></i><i class="radius-box" style="border-radius:18px"></i><i class="radius-box" style="border-radius:24px"></i></div><span class="swatch-label">8 / 18 / 24</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div><div class="space-bar"><i style="width:32px"></i>32</div></div></div>
+    </div>
+  </section>
+
+  <!-- 规范 -->
+  <section class="panel" id="panel-spec" role="tabpanel" aria-labelledby="tab-spec" hidden>
+    <div class="panel-head">
+      <h1>规范</h1>
+      <p>这五套都来自真实法律场景，不是把“法律”当装饰。组件语义、间距和圆角仍然共用一套规则。</p>
+    </div>
+    <div class="spec-tab">
+      <section class="spec-section">
+        <h2>一、五种法律原生结构</h2>
+        <table class="scale-table">
+          <thead><tr><th>方向</th><th>参考</th><th>结构</th><th>适合</th></tr></thead>
+          <tbody>
+            <tr><td><strong>法务刊</strong></td><td>Legora / Harvey</td><td>全幅暗色 hero + 三栏编辑</td><td>品牌首页、内容入口</td></tr>
+            <tr><td><strong>国际律所</strong></td><td>Clifford Chance / Mishcon / PGS</td><td>年报式非对称 12 列网格</td><td>品牌、关于、业务目录</td></tr>
+            <tr><td><strong>诉讼服务</strong></td><td>GOV.UK / MOJ / HMCTS</td><td>服务页 + 任务清单 + 进度</td><td>“怎么办”程序指引</td></tr>
+            <tr><td><strong>判例检索</strong></td><td>Westlaw / LexisNexis</td><td>三栏检索工作台</td><td>法条、判例、引用分析</td></tr>
+            <tr><td><strong>法律图解</strong></td><td>Legal Design / Visual Law</td><td>结论 + 流程图 + 时限</td><td>新手学习、程序说明</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="spec-section">
+        <h2>二、法律元素的正确用法</h2>
+        <p>法律视觉不是加一个天平图标或红色印章。它应该来自法律工作本身的物件与结构：条号、引注、案号、审级、时限、证据清单、程序阶段、引用旗标。</p>
+        <table class="scale-table">
+          <thead><tr><th>元素</th><th>承载什么信息</th><th>不要怎么用</th></tr></thead>
+          <tbody>
+            <tr><td>条号 / 引注</td><td>结论的依据与可追溯性</td><td>当装饰背景、当按钮</td></tr>
+            <tr><td>案号 / 审级</td><td>文书身份与效力层级</td><td>编造假案号撑真实感</td></tr>
+            <tr><td>红旗 / 黄旗</td><td>引用风险与后续裁判态度</td><td>当普通标签、当情绪色</td></tr>
+            <tr><td>进度追踪</td><td>程序阶段与下一步</td><td>当游戏进度条</td></tr>
+            <tr><td>时限警告</td><td>错过会失去权利</td><td>和普通提示混在一起</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="spec-section">
+        <h2>三、令牌、圆角与间距</h2>
+        <pre class="code">:root {
+  /* primitive */
+  --navy-900: #0B1B2B;
+  --ivory-50: #F3EFE6;
+  --oxblood-600: #7A1F2B;
+  --court-blue-600: #1D70B8;
+  --citator-red: #C0392B;
+
+  /* semantic */
+  --surface-page: var(--ivory-50);
+  --text-primary: var(--navy-900);
+  --action-primary: var(--court-blue-600);
+  --state-warning: var(--citator-red);
+
+  /* component */
+  --card-radius: 0px;
+  --card-padding: var(--space-4);
+}</pre>
+        <p class="footnote" style="margin-top:12px">圆角按方向选择：法务刊/国际律所/诉讼服务/判例检索使用 0–4；法律图解使用 8–24。间距统一 4 的倍数：4/8/12/16/24/32/48/64；嵌套容器等距内缩。</p>
+      </section>
+
+      <section class="spec-section">
+        <h2>四、组件语义</h2>
+        <div class="dodont-grid">
+          <div class="dodont"><span class="tag do">Do</span><h3>把“法条”做成引用块</h3><div class="mini"><span style="font-size:12px">第 469 条 · 民法典</span><span style="font-size:11px;color:var(--shell-muted)">▸ 展开原文</span></div><p>引用是证据，不是装饰。</p></div>
+          <div class="dodont"><span class="tag dont">Don't</span><h3>把法条做成主按钮</h3><div class="mini"><button class="btn btn-primary">第 469 条</button></div><p>用户会以为点击是执行操作。</p></div>
+          <div class="dodont"><span class="tag do">Do</span><h3>时限用警示块</h3><div class="mini"><span style="border-left:3px solid #D4351C;padding-left:8px;font-size:11px">仲裁时效一年，请尽快处理。</span></div><p>错过时限会失去权利。</p></div>
+          <div class="dodont"><span class="tag dont">Don't</span><h3>把时限写进普通说明</h3><div class="mini"><span style="font-size:11px;color:var(--shell-muted)">一般时效为一年……</span></div><p>关键信息会被淹没。</p></div>
+        </div>
+      </section>
+
+      <section class="spec-section">
+        <h2>五、参考来源</h2>
+        <ul class="sources">
+          <li><a href="https://designdetails.io/websites/legora-com">Legora 网站设计拆解</a> · <a href="https://opendesign.cc/zh-CN/sites/harvey">Harvey 设计参考</a></li>
+          <li><a href="https://www.heliosdesign.com/blog/web/the-best-law-firm-websites-2022.html">Helios — 国际律所网站设计</a> · <a href="https://ludge.studio/projects/pgs-legal/">LUDGE — PGS Legal</a></li>
+          <li><a href="https://design-system.service.gov.uk/">GOV.UK Design System</a> · <a href="https://design-patterns.service.justice.gov.uk/components/">MOJ Design Patterns</a></li>
+          <li><a href="https://researchguides.library.vanderbilt.edu/FirstYearLegalResearch/codesonline">Vanderbilt — Westlaw / Lexis 检索指南</a> · <a href="https://casebriefly.com/guides/westlaw-vs-lexis-whats-the-difference">Westlaw vs Lexis</a></li>
+          <li><a href="https://www.abajournal.com/legalrebels/article/2013_legal_rebel_profile_margaret_hagan">ABA — Margaret Hagan / Legal Design</a></li>
+        </ul>
+        <p class="footnote" style="margin-top:12px">如果选一套做主产品，我建议「法律图解」做学习主线，把「判例检索」放进法条与复习页，「诉讼服务」放进“怎么办”程序页；「法务刊」做品牌首页，「国际律所」做关于/业务目录。这样法律感来自功能，而不是装饰。</p>
+      </section>
+    </div>
+  </section>
+</main>
+
+<script>
+  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+  const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+  function select(name, focus) {
+    tabs.forEach((tab) => {
+      const on = tab.dataset.panel === name;
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      if (on && focus) tab.focus();
+    });
+    panels.forEach((panel) => { panel.hidden = panel.id !== 'panel-' + name; });
+    try { localStorage.setItem('fajing.design.legal', name); } catch (e) {}
+    try { if (history.replaceState) history.replaceState(null, '', '#' + name); } catch (e) {}
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => select(tab.dataset.panel, false));
+    tab.addEventListener('keydown', (event) => {
+      const index = tabs.indexOf(tab);
+      if (event.key === 'ArrowRight') { event.preventDefault(); select(tabs[(index + 1) % tabs.length].dataset.panel, true); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); select(tabs[(index - 1 + tabs.length) % tabs.length].dataset.panel, true); }
+    });
+  });
+
+  let initial = location.hash.replace('#', '');
+  if (!initial) { try { initial = localStorage.getItem('fajing.design.legal') || 'press'; } catch (e) { initial = 'press'; } }
+  if (!tabs.some((tab) => tab.dataset.panel === initial)) initial = 'press';
+  select(initial, false);
+
+  window.addEventListener('hashchange', () => {
+    const name = location.hash.replace('#', '');
+    if (tabs.some((tab) => tab.dataset.panel === name)) select(name, false);
+  });
+</script>

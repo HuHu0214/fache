@@ -44,7 +44,7 @@ export function DailyChest() {
           <path
             d="M8 28 Q8 14 32 14 Q56 14 56 28"
             fill="none"
-            stroke="var(--amber)"
+            stroke="var(--line)"
             strokeWidth="2"
           />
           <rect
@@ -53,27 +53,27 @@ export function DailyChest() {
             width="48"
             height="26"
             rx="2"
-            fill="var(--amber-soft)"
-            stroke="var(--amber)"
+            fill="var(--yellow)"
+            stroke="var(--line)"
             strokeWidth="2"
           />
-          <rect x="8" y="32" width="48" height="3" fill="var(--amber)" />
+          <rect x="8" y="32" width="48" height="3" fill="var(--line)" />
           <rect
             x="29"
             y="38"
             width="6"
             height="8"
             rx="1"
-            fill="var(--amber)"
+            fill="var(--line)"
           />
-          <circle cx="32" cy="42" r="1.5" fill="var(--bg)" />
+          <circle cx="32" cy="42" r="1.5" fill="var(--yellow)" />
         </svg>
 
         <div className="min-w-0 flex-1">
           <p className="hud-label">[ CACHE ] 每日宝箱</p>
           <p className="mt-1 text-sm">
             {canOpen
-              ? '开启可得 20–30 阅历，可能掉落护符'
+              ? '每日奖励 20–30 阅历，可能获得护符'
               : lastBonus > 0
                 ? `今日已开启：+${lastBonus} 阅历${lastFreeze ? ' · +1 断签护符' : ''}`
                 : '今日已开启，明天再来'}

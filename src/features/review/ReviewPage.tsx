@@ -32,11 +32,11 @@ export default function ReviewPage() {
     return (
       <div className="space-y-3 py-10 text-center">
         <p className="hud-label">[ REVIEW QUEUE ]</p>
-        <h2 className="text-2xl font-semibold tracking-tight">
+        <h2 className="text-3xl font-black tracking-tight">
           复习
         </h2>
         <p className="text-sm text-[var(--muted)]">
-          今天没有要复习的，去主题里逛逛。
+          暂无到期复习。
         </p>
       </div>
     );
@@ -55,7 +55,7 @@ export default function ReviewPage() {
       <header className="flex items-baseline justify-between gap-3">
         <div>
           <p className="hud-label">[ REVIEW QUEUE ]</p>
-          <h2 className="text-2xl font-semibold tracking-tight">复习</h2>
+          <h2 className="text-3xl font-black tracking-tight">复习</h2>
         </div>
         <span className="font-mono text-[10px] tracking-[0.12em] text-[var(--amber)]">
           剩余 {queue.length} 张
@@ -63,7 +63,7 @@ export default function ReviewPage() {
       </header>
 
       <section className="hud-panel space-y-4 px-5 py-5">
-        <h3 className="flex items-center gap-2 text-lg font-medium">
+        <h3 className="flex items-center gap-2 text-lg font-black">
           <span
             className="h-3 w-1 bg-[var(--accent)]"
             aria-hidden="true"

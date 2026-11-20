@@ -232,10 +232,17 @@ export default function HomePage() {
   const continueTo = currentNode ? currentNode.to : '/review';
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-[3px] border-[var(--line)] bg-[var(--band-bg)] px-3 py-2 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--band-fg)]">
+        <span>公共法律信息 · 学习指引</span>
+        <span>
+          NO. {new Date().toISOString().slice(0, 10)} / 本地
+        </span>
+      </div>
+
       <section className="hud-panel relative overflow-hidden p-5 sm:p-6">
         <div
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,229,255,0.05),transparent)] opacity-70"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(47,91,255,0.08),transparent)] opacity-70"
           aria-hidden="true"
         />
         <div className="relative flex flex-wrap items-center gap-5">
@@ -252,11 +259,12 @@ export default function HomePage() {
 
           <div className="min-w-0 flex-1">
             <p className="hud-label">[ LEARNING PATH ] 法径航线</p>
-            <h2 className="mt-1 text-2xl font-semibold tracking-tight">
-              {profile.title}
+            <h2 className="mt-1 text-3xl font-black tracking-tight">
+              继续研读
             </h2>
             <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-[var(--muted)]">
-              {profile.xp} 阅历 · 连续 {stats.streak} 天
+              {profile.title} · {profile.xp} 阅历 · 连续{' '}
+              {stats.streak} 天
             </p>
           </div>
 
@@ -270,7 +278,7 @@ export default function HomePage() {
             </Badge>
             <Link
               to={continueTo}
-              className="inline-flex h-10 items-center rounded-[2px] border border-[var(--accent)] bg-[var(--accent)] px-4 font-mono text-[11px] tracking-[0.12em] text-[var(--on-accent)] shadow-[0_0_22px_-8px_var(--accent)] hover:brightness-110"
+              className="inline-flex h-10 items-center border-[3px] border-[var(--line)] bg-[var(--accent)] px-4 font-mono text-[11px] font-bold tracking-[0.12em] text-[var(--on-accent)] shadow-[4px_4px_0_var(--shadow)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_var(--shadow)]"
             >
               继续学习 →
             </Link>
@@ -306,17 +314,20 @@ export default function HomePage() {
           );
 
           return (
-            <section key={unit.theme.id} className="pb-8">
-              <div className="mt-4 flex items-end justify-between gap-3 border-b border-[var(--line)] pb-2">
+            <section
+              key={unit.theme.id}
+              className="hud-panel mb-8 p-4"
+            >
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-[3px] border-[var(--line)] bg-[var(--band-bg)] px-3 py-2">
                 <Link
                   to={`/theme/${unit.theme.id}`}
                   className="focus-visible:outline-none"
                 >
-                  <h3 className="text-xl font-semibold">
+                  <h3 className="text-xl font-black text-[var(--band-fg)]">
                     {unit.theme.title}
                   </h3>
                 </Link>
-                <span className="font-mono text-[10px] tracking-[0.12em] text-[var(--amber)]">
+                <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[var(--yellow)]">
                   {scenarioCompleted}/{unit.scenarios.length}
                   {bossNode?.status === 'complete' && ' · BOSS ✓'}
                   {bossNode?.status === 'current' && ' · BOSS READY'}

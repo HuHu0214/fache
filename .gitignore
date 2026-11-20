@@ -5,3 +5,8 @@ dist
 playwright-report
 test-results
 *.local
+
+# local design preview pages served from public/
+public/design-directions-v2.html
+public/legal-native-directions.html
+public/combined-notice-visual.html

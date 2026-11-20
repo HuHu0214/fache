@@ -1,0 +1,841 @@
+<title>法径设计五案</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  :root {
+    color-scheme: light;
+    --shell-bg: #ECEAE4;
+    --shell-surface: #F8F6F1;
+    --shell-raised: #FFFFFF;
+    --shell-ink: #1B1A17;
+    --shell-muted: #6C675E;
+    --shell-line: #D3CEC4;
+    --shell-accent: #6B4BD6;
+    --shell-good: #2F6B4F;
+    --shell-bad: #A33A32;
+    --sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --serif: "Songti SC", "STSong", "Noto Serif SC", "SimSun", Georgia, serif;
+    --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --shell-bg: #131210;
+      --shell-surface: #1C1A16;
+      --shell-raised: #252219;
+      --shell-ink: #ECE6D9;
+      --shell-muted: #A59C8D;
+      --shell-line: #393429;
+      --shell-accent: #B79BFF;
+      --shell-good: #7FB59A;
+      --shell-bad: #E08A80;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --shell-bg: #131210;
+    --shell-surface: #1C1A16;
+    --shell-raised: #252219;
+    --shell-ink: #ECE6D9;
+    --shell-muted: #A59C8D;
+    --shell-line: #393429;
+    --shell-accent: #B79BFF;
+    --shell-good: #7FB59A;
+    --shell-bad: #E08A80;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--shell-bg);
+    color: var(--shell-ink);
+    font-family: var(--sans);
+    line-height: 1.65;
+    padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 64px;
+  }
+
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    background: color-mix(in srgb, var(--shell-bg) 92%, transparent);
+    border-bottom: 1px solid var(--shell-line);
+    backdrop-filter: blur(10px);
+  }
+
+  .topbar-inner {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding-block: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+  }
+
+  .wordmark {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  .wordmark span {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    color: var(--shell-muted);
+  }
+
+  .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    appearance: none;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--shell-muted);
+    border-radius: 6px;
+    padding: 6px 11px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .tab:hover { color: var(--shell-ink); border-color: var(--shell-line); }
+  .tab[aria-selected="true"] {
+    color: var(--shell-ink);
+    background: var(--shell-raised);
+    border-color: var(--shell-line);
+  }
+
+  .topbar-note { margin-left: auto; font-size: 11px; letter-spacing: .08em; color: var(--shell-muted); }
+
+  .wrap { max-width: 1220px; margin: 0 auto; padding-top: 28px; }
+  .panel { display: grid; gap: 16px; }
+  .panel[hidden] { display: none; }
+
+  .panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--shell-line);
+  }
+
+  .panel-head h1 {
+    margin: 0;
+    font-size: clamp(26px, 3.2vw, 38px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .panel-head p { margin: 0; max-width: 62ch; font-size: 13px; color: var(--shell-muted); }
+
+  .style-note {
+    display: flex; flex-wrap: wrap; gap: 6px 16px;
+    margin: 0; padding: 0; list-style: none;
+    font-size: 12px; color: var(--shell-muted);
+  }
+  .style-note strong { color: var(--shell-ink); font-weight: 600; }
+
+  /* shared bits */
+  .specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .spec-card { background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 12px; padding: 14px; min-width: 0; }
+  .spec-card h3 { margin: 0 0 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--shell-muted); font-weight: 500; }
+  .swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+  .swatch { width: 28px; height: 28px; border-radius: 4px; border: 1px solid rgba(0,0,0,.12); }
+  .swatch-label { font-family: var(--mono); font-size: 9px; color: var(--shell-muted); margin-top: 8px; display: block; letter-spacing: .04em; }
+  .type-sample { font-size: 24px; line-height: 1.3; font-weight: 700; }
+  .type-sample small { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; color: var(--shell-muted); }
+  .radius-row { display: flex; gap: 8px; align-items: end; }
+  .radius-box { width: 38px; height: 38px; background: var(--shell-raised); border: 1px solid var(--shell-line); }
+  .space-row { display: grid; gap: 6px; }
+  .space-bar { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; color: var(--shell-muted); }
+  .space-bar i { display: block; height: 6px; background: var(--shell-accent); opacity: .8; }
+
+  .specimen {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+    padding: 14px; background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 12px;
+  }
+
+  /* 1. Neo-brutalist notice board */
+  .s-brutal { --b-bg:#FFE85C; --b-surface:#FFFDF5; --b-ink:#0E0E0E; --b-blue:#2F5BFF; --b-pink:#FF3B7F; }
+  .brutal-frame {
+    background: var(--b-bg);
+    color: var(--b-ink);
+    border: 3px solid var(--b-ink);
+    box-shadow: 8px 8px 0 var(--b-ink);
+    font-family: var(--sans);
+  }
+  .brutal-top {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+    padding: 12px 16px; border-bottom: 3px solid var(--b-ink);
+    background: var(--b-surface);
+  }
+  .brutal-brand { font-size: 19px; font-weight: 900; letter-spacing: -0.04em; }
+  .brutal-top .tag { background: var(--b-blue); color: #fff; border: 2px solid var(--b-ink); padding: 2px 7px; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; }
+  .brutal-top .spacer { flex: 1; }
+  .brutal-top .toplink { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+  .brutal-body { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(210px,.7fr); gap: 16px; padding: 16px; }
+  .brutal-main { display: grid; gap: 14px; align-content: start; min-width: 0; }
+  .brutal-aside { display: grid; gap: 14px; align-content: start; min-width: 0; }
+  .brutal-kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+  .brutal-hero {
+    position: relative; background: var(--b-surface); border: 3px solid var(--b-ink);
+    box-shadow: 6px 6px 0 var(--b-ink); padding: 20px;
+  }
+  .brutal-hero h2 { margin: 6px 0 8px; font-size: clamp(28px, 4vw, 46px); line-height: .98; letter-spacing: -0.055em; font-weight: 900; }
+  .brutal-hero p { margin: 0; max-width: 40ch; font-size: 13px; font-weight: 500; }
+  .brutal-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .b-btn {
+    appearance: none; border: 3px solid var(--b-ink); background: var(--b-blue); color: #fff;
+    padding: 8px 14px; font: inherit; font-size: 13px; font-weight: 800;
+    box-shadow: 4px 4px 0 var(--b-ink); cursor: pointer;
+  }
+  .b-btn.alt { background: var(--b-surface); color: var(--b-ink); }
+  .b-btn:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--b-ink); }
+  .brutal-sticker {
+    position: absolute; top: 12px; right: 12px; width: 48px; height: 48px;
+    display: grid; place-items: center; background: var(--b-pink); border: 3px solid var(--b-ink);
+    font-size: 20px; font-weight: 900; transform: rotate(5deg);
+  }
+  .brutal-path { display: flex; align-items: center; gap: 0; overflow-x: auto; }
+  .b-node { flex: none; width: 36px; height: 36px; display: grid; place-items: center; border: 3px solid var(--b-ink); background: var(--b-surface); font-family: var(--mono); font-size: 11px; }
+  .b-node.done { background: var(--b-blue); color: #fff; }
+  .b-node.now { background: var(--b-pink); }
+  .b-link { width: 18px; height: 3px; background: var(--b-ink); flex: none; }
+  .brutal-article { background: var(--b-surface); border: 3px solid var(--b-ink); padding: 14px; }
+  .brutal-article span { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+  .brutal-article p { margin: 6px 0 0; font-size: 13px; line-height: 1.7; }
+  .brutal-stat { background: var(--b-surface); border: 3px solid var(--b-ink); box-shadow: 5px 5px 0 var(--b-ink); padding: 14px; }
+  .brutal-stat .row { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 2px dashed var(--b-ink); font-size: 12px; }
+  .brutal-stat .row:last-child { border: 0; }
+  .brutal-stat b { font-family: var(--mono); }
+  .brutal-note { background: var(--b-pink); border: 3px solid var(--b-ink); padding: 12px; font-size: 12px; font-weight: 700; transform: rotate(-1deg); }
+
+  /* 2. Biomorphic soft law */
+  .s-soft { --s-bg:#EAF6EF; --s-ink:#1F3A34; --s-coral:#FF7A59; --s-violet:#7C5CFF; --s-mint:#B8E0D2; --s-apricot:#FFE3D3; }
+  .soft-frame {
+    position: relative; overflow: hidden;
+    background: linear-gradient(155deg,#EAF6EF 0%,#F4F0FF 52%,#FFF0E6 100%);
+    color: var(--s-ink); border-radius: 42px; padding: 22px;
+  }
+  .soft-frame::before, .soft-frame::after {
+    content: ""; position: absolute; border-radius: 50%; pointer-events: none; filter: blur(2px);
+  }
+  .soft-frame::before { width: 220px; height: 220px; right: -60px; top: -80px; background: #B8E0D2; opacity: .55; }
+  .soft-frame::after { width: 160px; height: 160px; left: -50px; bottom: -60px; background: #FFE3D3; opacity: .8; }
+  .soft-nav {
+    position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+    background: rgba(255,255,255,.55); border-radius: 999px; padding: 8px 12px;
+    backdrop-filter: blur(8px);
+  }
+  .soft-brand { font-size: 18px; font-weight: 800; letter-spacing: .04em; }
+  .soft-links { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: #55706A; }
+  .soft-links .on { color: var(--s-ink); font-weight: 700; }
+  .soft-pill { margin-left: auto; background: var(--s-ink); color: #fff; border-radius: 999px; padding: 4px 12px; font-size: 11px; }
+  .soft-body { position: relative; z-index: 1; display: grid; gap: 16px; margin-top: 16px; }
+  .soft-hero {
+    position: relative; background: rgba(255,255,255,.6); border-radius: 36px; padding: 26px;
+    box-shadow: 0 24px 60px -42px rgba(31,58,52,.55);
+  }
+  .soft-orb {
+    width: 66px; height: 66px; display: grid; place-items: center;
+    border-radius: 46% 54% 58% 42% / 52% 46% 54% 48%;
+    background: radial-gradient(circle at 30% 25%, #FFD1C1, var(--s-coral));
+    color: #fff; font-family: var(--serif); font-size: 28px; margin-bottom: 10px;
+    box-shadow: 0 12px 30px -18px rgba(255,122,89,.8);
+  }
+  .soft-kicker { margin: 0; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #6C8A80; }
+  .soft-hero h2 { margin: 4px 0 8px; font-size: clamp(28px, 4vw, 42px); line-height: 1.08; font-weight: 800; letter-spacing: -.03em; }
+  .soft-hero p { margin: 0; max-width: 44ch; font-size: 13px; color: #55706A; }
+  .soft-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .soft-btn { appearance: none; border: 0; border-radius: 999px; background: var(--s-coral); color: #fff; padding: 9px 16px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .soft-btn.ghost { background: rgba(255,255,255,.75); color: var(--s-ink); }
+  .soft-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+  .soft-card { background: rgba(255,255,255,.62); border-radius: 28px; padding: 16px; }
+  .soft-card .label { margin: 0 0 8px; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6C8A80; }
+  .soft-card .big { margin: 0; font-size: 28px; font-weight: 800; }
+  .soft-card p { margin: 4px 0 0; font-size: 12px; color: #55706A; }
+  .soft-article { grid-column: 1 / -1; background: rgba(255,240,230,.75); border-radius: 30px; padding: 16px; }
+  .soft-article span { font-size: 11px; font-weight: 700; color: var(--s-coral); }
+  .soft-article p { margin: 6px 0 0; font-size: 13px; line-height: 1.7; color: #4A625B; }
+  .soft-path { grid-column: 1 / -1; display: flex; align-items: center; gap: 0; overflow-x: auto; padding: 4px; }
+  .s-node { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.7); color: #6C8A80; font-family: var(--mono); font-size: 11px; }
+  .s-node.done { background: var(--s-mint); color: #1F3A34; }
+  .s-node.now { background: var(--s-violet); color: #fff; }
+  .s-link { width: 22px; height: 2px; background: rgba(31,58,52,.18); }
+
+  /* 3. LawOS 2000 */
+  .s-lawos { --y-bg:#C7D0E4; --y-ink:#0A1030; --y-navy:#1B2A6B; --y-pink:#FF3EA5; --y-cyan:#41E3FF; }
+  .lawos-frame {
+    background: var(--y-bg); color: var(--y-ink);
+    border: 2px solid var(--y-ink);
+    box-shadow: 0 0 0 2px #fff inset, 10px 10px 0 rgba(10,16,48,.3);
+    font-family: "Courier New", var(--mono);
+  }
+  .lawos-titlebar {
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(180deg,#1B2A6B,#3B4F9E);
+    color: #fff; padding: 5px 8px; font-size: 12px; font-weight: 700;
+  }
+  .lawos-titlebar .win-btns { margin-left: auto; display: flex; gap: 3px; }
+  .lawos-titlebar .win-btns i { width: 14px; height: 14px; display: grid; place-items: center; background: #D8DFEF; color: var(--y-navy); border: 1px solid #fff; font-style: normal; font-size: 9px; }
+  .lawos-menubar { display: flex; flex-wrap: wrap; gap: 4px 12px; background: #E4E9F4; border-bottom: 1px solid #8A96B5; padding: 3px 8px; font-size: 10px; }
+  .lawos-menubar .right { margin-left: auto; color: #5C6B8F; }
+  .lawos-body { display: grid; grid-template-columns: 78px minmax(0,1fr) minmax(180px,.55fr); gap: 8px; padding: 8px; }
+  .lawos-icons { display: grid; gap: 8px; align-content: start; }
+  .lawos-icon { text-align: center; font-size: 9px; }
+  .lawos-icon b { display: grid; place-items: center; width: 38px; height: 34px; margin: 0 auto 2px; background: linear-gradient(180deg,#FFF,#AEBAD4); border: 1px outset #fff; font-size: 14px; }
+  .lawos-window { background: #F4F7FD; border: 2px inset #fff; padding: 10px; min-width: 0; }
+  .lawos-chrome {
+    display: inline-block; font-size: clamp(26px, 4vw, 44px); font-weight: 900; line-height: 1; letter-spacing: -.03em;
+    background: linear-gradient(180deg,#FFFFFF 0 34%,#9AA7C7 38% 49%,#FFFFFF 52% 60%,#5C6B8F 63% 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    -webkit-text-stroke: 1px var(--y-ink);
+    filter: drop-shadow(2px 2px 0 rgba(255,255,255,.8));
+  }
+  .lawos-hero h2 { margin: 6px 0; font-size: 20px; line-height: 1.25; }
+  .lawos-hero p { margin: 0; font-size: 11px; color: #36446E; }
+  .lawos-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .y-btn { appearance: none; border: 2px outset #fff; background: #D8DFEF; color: var(--y-ink); padding: 5px 12px; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .y-btn.primary { background: linear-gradient(180deg,#FF7BC0,#E61C87); color: #fff; }
+  .lawos-path { display: flex; align-items: center; gap: 0; margin-top: 12px; overflow-x: auto; }
+  .y-node { flex: none; width: 30px; height: 26px; display: grid; place-items: center; background: #D8DFEF; border: 2px outset #fff; font-size: 10px; }
+  .y-node.done { background: var(--y-cyan); }
+  .y-node.now { background: var(--y-pink); color: #fff; }
+  .y-link { width: 12px; height: 2px; background: #5C6B8F; }
+  .lawos-article { margin-top: 12px; background: #fff; border: 2px inset #fff; padding: 10px; }
+  .lawos-article span { color: #C2187A; font-size: 10px; font-weight: 700; }
+  .lawos-article p { margin: 4px 0 0; font-size: 11px; line-height: 1.7; }
+  .lawos-panel { background: #E4E9F4; border: 2px inset #fff; padding: 10px; font-size: 10px; }
+  .lawos-panel h3 { margin: 0 0 8px; font-size: 10px; letter-spacing: .08em; }
+  .lawos-panel .row { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px solid #AEBAD4; padding: 4px 0; }
+  .lawos-sparkle { position: absolute; width: 14px; height: 14px; background: var(--y-cyan); clip-path: polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%); }
+  .lawos-statusbar { border-top: 1px solid #8A96B5; background: #E4E9F4; padding: 3px 8px; font-size: 9px; display: flex; gap: 14px; }
+
+  /* 4. Bento case matrix */
+  .s-matrix { --m-bg:#0B0C0E; --m-surface:#14161A; --m-line:#24272E; --m-ink:#E8EAED; --m-muted:#8B93A1; --m-accent:#C6FF3D; --m-danger:#FF5C7A; }
+  .matrix-frame { background: var(--m-bg); color: var(--m-ink); border: 1px solid #2A2D34; border-radius: 20px; padding: 16px; }
+  .matrix-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--m-muted); padding-bottom: 12px; border-bottom: 1px solid var(--m-line); }
+  .matrix-grid { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; margin-top: 12px; }
+  .m-tile { background: var(--m-surface); border: 1px solid var(--m-line); border-radius: 16px; padding: 16px; min-width: 0; }
+  .m-hero { grid-column: span 4; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; }
+  .m-hero .kicker { margin: 0; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: var(--m-accent); }
+  .m-hero h2 { margin: 8px 0; font-size: clamp(24px, 3.4vw, 38px); line-height: 1.05; letter-spacing: -.03em; font-weight: 650; }
+  .m-hero p { margin: 0; max-width: 40ch; font-size: 12px; color: var(--m-muted); }
+  .m-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .m-btn { appearance: none; border: 0; border-radius: 10px; background: var(--m-accent); color: #0B0C0E; padding: 8px 14px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .m-btn.ghost { background: #1E2127; color: var(--m-ink); border: 1px solid var(--m-line); }
+  .m-stat { grid-column: span 2; display: flex; flex-direction: column; justify-content: space-between; min-height: 100px; }
+  .m-stat .label { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--m-muted); }
+  .m-stat .big { font-family: var(--mono); font-size: 30px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .m-article { grid-column: span 3; }
+  .m-article .label { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--m-accent); }
+  .m-article p { margin: 6px 0 0; font-size: 11px; line-height: 1.7; color: var(--m-muted); }
+  .m-path { grid-column: span 3; display: flex; align-items: center; gap: 0; overflow-x: auto; }
+  .m-node { flex: none; width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; border: 1px solid var(--m-line); font-family: var(--mono); font-size: 9px; color: var(--m-muted); }
+  .m-node.done { background: var(--m-accent); color: #0B0C0E; border-color: var(--m-accent); }
+  .m-node.now { border-color: var(--m-accent); color: var(--m-accent); }
+  .m-link { width: 12px; height: 1px; background: var(--m-line); }
+  .m-bar { height: 3px; background: #23262C; border-radius: 99px; overflow: hidden; }
+  .m-bar span { display: block; height: 100%; width: 25%; background: var(--m-accent); }
+
+  /* 5. Risograph zine */
+  .s-riso { --r-paper:#F4EDDE; --r-pink:#FF48B0; --r-blue:#0078BF; --r-ink:#111111; }
+  .riso-frame { position: relative; overflow: hidden; background: var(--r-paper); color: var(--r-ink); border: 3px solid var(--r-ink); font-family: var(--sans); }
+  .riso-frame::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 3;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+    opacity: .18; mix-blend-mode: multiply;
+  }
+  .riso-frame::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background-image: radial-gradient(circle, rgba(0,120,191,.28) 1px, transparent 1.4px);
+    background-size: 9px 9px; opacity: .25; mix-blend-mode: multiply;
+  }
+  .riso-top { position: relative; z-index: 4; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; border-bottom: 3px solid var(--r-ink); padding: 10px 14px; }
+  .riso-brand { font-size: 20px; font-weight: 900; letter-spacing: -.06em; }
+  .riso-top .issue { font-family: var(--mono); font-size: 9px; letter-spacing: .14em; }
+  .riso-top .spacer { flex: 1; }
+  .riso-top .stamp { border: 2px solid var(--r-pink); color: var(--r-pink); font-family: var(--mono); font-size: 9px; padding: 2px 6px; transform: rotate(-4deg); }
+  .riso-body { position: relative; z-index: 4; display: grid; grid-template-columns: minmax(0,1.2fr) minmax(210px,.8fr); gap: 18px; padding: 18px; }
+  .riso-cover { position: relative; border-right: 3px solid var(--r-ink); padding-right: 18px; }
+  .riso-issue-big { font-family: var(--mono); font-size: 86px; line-height: .8; font-weight: 700; color: var(--r-blue); opacity: .9; position: absolute; right: 8px; top: -10px; }
+  .riso-kicker { margin: 0; font-family: var(--mono); font-size: 10px; letter-spacing: .16em; }
+  .riso-title { position: relative; margin: 12px 0 0; font-size: clamp(36px, 6vw, 68px); line-height: .9; letter-spacing: -.07em; font-weight: 900; text-shadow: 3px 3px 0 var(--r-pink), -3px -3px 0 var(--r-blue); }
+  .riso-sub { margin: 8px 0 0; font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+  .riso-cover p { margin: 12px 0 0; max-width: 36ch; font-size: 12px; line-height: 1.8; }
+  .riso-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .r-btn { appearance: none; border: 3px solid var(--r-ink); background: var(--r-pink); color: var(--r-ink); padding: 7px 14px; font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; }
+  .r-btn.alt { background: transparent; }
+  .riso-side { display: grid; gap: 14px; align-content: start; }
+  .riso-card { border: 3px solid var(--r-ink); padding: 12px; background: color-mix(in srgb, var(--r-paper) 70%, #fff); }
+  .riso-card span { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--r-blue); }
+  .riso-card p { margin: 6px 0 0; font-size: 12px; line-height: 1.7; }
+  .riso-path { display: flex; align-items: center; gap: 0; overflow-x: auto; }
+  .r-node { flex: none; width: 30px; height: 30px; border: 2px solid var(--r-ink); display: grid; place-items: center; font-family: var(--mono); font-size: 9px; background: transparent; }
+  .r-node.done { background: var(--r-blue); color: #fff; }
+  .r-node.now { background: var(--r-pink); }
+  .r-link { width: 12px; height: 2px; background: var(--r-ink); }
+  .riso-footer { position: relative; z-index: 4; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; border-top: 3px solid var(--r-ink); padding: 8px 14px; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; }
+
+  /* Spec tab */
+  .spec-tab { display: grid; gap: 24px; }
+  .spec-section { background: var(--shell-surface); border: 1px solid var(--shell-line); border-radius: 16px; padding: clamp(18px, 3vw, 28px); }
+  .spec-section h2 { margin: 0 0 6px; font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+  .spec-section > p { margin: 0 0 18px; max-width: 76ch; color: var(--shell-muted); font-size: 13px; }
+  .code { margin: 0; padding: 16px; overflow-x: auto; background: #171512; color: #E9DFCC; border-radius: 8px; font-family: var(--mono); font-size: 11px; line-height: 1.8; }
+  .scale-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .scale-table th, .scale-table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--shell-line); vertical-align: top; }
+  .scale-table th { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--shell-muted); font-weight: 500; }
+  .scale-table code { font-family: var(--mono); font-size: 11px; }
+  .dodont-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin-top: 16px; }
+  .dodont { border: 1px solid var(--shell-line); border-radius: 12px; padding: 14px; background: var(--shell-raised); }
+  .dodont h3 { margin: 8px 0 4px; font-size: 14px; }
+  .dodont p { margin: 0; font-size: 12px; color: var(--shell-muted); }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 9px; letter-spacing: .1em; padding: 2px 6px; border-radius: 3px; }
+  .tag.do { background: color-mix(in srgb, var(--shell-good) 14%, transparent); color: var(--shell-good); border: 1px solid color-mix(in srgb, var(--shell-good) 40%, transparent); }
+  .tag.dont { background: color-mix(in srgb, var(--shell-bad) 12%, transparent); color: var(--shell-bad); border: 1px solid color-mix(in srgb, var(--shell-bad) 40%, transparent); }
+  .mini { padding: 12px; border: 1px dashed var(--shell-line); border-radius: 8px; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .mini .btn { border-radius: 6px; font-size: 12px; padding: 6px 10px; border: 1px solid var(--shell-line); background: transparent; color: var(--shell-ink); }
+  .mini .btn-primary { background: var(--shell-accent); border-color: var(--shell-accent); color: #fff; }
+  .copy-table td:first-child { color: var(--shell-muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .copy-table td:last-child { font-weight: 500; }
+  .compare-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+  .compare-card { border: 1px solid var(--shell-line); border-radius: 12px; padding: 16px; background: var(--shell-raised); }
+  .compare-card h3 { margin: 0 0 4px; font-size: 17px; }
+  .compare-card p { margin: 0; font-size: 12px; color: var(--shell-muted); }
+  .mini-swatch { display: flex; gap: 4px; margin-top: 10px; }
+  .mini-swatch i { width: 18px; height: 18px; border-radius: 3px; }
+  .footnote { font-size: 11px; color: var(--shell-muted); max-width: 78ch; }
+  .sources { margin: 8px 0 0; padding-left: 18px; font-size: 11px; color: var(--shell-muted); }
+  .sources a { color: var(--shell-accent); }
+
+  @media (max-width: 820px) {
+    .brutal-body, .soft-grid, .riso-body { grid-template-columns: minmax(0,1fr); }
+    .riso-cover { border-right: 0; border-bottom: 3px solid var(--r-ink); padding-right: 0; padding-bottom: 16px; }
+    .lawos-body { grid-template-columns: 64px minmax(0,1fr); }
+    .lawos-panel { grid-column: 1 / -1; }
+    .matrix-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .m-hero, .m-stat, .m-article, .m-path { grid-column: span 2; }
+    .specs { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .dodont-grid, .compare-grid { grid-template-columns: minmax(0,1fr); }
+    .topbar-note { display: none; }
+  }
+
+  @media (max-width: 460px) {
+    .brutal-top .toplink { display: none; }
+    .soft-grid { grid-template-columns: minmax(0,1fr); }
+    .lawos-body { grid-template-columns: minmax(0,1fr); }
+    .lawos-icons { grid-template-columns: repeat(3, 1fr); }
+    .matrix-grid { grid-template-columns: minmax(0,1fr); }
+    .m-hero, .m-stat, .m-article, .m-path { grid-column: auto; }
+    .specs { grid-template-columns: minmax(0,1fr); }
+    .riso-issue-big { font-size: 60px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="wordmark">法径 <span>设计五案</span></div>
+    <div class="tabs" role="tablist" aria-label="设计方向">
+      <button class="tab" role="tab" id="tab-brutal" aria-selected="true" aria-controls="panel-brutal" data-panel="brutal">公告</button>
+      <button class="tab" role="tab" id="tab-soft" aria-selected="false" aria-controls="panel-soft" data-panel="soft">软法</button>
+      <button class="tab" role="tab" id="tab-lawos" aria-selected="false" aria-controls="panel-lawos" data-panel="lawos">LawOS 2000</button>
+      <button class="tab" role="tab" id="tab-matrix" aria-selected="false" aria-controls="panel-matrix" data-panel="matrix">判例矩阵</button>
+      <button class="tab" role="tab" id="tab-riso" aria-selected="false" aria-controls="panel-riso" data-panel="riso">法志</button>
+      <button class="tab" role="tab" id="tab-spec" aria-selected="false" aria-controls="panel-spec" data-panel="spec">规范</button>
+    </div>
+    <p class="topbar-note">五种设计语言 · 不是五种配色</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 1 公告 -->
+  <section class="panel s-brutal" id="panel-brutal" role="tabpanel" aria-labelledby="tab-brutal">
+    <div class="panel-head">
+      <h1>公告</h1>
+      <p>新粗野主义。把法律做成街边公告栏：粗黑边框、硬投影、荧光黄与电蓝、贴纸和盖章。适合强化“法律是公共信息”的直白与力量。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 海报 + 公告栏</li><li><strong>关键词</strong> 粗野 / 直白 / 有冲击</li><li><strong>风险</strong> 长时间阅读会疲劳，适合入口与重点页</li></ul>
+
+    <div class="s-brutal">
+      <div class="brutal-frame">
+        <div class="brutal-top">
+          <span class="brutal-brand">法径</span>
+          <span class="tag">LEGAL NOTICE / 03</span>
+          <span class="spacer"></span>
+          <span class="toplink">检索</span>
+          <span class="toplink">设置</span>
+        </div>
+        <div class="brutal-body">
+          <div class="brutal-main">
+            <div class="brutal-kicker">今日研读 · 合同编 · 第 469 条</div>
+            <div class="brutal-hero">
+              <h2>口头约定<br>成立合同吗？</h2>
+              <p>合同不以书面为要件。形式自由，但举证困难。</p>
+              <div class="brutal-actions"><button class="b-btn">开始研读</button><button class="b-btn alt">查看条文</button></div>
+              <span class="brutal-sticker">法</span>
+            </div>
+            <div class="brutal-path"><span class="b-node done">01</span><i class="b-link"></i><span class="b-node done">02</span><i class="b-link"></i><span class="b-node now">03</span><i class="b-link"></i><span class="b-node">04</span><i class="b-link"></i><span class="b-node">05</span></div>
+            <div class="brutal-article"><span>第 469 条</span><p>当事人订立合同，可以采用书面形式、口头形式或者其他形式。书面形式是合同书、信件、电报、电传、传真等可以有形地表现所载内容的形式。</p></div>
+          </div>
+          <aside class="brutal-aside">
+            <div class="brutal-stat"><div class="row"><span>等级</span><b>03</b></div><div class="row"><span>本卷</span><b>3 / 12</b></div><div class="row"><span>待复习</span><b>2</b></div></div>
+            <div class="brutal-note">今日复习 2 条<br>连续研读 6 天</div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#FFE85C"></i><i class="swatch" style="background:#FFFDF5"></i><i class="swatch" style="background:#0E0E0E"></i><i class="swatch" style="background:#2F5BFF"></i><i class="swatch" style="background:#FF3B7F"></i></div><span class="swatch-label">荧光黄 / 纸白 / 墨黑 / 电蓝 / 品红</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-weight:900;letter-spacing:-.05em">法 469<small>超粗无衬线 / 等宽标签 / 无衬线正文</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:0;border-width:3px"></i><i class="radius-box" style="border-radius:0;box-shadow:4px 4px 0 #1B1A17"></i></div><span class="swatch-label">0 / 0 / 0 + 硬投影</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div><div class="space-bar"><i style="width:32px"></i>32</div></div></div>
+    </div>
+
+    <div class="specimen">
+      <button class="b-btn">开始研读</button><button class="b-btn alt">查看条文</button><span class="tag" style="background:#FF3B7F;color:#fff;border:2px solid #0E0E0E;padding:4px 8px">已掌握</span><span class="tag" style="border:2px solid #0E0E0E;padding:4px 8px">待复习</span>
+    </div>
+  </section>
+
+  <!-- 2 软法 -->
+  <section class="panel s-soft" id="panel-soft" role="tabpanel" aria-labelledby="tab-soft" hidden>
+    <div class="panel-head">
+      <h1>软法</h1>
+      <p>生物形态与软陶质感。用超大连续圆角、鹅卵石卡片、薄荷与杏色渐变、漂浮的“法”泡泡，把法律从威严拉回到可接近。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 软盒堆叠 + 悬浮层</li><li><strong>关键词</strong> 温和 / 亲和 / 无棱角</li><li><strong>风险</strong> 容易显得幼稚，需要靠内容密度压住</li></ul>
+
+    <div class="s-soft">
+      <div class="soft-frame">
+        <div class="soft-nav"><span class="soft-brand">法径</span><span class="soft-links"><span class="on">研读</span><span>法条</span><span>复习</span><span>笔记</span></span><span class="soft-pill">设置</span></div>
+        <div class="soft-body">
+          <div class="soft-hero">
+            <div class="soft-orb">法</div>
+            <p class="soft-kicker">今日 · 合同</p>
+            <h2>口头约定，<br>也算数吗？</h2>
+            <p>合同不以书面为要件。形式自由，但举证困难。</p>
+            <div class="soft-actions"><button class="soft-btn">继续研读</button><button class="soft-btn ghost">查看条文</button></div>
+          </div>
+          <div class="soft-grid">
+            <div class="soft-card"><p class="label">本卷进度</p><p class="big">3 / 12</p><p>还剩 9 个场景</p></div>
+            <div class="soft-card"><p class="label">连续研读</p><p class="big">6 天</p><p>下一档：每日 +12 阅历</p></div>
+            <div class="soft-path"><span class="s-node done">01</span><i class="s-link"></i><span class="s-node done">02</span><i class="s-link"></i><span class="s-node now">03</span><i class="s-link"></i><span class="s-node">04</span><i class="s-link"></i><span class="s-node">05</span></div>
+            <div class="soft-article"><span>第 469 条</span><p>当事人订立合同，可以采用书面形式、口头形式或者其他形式。书面形式是合同书、信件、电报、电传、传真等可以有形地表现所载内容的形式。</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#EAF6EF"></i><i class="swatch" style="background:#B8E0D2"></i><i class="swatch" style="background:#FFE3D3"></i><i class="swatch" style="background:#FF7A59"></i><i class="swatch" style="background:#7C5CFF"></i></div><span class="swatch-label">薄荷 / 鼠尾草 / 杏 / 珊瑚 / 紫</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-weight:800">法 469<small>圆润无衬线 / 大标题 / 无硬边</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:14px"></i><i class="radius-box" style="border-radius:24px"></i><i class="radius-box" style="border-radius:36px"></i></div><span class="swatch-label">14 / 24 / 36 · squircle</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:12px"></i>12</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div><div class="space-bar"><i style="width:32px"></i>32</div></div></div>
+    </div>
+
+    <div class="specimen">
+      <button class="soft-btn">继续研读</button><button class="soft-btn ghost">查看条文</button><span class="tag" style="background:#B8E0D2;color:#1F3A34;border:0;border-radius:999px;padding:5px 10px">已掌握</span><span class="tag" style="background:#fff;color:#55706A;border:0;border-radius:999px;padding:5px 10px">待复习</span>
+    </div>
+  </section>
+
+  <!-- 3 LawOS 2000 -->
+  <section class="panel s-lawos" id="panel-lawos" role="tabpanel" aria-labelledby="tab-lawos" hidden>
+    <div class="panel-head">
+      <h1>LawOS 2000</h1>
+      <p>Y2K 复古未来主义。银色铬字、像素标签、星芒、半透明塑料和 Windows 98 式窗口。法律被装进一台 2000 年的学习终端。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 桌面窗口 + 状态栏</li><li><strong>关键词</strong> 怀旧 / 铬金属 / 像素</li><li><strong>风险</strong> 可读性和信任感最弱，适合实验性入口</li></ul>
+
+    <div class="s-lawos" style="position:relative">
+      <span class="lawos-sparkle" style="right:8%;top:10px"></span>
+      <span class="lawos-sparkle" style="left:38%;top:4px;width:9px;height:9px;background:#FF3EA5"></span>
+      <div class="lawos-frame">
+        <div class="lawos-titlebar"><span>法径.exe</span><span class="win-btns"><i>□</i><i>×</i></span></div>
+        <div class="lawos-menubar"><span>文件</span><span>编辑</span><span>查看</span><span>帮助</span><span class="right">LAW.DB · 1,272 条</span></div>
+        <div class="lawos-body">
+          <div class="lawos-icons"><div class="lawos-icon"><b>卷</b>卷宗</div><div class="lawos-icon"><b>条</b>法条</div><div class="lawos-icon"><b>复</b>复习</div></div>
+          <div class="lawos-window">
+            <span class="lawos-chrome">法径</span>
+            <div class="lawos-hero">
+              <h2>口头约定，成立合同吗？</h2>
+              <p>合同不以书面为要件。形式自由，但举证困难。</p>
+              <div class="lawos-actions"><button class="y-btn primary">继续研读</button><button class="y-btn">查看条文</button></div>
+            </div>
+            <div class="lawos-path"><span class="y-node done">01</span><i class="y-link"></i><span class="y-node done">02</span><i class="y-link"></i><span class="y-node now">03</span><i class="y-link"></i><span class="y-node">04</span><i class="y-link"></i><span class="y-node">05</span></div>
+            <div class="lawos-article"><span>ARTICLE 469</span><p>当事人订立合同，可以采用书面形式、口头形式或者其他形式。书面形式是合同书、信件、电报、电传、传真等可以有形地表现所载内容的形式。</p></div>
+          </div>
+          <div class="lawos-panel"><h3>系统属性</h3><div class="row"><span>等级</span><b>03</b></div><div class="row"><span>本卷</span><b>3 / 12</b></div><div class="row"><span>复习</span><b>2</b></div><div class="row"><span>连续</span><b>6 天</b></div></div>
+        </div>
+        <div class="lawos-statusbar"><span>就绪</span><span>法条库 7 部</span><span>本地存储</span></div>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#C7D0E4"></i><i class="swatch" style="background:#1B2A6B"></i><i class="swatch" style="background:#0A1030"></i><i class="swatch" style="background:#FF3EA5"></i><i class="swatch" style="background:#41E3FF"></i></div><span class="swatch-label">银 / 海军蓝 / 深空 / 品红 / 青</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-family:var(--mono);font-weight:700;background:linear-gradient(180deg,#fff,#9AA7C7 48%,#5C6B8F);-webkit-background-clip:text;background-clip:text;color:transparent">法 469<small style="-webkit-text-fill-color:var(--shell-muted);color:var(--shell-muted)">像素等宽 / 铬金属字 / 系统窗口</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:2px"></i><i class="radius-box" style="border-radius:4px"></i></div><span class="swatch-label">0 / 2 / 4 · 窗口直角</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:4px"></i>4</div><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:12px"></i>12</div><div class="space-bar"><i style="width:16px"></i>16</div></div></div>
+    </div>
+
+    <div class="specimen">
+      <button class="y-btn primary">继续研读</button><button class="y-btn">查看条文</button><span class="tag" style="background:#41E3FF;color:#0A1030;border:2px outset #fff;padding:4px 8px">已掌握</span><span class="tag" style="background:#D8DFEF;color:#0A1030;border:2px outset #fff;padding:4px 8px">待复习</span>
+    </div>
+  </section>
+
+  <!-- 4 判例矩阵 -->
+  <section class="panel s-matrix" id="panel-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
+    <div class="panel-head">
+      <h1>判例矩阵</h1>
+      <p>Bento 数据产品。暗色模块网格、单色荧光绿强调、等宽数字与判例编号。法律被组织成可扫读、可比较、可定位的数据矩阵。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 12 列 Bento 网格</li><li><strong>关键词</strong> 数据 / 秩序 / 高效</li><li><strong>风险</strong> 亲和力低，需要内容质量撑住</li></ul>
+
+    <div class="s-matrix">
+      <div class="matrix-frame">
+        <div class="matrix-top"><span>法径 / CASE MATRIX</span><span>2026-11-20 · 本地</span></div>
+        <div class="matrix-grid">
+          <div class="m-tile m-hero">
+            <div><p class="kicker">CASE 03 / CONTRACTS</p><h2>口头约定，是否成立合同？</h2><p>合同不以书面为要件。形式自由，但举证困难。</p></div>
+            <div class="m-actions"><button class="m-btn">继续研读</button><button class="m-btn ghost">查看条文</button></div>
+          </div>
+          <div class="m-tile m-stat"><span class="label">LEVEL</span><span class="big">03</span></div>
+          <div class="m-tile m-stat"><span class="label">UNIT</span><span class="big">3/12</span><div class="m-bar"><span></span></div></div>
+          <div class="m-tile m-article"><span class="label">ARTICLE 469</span><p>当事人订立合同，可以采用书面形式、口头形式或者其他形式。</p></div>
+          <div class="m-tile m-path"><span class="m-node done">01</span><i class="m-link"></i><span class="m-node done">02</span><i class="m-link"></i><span class="m-node now">03</span><i class="m-link"></i><span class="m-node">04</span><i class="m-link"></i><span class="m-node">05</span></div>
+          <div class="m-tile m-stat"><span class="label">REVIEW</span><span class="big">02</span></div>
+          <div class="m-tile m-stat"><span class="label">STREAK</span><span class="big">6 天</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#0B0C0E"></i><i class="swatch" style="background:#14161A"></i><i class="swatch" style="background:#24272E"></i><i class="swatch" style="background:#E8EAED"></i><i class="swatch" style="background:#C6FF3D"></i></div><span class="swatch-label">黑 / 面 / 线 / 白 / 荧光绿</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-weight:650">法 469<small>中性无衬线 / 等宽数字 / 表格化</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:8px"></i><i class="radius-box" style="border-radius:14px"></i><i class="radius-box" style="border-radius:20px"></i></div><span class="swatch-label">8 / 14 / 20 · Bento 模块</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:12px"></i>12</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div></div></div>
+    </div>
+
+    <div class="specimen">
+      <button class="m-btn">继续研读</button><button class="m-btn ghost">查看条文</button><span class="tag" style="background:#C6FF3D;color:#0B0C0E;border:0;padding:4px 8px">已掌握</span><span class="tag" style="background:#1E2127;color:#8B93A1;border:1px solid #24272E;padding:4px 8px">待复习</span>
+    </div>
+  </section>
+
+  <!-- 5 法志 -->
+  <section class="panel s-riso" id="panel-riso" role="tabpanel" aria-labelledby="tab-riso" hidden>
+    <div class="panel-head">
+      <h1>法志</h1>
+      <p>Risograph 孔版印刷。双色套印、错位标题、网点、纸纹、胶带和印章。法律被做成一本独立杂志，适合品牌入口与专题内容。</p>
+    </div>
+    <ul class="style-note"><li><strong>结构</strong> 杂志跨页 + 拼贴</li><li><strong>关键词</strong> 印刷 / 双色 / 手工感</li><li><strong>风险</strong> 不适合高频操作页，适合封面与专题</li></ul>
+
+    <div class="s-riso">
+      <div class="riso-frame">
+        <div class="riso-top"><span class="riso-brand">法志</span><span class="issue">ISSUE 03 / 合同</span><span class="spacer"></span><span class="stamp">每期一案</span><span class="issue">本地刊</span></div>
+        <div class="riso-body">
+          <div class="riso-cover">
+            <span class="riso-issue-big">03</span>
+            <p class="riso-kicker">COVER STORY / 第四百六十九条</p>
+            <h2 class="riso-title">口头约定</h2>
+            <p class="riso-sub">成立合同吗？</p>
+            <p>合同不以书面为要件。形式自由，但举证困难。</p>
+            <div class="riso-actions"><button class="r-btn">翻开本期</button><button class="r-btn alt">查看条文</button></div>
+          </div>
+          <div class="riso-side">
+            <div class="riso-card"><span>第 469 条</span><p>当事人订立合同，可以采用书面形式、口头形式或者其他形式。</p></div>
+            <div class="riso-card"><span>本期路径</span><div class="riso-path"><span class="r-node done">01</span><i class="r-link"></i><span class="r-node done">02</span><i class="r-link"></i><span class="r-node now">03</span><i class="r-link"></i><span class="r-node">04</span></div></div>
+            <div class="riso-card"><span>研读档案</span><p>等级 03 · 本卷 3/12<br>连续 6 天 · 待复习 2</p></div>
+          </div>
+        </div>
+        <div class="riso-footer"><span>法志 · 每期一个法律问题</span><span>两色印刷 / 本地存档</span></div>
+      </div>
+    </div>
+
+    <div class="specs">
+      <div class="spec-card"><h3>COLOR</h3><div class="swatches"><i class="swatch" style="background:#F4EDDE"></i><i class="swatch" style="background:#111111"></i><i class="swatch" style="background:#FF48B0"></i><i class="swatch" style="background:#0078BF"></i><i class="swatch" style="background:#F4EDDE;border:2px dashed #0078BF"></i></div><span class="swatch-label">纸 / 墨 / 荧光粉 / 孔版蓝 / 套印</span></div>
+      <div class="spec-card"><h3>TYPE</h3><div class="type-sample" style="font-weight:900;letter-spacing:-.07em;text-shadow:2px 2px 0 #FF48B0,-2px -2px 0 #0078BF">法 469<small style="text-shadow:none;font-weight:400">超粗标题 / 等宽细节 / 双色错位</small></div></div>
+      <div class="spec-card"><h3>RADIUS</h3><div class="radius-row"><i class="radius-box" style="border-radius:0"></i><i class="radius-box" style="border-radius:0;border-width:3px"></i><i class="radius-box" style="border-radius:0;background:#FF48B0"></i></div><span class="swatch-label">0 / 0 / 0 · 印刷直角</span></div>
+      <div class="spec-card"><h3>SPACE</h3><div class="space-row"><div class="space-bar"><i style="width:8px"></i>8</div><div class="space-bar"><i style="width:16px"></i>16</div><div class="space-bar"><i style="width:24px"></i>24</div><div class="space-bar"><i style="width:32px"></i>32</div></div></div>
+    </div>
+
+    <div class="specimen">
+      <button class="r-btn">翻开本期</button><button class="r-btn alt">查看条文</button><span class="tag" style="background:#FF48B0;color:#111;border:2px solid #111;padding:4px 8px">已掌握</span><span class="tag" style="background:transparent;color:#111;border:2px solid #111;padding:4px 8px">待复习</span>
+    </div>
+  </section>
+
+  <!-- 规范 -->
+  <section class="panel" id="panel-spec" role="tabpanel" aria-labelledby="tab-spec" hidden>
+    <div class="panel-head">
+      <h1>规范</h1>
+      <p>五种语言共享一套组件语义、间距和圆角规则。风格可以极端，结构不能失控。</p>
+    </div>
+    <div class="spec-tab">
+      <section class="spec-section">
+        <h2>一、风格谱系</h2>
+        <p>这次刻意选了五种不同的设计语言，而不是同一套视觉换五个色。它们的结构、材质、字体和动效都不同。</p>
+        <table class="scale-table">
+          <thead><tr><th>方向</th><th>设计语言</th><th>结构</th><th>圆角</th><th>适合</th></tr></thead>
+          <tbody>
+            <tr><td><strong>公告</strong></td><td>Neo-brutalism</td><td>海报 / 公告栏</td><td>0 + 硬投影</td><td>入口、Boss、成就</td></tr>
+            <tr><td><strong>软法</strong></td><td>Biomorphic / clay</td><td>软盒堆叠</td><td>14–36 squircle</td><td>日常学习、陪伴感</td></tr>
+            <tr><td><strong>LawOS 2000</strong></td><td>Y2K / chrome</td><td>桌面窗口</td><td>0–4</td><td>实验性入口、活动页</td></tr>
+            <tr><td><strong>判例矩阵</strong></td><td>Bento data</td><td>12 列模块网格</td><td>8–20</td><td>主产品、复习、档案</td></tr>
+            <tr><td><strong>法志</strong></td><td>Risograph</td><td>杂志跨页 / 拼贴</td><td>0</td><td>品牌、专题、封面</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="spec-section">
+        <h2>二、令牌体系</h2>
+        <p>组件只读语义令牌。风格切换只替换 primitive 与字体、圆角、间距的映射，不改组件 API。</p>
+        <pre class="code">:root {
+  /* primitive */
+  --ink-900: #1B1A17;
+  --paper-50: #FAF7F0;
+  --accent-500: #6B4BD6;
+  --state-danger: #A33A32;
+
+  /* semantic */
+  --surface-page: var(--paper-50);
+  --surface-card: #FFFFFF;
+  --text-primary: var(--ink-900);
+  --text-muted: #6C675E;
+  --border-subtle: #D3CEC4;
+  --action-primary: var(--accent-500);
+
+  /* component */
+  --button-primary-bg: var(--action-primary);
+  --button-primary-fg: #FFFFFF;
+  --card-radius: var(--radius-lg);
+  --card-padding: var(--space-4);
+}</pre>
+      </section>
+
+      <section class="spec-section">
+        <h2>三、圆角与间距</h2>
+        <p>圆角按组件层级取固定档位，不写任意值。软法使用 squircle 连续圆角；公告与法志保持 0 圆角，作为语言的一部分。间距全部取 4 的倍数，嵌套容器等距内缩。</p>
+        <table class="scale-table">
+          <thead><tr><th>层级</th><th>圆角</th><th>间距</th></tr></thead>
+          <tbody>
+            <tr><td>标签 / 条号</td><td><code>0–2px</code></td><td><code>4px</code> 标签与值</td></tr>
+            <tr><td>按钮 / 输入</td><td><code>4–12px</code></td><td><code>8px</code> 图标与文字</td></tr>
+            <tr><td>卡片</td><td><code>8–20px</code></td><td><code>16–24px</code> 卡片内边距</td></tr>
+            <tr><td>浮层 / 软盒</td><td><code>16–36px</code></td><td><code>32–48px</code> 页面区块</td></tr>
+          </tbody>
+        </table>
+        <pre class="code" style="margin-top:14px">.soft-card {
+  border-radius: 32px;
+  corner-shape: squircle; /* 支持时使用连续圆角 */
+}
+/* 不支持时回退普通圆角；公告 / 法志则明确使用 0 圆角 */</pre>
+      </section>
+
+      <section class="spec-section">
+        <h2>四、组件语义</h2>
+        <p>组件按场景选择，不按风格选择。以下规则在五种方向里都成立。</p>
+        <table class="scale-table">
+          <thead><tr><th>组件</th><th>正确场景</th><th>错误场景</th></tr></thead>
+          <tbody>
+            <tr><td><strong>主按钮</strong></td><td>一个视图唯一主行动</td><td>导航、搜索、设置、多个并列主按钮</td></tr>
+            <tr><td><strong>次按钮</strong></td><td>查看条文、返回、次级操作</td><td>替代主行动、承载危险操作</td></tr>
+            <tr><td><strong>展开器</strong></td><td>法条原文、解析、更多字段</td><td>主行动、导航</td></tr>
+            <tr><td><strong>危险按钮</strong></td><td>清除数据、放弃未保存内容</td><td>收藏、取消、关闭</td></tr>
+            <tr><td><strong>提示气泡</strong></td><td>护符规则、奖励概率、字段解释</td><td>关键步骤、必读免责声明</td></tr>
+          </tbody>
+        </table>
+        <div class="dodont-grid">
+          <div class="dodont"><span class="tag do">Do</span><h3>一个视图一个主按钮</h3><div class="mini"><button class="btn btn-primary">继续研读</button><button class="btn">查看条文</button></div><p>主行动明确，次行动降级。</p></div>
+          <div class="dodont"><span class="tag dont">Don't</span><h3>导航和主行动都做成主按钮</h3><div class="mini"><button class="btn btn-primary">继续研读</button><button class="btn btn-primary">搜索</button><button class="btn btn-primary">设置</button></div><p>三个主按钮互相争夺注意力。</p></div>
+          <div class="dodont"><span class="tag do">Do</span><h3>法条用展开器</h3><div class="mini"><span style="font-size:13px">第 469 条</span><span style="font-size:12px;color:var(--shell-muted)">▸ 展开原文</span></div><p>阅读节奏不被打断。</p></div>
+          <div class="dodont"><span class="tag dont">Don't</span><h3>法条做成主按钮</h3><div class="mini"><button class="btn btn-primary">第 469 条</button></div><p>条文是信息，不是行动。</p></div>
+        </div>
+      </section>
+
+      <section class="spec-section">
+        <h2>五、文案规范</h2>
+        <table class="scale-table copy-table">
+          <thead><tr><th>当前</th><th>建议</th><th>理由</th></tr></thead>
+          <tbody>
+            <tr><td>今天学点什么</td><td>今日研读</td><td>去掉口语提问</td></tr>
+            <tr><td>去主题里逛逛</td><td>暂无到期复习</td><td>只陈述状态</td></tr>
+            <tr><td>掉落护符</td><td>获得护符</td><td>游戏俚语改书面语</td></tr>
+            <tr><td>继续学习 →</td><td>继续研读</td><td>去掉箭头装饰</td></tr>
+            <tr><td>这次看懂了吗？</td><td>掌握程度</td><td>自评是字段，不是追问</td></tr>
+          </tbody>
+        </table>
+        <p class="footnote" style="margin-top:12px">低频说明放 tooltip；免责声明放首次弹窗与页脚；空状态只写“发生了什么 + 下一步”。</p>
+      </section>
+
+      <section class="spec-section">
+        <h2>六、参考来源</h2>
+        <ul class="sources">
+          <li><a href="https://www.nngroup.com/articles/neobrutalism/">NN/g — Neobrutalism: Definition and Best Practices</a></li>
+          <li><a href="https://achal13jain.github.io/design-patterns/#gallery">UIAestheticAtlas — 20 种界面美学对照</a></li>
+          <li><a href="https://github.com/guanmo-ai/design-style">guanmo-ai/design-style — Neo-Brutalism / Risograph / Y2K / Bento 风格规范</a></li>
+          <li><a href="https://github.com/sickn33/agentic-awesome-skills/blob/6d4ea18320984083107f07ff69587fa355ee94c0/plugins/agentic-awesome-skills-claude/skills/design-it/y2k-design/SKILL.md">Y2K Design Skill</a></li>
+          <li><a href="https://laarpi.com/styles/riso-zine">Laarpi — Risograph / Riso Zine 风格指南</a></li>
+          <li><a href="https://speckyboy.com/css-bento-grid-layouts/">Speckyboy — Bento Grid CSS 实例</a></li>
+        </ul>
+        <p class="footnote" style="margin-top:12px">如果只能选一个做主产品，我建议「判例矩阵」：信息密度、航线、Boss、复习和档案都能装进同一套网格，且和之前所有版本彻底不同。想要更强的“法律公告”气质，选「公告」；想做品牌入口，选「法志」。</p>
+      </section>
+    </div>
+  </section>
+</main>
+
+<script>
+  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+  const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+  function select(name, focus) {
+    tabs.forEach((tab) => {
+      const on = tab.dataset.panel === name;
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      if (on && focus) tab.focus();
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.id !== 'panel-' + name;
+    });
+    try { localStorage.setItem('fajing.design.v2', name); } catch (e) {}
+    try { if (history.replaceState) history.replaceState(null, '', '#' + name); } catch (e) {}
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => select(tab.dataset.panel, false));
+    tab.addEventListener('keydown', (event) => {
+      const index = tabs.indexOf(tab);
+      if (event.key === 'ArrowRight') { event.preventDefault(); select(tabs[(index + 1) % tabs.length].dataset.panel, true); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); select(tabs[(index - 1 + tabs.length) % tabs.length].dataset.panel, true); }
+    });
+  });
+
+  let initial = location.hash.replace('#', '');
+  if (!initial) { try { initial = localStorage.getItem('fajing.design.v2') || 'brutal'; } catch (e) { initial = 'brutal'; } }
+  if (!tabs.some((tab) => tab.dataset.panel === initial)) initial = 'brutal';
+  select(initial, false);
+
+  window.addEventListener('hashchange', () => {
+    const name = location.hash.replace('#', '');
+    if (tabs.some((tab) => tab.dataset.panel === name)) select(name, false);
+  });
+</script>

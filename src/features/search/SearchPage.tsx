@@ -44,7 +44,7 @@ export default function SearchPage() {
     <div className="space-y-6">
       <header className="space-y-3">
         <p className="hud-label">[ SEARCH INDEX ]</p>
-        <h2 className="text-2xl font-semibold tracking-tight">搜索</h2>
+        <h2 className="text-3xl font-black tracking-tight">搜索</h2>
         <Input
           type="search"
           value={query}
@@ -59,7 +59,7 @@ export default function SearchPage() {
             onChange={(event) =>
               setFilter(event.target.value as SearchFilter)
             }
-            className="h-9 rounded-[2px] border border-[var(--line-strong)] bg-[var(--bg-elev)] px-2 font-mono text-[11px] tracking-[0.06em]"
+            className="h-9 border-2 border-[var(--line)] bg-[var(--card)] px-2 font-mono text-[11px] tracking-[0.06em]"
           >
             <option value="all">全部类型</option>
             <option value="scenario">场景</option>
@@ -70,7 +70,7 @@ export default function SearchPage() {
             aria-label="按主题筛选"
             value={themeId}
             onChange={(event) => setThemeId(event.target.value)}
-            className="h-9 rounded-[2px] border border-[var(--line-strong)] bg-[var(--bg-elev)] px-2 font-mono text-[11px] tracking-[0.06em]"
+            className="h-9 border-2 border-[var(--line)] bg-[var(--card)] px-2 font-mono text-[11px] tracking-[0.06em]"
           >
             <option value="">全部主题</option>
             {getThemes().map((theme) => (

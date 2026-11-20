@@ -12,6 +12,8 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
   const [loaded, setLoaded] = useState(false);
   const [saved, setSaved] = useState(false);
   const touched = useRef(false);
+  const valueRef = useRef('');
+  const dirtyRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -20,7 +22,9 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
         return;
       }
       if (!touched.current) {
-        setValue(note?.content ?? '');
+        const content = note?.content ?? '';
+        setValue(content);
+        valueRef.current = content;
       }
       setLoaded(true);
     });
@@ -30,16 +34,33 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
   }, [targetType, targetId]);
 
   useEffect(() => {
+    return () => {
+      if (!dirtyRef.current) {
+        return;
+      }
+      const content = valueRef.current;
+      if (content.trim() === '') {
+        void deleteNote(noteId(targetType, targetId));
+      } else {
+        void saveNote(targetType, targetId, content);
+      }
+      dirtyRef.current = false;
+    };
+  }, [targetType, targetId]);
+
+  useEffect(() => {
     if (!loaded) {
       return;
     }
     const timer = setTimeout(() => {
       void (async () => {
-        if (value.trim() === '') {
+        const content = valueRef.current;
+        if (content.trim() === '') {
           await deleteNote(noteId(targetType, targetId));
         } else {
-          await saveNote(targetType, targetId, value);
+          await saveNote(targetType, targetId, content);
         }
+        dirtyRef.current = false;
         setSaved(true);
       })();
     }, 500);
@@ -59,6 +80,8 @@ export function NoteEditor({ targetType, targetId }: NoteEditorProps) {
         value={value}
         onChange={(event) => {
           touched.current = true;
+          dirtyRef.current = true;
+          valueRef.current = event.target.value;
           setSaved(false);
           setValue(event.target.value);
         }}

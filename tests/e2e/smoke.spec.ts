@@ -65,6 +65,22 @@ test('到期卡片可在复习页完成自评', async ({ page }) => {
   await expect(page.getByText(/今天没有要复习的/)).toBeVisible();
 });
 
+test('笔记和收藏在刷新后保留', async ({ page }) => {
+  await page.goto('/concept/contract-formation');
+  await page.getByRole('textbox').fill('刷新后还在');
+  await expect(page.getByText('已保存')).toBeVisible();
+  await page.getByRole('button', { name: '收藏' }).click();
+  await expect(
+    page.getByRole('button', { name: '已收藏' }),
+  ).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByRole('textbox')).toHaveValue('刷新后还在');
+  await expect(
+    page.getByRole('button', { name: '已收藏' }),
+  ).toHaveAttribute('aria-pressed', 'true');
+});
+
 test('深色模式切换生效', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: '切换深色模式' }).click();

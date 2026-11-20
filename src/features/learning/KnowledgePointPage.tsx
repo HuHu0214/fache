@@ -106,7 +106,11 @@ export default function KnowledgePointPage({
           <h3 className="text-sm font-medium">笔记与收藏</h3>
           <BookmarkButton targetType="kp" targetId={entry.meta.id} />
         </div>
-        <NoteEditor targetType="kp" targetId={entry.meta.id} />
+        <NoteEditor
+          key={`kp:${entry.meta.id}`}
+          targetType="kp"
+          targetId={entry.meta.id}
+        />
       </section>
     </article>
   );

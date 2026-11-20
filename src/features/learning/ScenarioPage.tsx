@@ -118,7 +118,11 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
             targetId={entry.meta.id}
           />
         </div>
-        <NoteEditor targetType="scenario" targetId={entry.meta.id} />
+        <NoteEditor
+          key={`scenario:${entry.meta.id}`}
+          targetType="scenario"
+          targetId={entry.meta.id}
+        />
       </section>
     </article>
   );

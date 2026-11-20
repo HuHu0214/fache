@@ -27,6 +27,50 @@ test('输入笔记后自动保存', async () => {
   );
 });
 
+test('切换目标时不会把上一篇笔记写到下一篇', async () => {
+  const view = render(
+    <NoteEditor
+      key="kp:a"
+      targetType="kp"
+      targetId="target-a"
+    />,
+  );
+  await userEvent.type(screen.getByRole('textbox'), 'A 的笔记');
+  view.rerender(
+    <NoteEditor
+      key="kp:b"
+      targetType="kp"
+      targetId="target-b"
+    />,
+  );
+  expect(screen.getByRole('textbox')).toHaveValue('');
+  await vi.waitFor(
+    async () => {
+      expect((await getNote('kp', 'target-a'))?.content).toContain(
+        'A 的笔记',
+      );
+    },
+    { timeout: 2000 },
+  );
+  expect(await getNote('kp', 'target-b')).toBeUndefined();
+});
+
+test('离开页面时立即保存未完成的编辑', async () => {
+  const view = render(
+    <NoteEditor targetType="kp" targetId="target-c" />,
+  );
+  await userEvent.type(screen.getByRole('textbox'), '立刻离开');
+  view.unmount();
+  await vi.waitFor(
+    async () => {
+      expect((await getNote('kp', 'target-c'))?.content).toContain(
+        '立刻离开',
+      );
+    },
+    { timeout: 2000 },
+  );
+});
+
 test('收藏按钮可切换并带 aria-pressed', async () => {
   render(
     <BookmarkButton

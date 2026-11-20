@@ -18,7 +18,11 @@ export function useProfileData() {
       .length,
     notes: notes.length,
     bookmarks: bookmarks.length,
-    streak: computeStreak(reads, new Date()),
+    streak: computeStreak(
+      reads,
+      new Date(),
+      setting?.frozenDates ?? [],
+    ),
     bonusXp,
   };
 

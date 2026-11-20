@@ -27,7 +27,7 @@ test('按学习量计算经验与等级', () => {
     bookmarks: 1,
     streak: 3,
   });
-  expect(profile.xp).toBe(338);
+  expect(profile.xp).toBe(347);
   expect(profile.level).toBe(4);
   expect(profile.title).toBe('条文熟手');
 });

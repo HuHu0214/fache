@@ -1,3 +1,4 @@
+import { localDateKey } from '../../lib/date';
 import type { Progress, Read } from '../../lib/db';
 
 export type ThemeProgress = {
@@ -30,14 +31,21 @@ export function computeThemeProgress(
   };
 }
 
-export function computeStreak(reads: Read[], now: Date): number {
-  const days = new Set(reads.map((read) => read.readAt.slice(0, 10)));
+export function computeStreak(
+  reads: Read[],
+  now: Date,
+  frozenDates: string[] = [],
+): number {
+  const days = new Set([
+    ...frozenDates,
+    ...reads.map((read) => localDateKey(new Date(read.readAt))),
+  ]);
   const cursor = new Date(now);
   let streak = 0;
 
-  while (days.has(cursor.toISOString().slice(0, 10))) {
+  while (days.has(localDateKey(cursor))) {
     streak += 1;
-    cursor.setUTCDate(cursor.getUTCDate() - 1);
+    cursor.setDate(cursor.getDate() - 1);
   }
 
   return streak;

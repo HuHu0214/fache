@@ -1,0 +1,87 @@
+{
+  "themeId": "contracts",
+  "title": "合同 · 卷宗校验",
+  "passScore": 5,
+  "questions": [
+    {
+      "id": "contracts-boss-1",
+      "question": "口头约定在什么情况下可能成立合同？",
+      "options": [
+        "只有双方签字才成立",
+        "双方意思表示一致时可能成立",
+        "必须经过公证",
+        "只有书面形式才成立"
+      ],
+      "answer": 1,
+      "explanation": "合同是双方意思表示一致的协议。口头形式也可能成立合同，法律、行政法规规定或者当事人约定必须书面的除外。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第四百六十九条" }
+      ]
+    },
+    {
+      "id": "contracts-boss-2",
+      "question": "给付定金的一方不履行债务，致使不能实现合同目的的，定金怎么处理？",
+      "options": ["全额返还", "双倍返还", "无权请求返还", "只返还一半"],
+      "answer": 2,
+      "explanation": "给付定金的一方不履行债务或者履行不符合约定，致使不能实现合同目的的，无权请求返还定金；收受定金的一方违约的，应当双倍返还定金。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第五百八十七条" }
+      ]
+    },
+    {
+      "id": "contracts-boss-3",
+      "question": "约定的违约金过分高于造成的损失时，当事人可以怎么做？",
+      "options": [
+        "必须按约定金额支付",
+        "请求人民法院或者仲裁机构适当减少",
+        "约定自动无效",
+        "只能改为主张定金"
+      ],
+      "answer": 1,
+      "explanation": "约定的违约金过分高于造成的损失的，人民法院或者仲裁机构可以根据当事人的请求予以适当减少。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第五百八十五条" }
+      ]
+    },
+    {
+      "id": "contracts-boss-4",
+      "question": "租期六个月以上的租赁合同，法律要求采用什么形式？",
+      "options": ["书面形式", "口头形式", "公证形式", "见证形式"],
+      "answer": 0,
+      "explanation": "租赁期限六个月以上的，应当采用书面形式。未采用书面形式，无法确定租赁期限的，视为不定期租赁。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第七百零七条" }
+      ]
+    },
+    {
+      "id": "contracts-boss-5",
+      "question": "自然人之间的借款合同何时成立？",
+      "options": [
+        "双方签字时",
+        "贷款人提供借款时",
+        "约定还款日时",
+        "办理公证时"
+      ],
+      "answer": 1,
+      "explanation": "自然人之间的借款合同，自贷款人提供借款时成立。因此转账记录、交付凭证很重要。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第六百七十九条" }
+      ]
+    },
+    {
+      "id": "contracts-boss-6",
+      "question": "电子商务中，用户提交订单成功后合同一般何时成立？",
+      "options": [
+        "商品信息符合要约条件、用户提交订单成功时",
+        "商家实际发货时",
+        "用户签收商品时",
+        "用户完成付款时"
+      ],
+      "answer": 0,
+      "explanation": "电子商务经营者发布的商品或者服务信息符合要约条件的，用户选择该商品或者服务并提交订单成功，合同成立，当事人另有约定的除外。",
+      "articleRefs": [
+        { "lawId": "e-commerce-law", "articleNo": "第四十九条" }
+      ]
+    }
+  ]
+}

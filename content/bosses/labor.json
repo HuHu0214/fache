@@ -1,0 +1,67 @@
+{
+  "themeId": "labor",
+  "title": "劳动 · 权益仲裁",
+  "passScore": 5,
+  "questions": [
+    {
+      "id": "labor-boss-1",
+      "question": "三年以上固定期限和无固定期限劳动合同，试用期最长不得超过多久？",
+      "options": ["一个月", "二个月", "三个月", "六个月"],
+      "answer": 3,
+      "explanation": "劳动合同期限三个月以上不满一年的，试用期不得超过一个月；一年以上不满三年的，不得超过二个月；三年以上固定期限和无固定期限的，不得超过六个月。",
+      "articleRefs": [
+        { "lawId": "labor-contracts-law", "articleNo": "第十九条" }
+      ]
+    },
+    {
+      "id": "labor-boss-2",
+      "question": "用人单位自用工之日起超过一个月不满一年未与劳动者订立书面劳动合同的，应当承担什么责任？",
+      "options": ["无需承担责任", "每月支付二倍工资", "支付一个月工资", "自动视为无固定期限合同"],
+      "answer": 1,
+      "explanation": "用人单位自用工之日起超过一个月不满一年未与劳动者订立书面劳动合同的，应当向劳动者每月支付二倍的工资。",
+      "articleRefs": [
+        { "lawId": "labor-contracts-law", "articleNo": "第八十二条" }
+      ]
+    },
+    {
+      "id": "labor-boss-3",
+      "question": "法定休假日安排劳动者工作的，应支付不低于工资的多少？",
+      "options": ["150%", "200%", "250%", "300%"],
+      "answer": 3,
+      "explanation": "法定休假日安排工作的，支付不低于工资的百分之三百的工资报酬；休息日安排工作又不能补休的，不低于百分之二百。",
+      "articleRefs": [
+        { "lawId": "labor-law", "articleNo": "第四十四条" }
+      ]
+    },
+    {
+      "id": "labor-boss-4",
+      "question": "用人单位违法解除劳动合同，应支付多少赔偿金？",
+      "options": ["经济补偿标准的一倍", "经济补偿标准的二倍", "一个月工资", "无需支付"],
+      "answer": 1,
+      "explanation": "用人单位违反本法规定解除或者终止劳动合同的，应当依照经济补偿标准的二倍向劳动者支付赔偿金。",
+      "articleRefs": [
+        { "lawId": "labor-contracts-law", "articleNo": "第八十七条" }
+      ]
+    },
+    {
+      "id": "labor-boss-5",
+      "question": "工伤保险费由谁缴纳？",
+      "options": ["职工个人", "用人单位", "职工和单位各一半", "社保基金"],
+      "answer": 1,
+      "explanation": "职工应当参加工伤保险，由用人单位缴纳工伤保险费，职工不缴纳工伤保险费。",
+      "articleRefs": [
+        { "lawId": "social-insurance-law", "articleNo": "第三十三条" }
+      ]
+    },
+    {
+      "id": "labor-boss-6",
+      "question": "劳动争议申请仲裁的一般时效期间是多久？",
+      "options": ["六个月", "一年", "二年", "三年"],
+      "answer": 1,
+      "explanation": "劳动争议申请仲裁的时效期间为一年，从当事人知道或者应当知道其权利被侵害之日起计算。拖欠劳动报酬在劳动关系存续期间有特殊规则。",
+      "articleRefs": [
+        { "lawId": "labor-dispute-mediation-and-arbitration-law", "articleNo": "第二十七条" }
+      ]
+    }
+  ]
+}

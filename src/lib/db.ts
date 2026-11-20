@@ -42,6 +42,9 @@ export type Setting = {
   bonusXp?: number;
   lastChestAt?: string;
   soundEnabled?: boolean;
+  freezeTokens?: number;
+  frozenDates?: string[];
+  bossCleared?: string[];
 };
 
 class FajingDatabase extends Dexie {

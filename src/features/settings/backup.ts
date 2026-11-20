@@ -63,6 +63,12 @@ const backupSchema = z.object({
       id: z.literal('app'),
       theme: z.enum(['light', 'dark', 'system']),
       disclaimerAcceptedAt: z.string().optional(),
+      bonusXp: z.number().optional(),
+      lastChestAt: z.string().optional(),
+      soundEnabled: z.boolean().optional(),
+      freezeTokens: z.number().optional(),
+      frozenDates: z.array(z.string()).optional(),
+      bossCleared: z.array(z.string()).optional(),
     }),
   ),
 });

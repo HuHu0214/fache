@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+import BossPage from '../features/boss/BossPage';
 import HomePage from '../features/home/HomePage';
 import KnowledgePointPage from '../features/learning/KnowledgePointPage';
 import ScenarioPage from '../features/learning/ScenarioPage';
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: 'law/:lawId/:articleNo',
         element: <ArticlePage />,
+      },
+      {
+        path: 'boss/:themeId',
+        element: <BossPage />,
       },
       { path: 'review', element: <ReviewPage /> },
       { path: 'search', element: <SearchPage /> },

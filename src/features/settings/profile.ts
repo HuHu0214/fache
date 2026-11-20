@@ -34,13 +34,29 @@ const LEVELS = [
   { level: 7, threshold: 1200, title: '大律' },
 ] as const;
 
+export function streakXpPerDay(streak: number): number {
+  if (streak >= 30) {
+    return 30;
+  }
+  if (streak >= 14) {
+    return 18;
+  }
+  if (streak >= 7) {
+    return 12;
+  }
+  if (streak >= 3) {
+    return 8;
+  }
+  return 5;
+}
+
 export function computeProfile(stats: ProfileStats): Profile {
   const xp =
     stats.scenariosRead * 10 +
     stats.kpsMastered * 25 +
     stats.notes * 5 +
     stats.bookmarks * 3 +
-    stats.streak * 5 +
+    stats.streak * streakXpPerDay(stats.streak) +
     (stats.bonusXp ?? 0);
 
   let index = 0;

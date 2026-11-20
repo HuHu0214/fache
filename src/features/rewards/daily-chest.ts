@@ -1,11 +1,7 @@
 import { db } from '../../lib/db';
+import { localDateKey } from '../../lib/date';
 
-export function localDateKey(date: Date = new Date()): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
+export { localDateKey };
 
 export function chestBonus(
   random: () => number = Math.random,
@@ -16,21 +12,24 @@ export function chestBonus(
 export async function openDailyChest(
   now: Date = new Date(),
   random: () => number = Math.random,
-): Promise<{ opened: boolean; bonus: number }> {
+): Promise<{ opened: boolean; bonus: number; freeze: boolean }> {
   const today = localDateKey(now);
   const existing = await db.settings.get('app');
 
   if (existing?.lastChestAt === today) {
-    return { opened: false, bonus: 0 };
+    return { opened: false, bonus: 0, freeze: false };
   }
 
   const bonus = chestBonus(random);
+  const freeze = random() < 0.3;
   await db.settings.put({
     ...(existing ?? { id: 'app' as const, theme: 'dark' as const }),
     id: 'app',
     bonusXp: (existing?.bonusXp ?? 0) + bonus,
+    freezeTokens:
+      (existing?.freezeTokens ?? 1) + (freeze ? 1 : 0),
     lastChestAt: today,
   });
 
-  return { opened: true, bonus };
+  return { opened: true, bonus, freeze };
 }

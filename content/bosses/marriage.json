@@ -1,0 +1,67 @@
+{
+  "themeId": "marriage",
+  "title": "婚姻 · 家事裁决",
+  "passScore": 5,
+  "questions": [
+    {
+      "id": "marriage-boss-1",
+      "question": "婚姻关系存续期间一方的工资，一般属于什么财产？",
+      "options": ["个人财产", "夫妻共同财产", "按登记名字判断", "归子女所有"],
+      "answer": 1,
+      "explanation": "婚姻关系存续期间所得的工资、奖金、劳务报酬，生产、经营、投资的收益等，一般属于夫妻共同财产。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第一千零六十二条" }
+      ]
+    },
+    {
+      "id": "marriage-boss-2",
+      "question": "一方的婚前财产，结婚后会自动变成夫妻共同财产吗？",
+      "options": ["会", "不会自动变成", "结婚满五年后自动变成", "有孩子后自动变成"],
+      "answer": 1,
+      "explanation": "一方的婚前财产属于个人财产，不会因为结婚自动变成共同财产。婚后共同还贷及增值如何处理，要结合具体事实和司法解释。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第一千零六十三条" }
+      ]
+    },
+    {
+      "id": "marriage-boss-3",
+      "question": "协议离婚的冷静期是多久？",
+      "options": ["七日", "十五日", "三十日", "六十日"],
+      "answer": 2,
+      "explanation": "自婚姻登记机关收到离婚登记申请之日起三十日内，任何一方不愿意离婚的，可以撤回申请。冷静期届满后三十日内还要亲自申请发给离婚证。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第一千零七十七条" }
+      ]
+    },
+    {
+      "id": "marriage-boss-4",
+      "question": "离婚时，不满两周岁的子女一般由谁直接抚养？",
+      "options": ["父亲", "母亲", "祖父母", "双方轮流"],
+      "answer": 1,
+      "explanation": "不满两周岁的子女，以由母亲直接抚养为原则；已满两周岁协议不成的，由法院按最有利于未成年子女的原则判决。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第一千零八十四条" }
+      ]
+    },
+    {
+      "id": "marriage-boss-5",
+      "question": "一方以个人名义超出家庭日常生活需要所负的债务，原则上属于什么债务？",
+      "options": ["夫妻共同债务", "不属于夫妻共同债务", "一律由债权人承担", "自动转为个人赠与"],
+      "answer": 1,
+      "explanation": "一方以个人名义超出家庭日常生活需要所负的债务，不属于夫妻共同债务，但债权人能证明用于夫妻共同生活、共同生产经营或者基于共同意思表示的除外。",
+      "articleRefs": [
+        { "lawId": "civil-code", "articleNo": "第一千零六十四条" }
+      ]
+    },
+    {
+      "id": "marriage-boss-6",
+      "question": "申请人身安全保护令，是否必须先提起离婚诉讼？",
+      "options": ["必须先离婚", "不需要，遭受家暴或面临现实危险即可申请", "必须分居满两年", "必须经过村委会同意"],
+      "answer": 1,
+      "explanation": "当事人因遭受家庭暴力或者面临家庭暴力的现实危险，就可以向人民法院申请人身安全保护令，不以离婚为前提。",
+      "articleRefs": [
+        { "lawId": "anti-domestic-violence-law", "articleNo": "第二十三条" }
+      ]
+    }
+  ]
+}

@@ -25,21 +25,34 @@ test('每天只能开一次，奖励会累计', async () => {
     new Date(2026, 10, 20, 9),
     () => 0.5,
   );
-  expect(first).toEqual({ opened: true, bonus: 25 });
+  expect(first).toEqual({
+    opened: true,
+    bonus: 25,
+    freeze: false,
+  });
 
   const second = await openDailyChest(
     new Date(2026, 10, 20, 22),
     () => 0.5,
   );
-  expect(second).toEqual({ opened: false, bonus: 0 });
+  expect(second).toEqual({
+    opened: false,
+    bonus: 0,
+    freeze: false,
+  });
 
   const nextDay = await openDailyChest(
     new Date(2026, 10, 21, 8),
     () => 0,
   );
-  expect(nextDay).toEqual({ opened: true, bonus: 20 });
+  expect(nextDay).toEqual({
+    opened: true,
+    bonus: 20,
+    freeze: true,
+  });
 
   const setting = await db.settings.get('app');
   expect(setting?.bonusXp).toBe(45);
+  expect(setting?.freezeTokens).toBe(2);
   expect(setting?.lastChestAt).toBe('2026-11-21');
 });

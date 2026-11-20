@@ -12,6 +12,7 @@ import {
   type ScenarioFrontmatter,
   type Theme,
 } from '../src/content/schema';
+import { bossSchema, type Boss } from '../src/content/boss-schema';
 import { scanMdx } from './lib/parse-mdx';
 
 export type ValidationIssue = {
@@ -97,6 +98,7 @@ export function validateContent(
     string,
     { law: Law; articleNos: Set<string> }
   >();
+  const bosses: Array<{ file: string; boss: Boss }> = [];
 
   const files = walk(contentDir);
 
@@ -133,6 +135,22 @@ export function validateContent(
         });
       } catch (error) {
         add(relative, `法条库解析失败：${messageOf(error)}`);
+      }
+      continue;
+    }
+
+    if (
+      file.endsWith('.json') &&
+      relative.startsWith('content/bosses/')
+    ) {
+      try {
+        const boss = bossSchema.parse(
+          JSON.parse(readFileSync(file, 'utf8')),
+        );
+        claimId('boss', relative, boss.themeId);
+        bosses.push({ file: relative, boss });
+      } catch (error) {
+        add(relative, `Boss 题库解析失败：${messageOf(error)}`);
       }
     }
   }
@@ -231,6 +249,48 @@ export function validateContent(
     for (const relatedId of concept.data.relatedKpIds) {
       if (!kpIds.has(relatedId)) {
         add(concept.file, `关联知识点不存在：${relatedId}`);
+      }
+    }
+  }
+
+  for (const { file, boss } of bosses) {
+    if (!themeIds.has(boss.themeId)) {
+      add(file, `主题不存在：${boss.themeId}`);
+      continue;
+    }
+    if (boss.passScore > boss.questions.length) {
+      add(
+        file,
+        `Boss 通过分数 ${boss.passScore} 超过题目数 ${boss.questions.length}`,
+      );
+    }
+    if (opts.strict && boss.reviewStatus !== 'checked') {
+      add(
+        file,
+        `reviewStatus 必须为 checked（发布构建）：${boss.themeId}`,
+      );
+    }
+    const questionIds = new Set<string>();
+    for (const question of boss.questions) {
+      if (questionIds.has(question.id)) {
+        add(file, `Boss 题目 id 重复：${question.id}`);
+      }
+      questionIds.add(question.id);
+      for (const ref of question.articleRefs) {
+        const law = laws.get(ref.lawId);
+        if (!law) {
+          add(
+            file,
+            `法律不存在：${ref.lawId}（引用 ${ref.articleNo}）`,
+          );
+          continue;
+        }
+        if (!law.articleNos.has(ref.articleNo)) {
+          add(
+            file,
+            `法条不存在：${ref.lawId} 未收录 ${ref.articleNo}`,
+          );
+        }
       }
     }
   }

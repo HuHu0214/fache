@@ -3,6 +3,7 @@ import {
   conceptBodies,
   scenarioBodies,
 } from '../generated/body-text';
+import { bossSchema, type Boss } from './boss-schema';
 import {
   knowledgePointFrontmatterSchema,
   lawFileSchema,
@@ -53,6 +54,10 @@ const conceptModules = import.meta.glob<MdxModule>(
 const lawModules = import.meta.glob<LawModule>('/content/laws/*.json', {
   eager: true,
 });
+const bossModules = import.meta.glob<LawModule>(
+  '/content/bosses/*.json',
+  { eager: true },
+);
 
 function themeIdOf(key: string): string {
   return key.split('/').filter(Boolean)[2] ?? '';
@@ -121,6 +126,15 @@ const lawFiles: LawFile[] = Object.entries(lawModules)
   )
   .sort((a, b) => a.law.title.localeCompare(b.law.title, 'zh-CN'));
 
+const bosses: Boss[] = Object.entries(bossModules)
+  .map(([key, module]) =>
+    parseOrThrow(key, bossSchema, module.default),
+  )
+  .sort((a, b) => a.themeId.localeCompare(b.themeId, 'zh-CN'));
+const bossByTheme = new Map(
+  bosses.map((boss) => [boss.themeId, boss]),
+);
+
 const laws = lawFiles.map((file) => file.law);
 const lawById = new Map(lawFiles.map((file) => [file.law.id, file]));
 const articlesByLaw = new Map(
@@ -167,6 +181,14 @@ export function getKnowledgePoints(
   return themeId
     ? knowledgePoints.filter((entry) => entry.meta.themeId === themeId)
     : knowledgePoints;
+}
+
+export function getBosses(): Boss[] {
+  return bosses;
+}
+
+export function getBoss(themeId: string): Boss | undefined {
+  return bossByTheme.get(themeId);
 }
 
 export function getLaws(): Law[] {

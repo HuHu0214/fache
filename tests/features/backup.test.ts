@@ -50,6 +50,33 @@ test('笔记可导出 Markdown', async () => {
   expect(await exportNotesMarkdown()).toContain('第一条笔记');
 });
 
+test('奖励与护符字段能随备份恢复', async () => {
+  await db.settings.put({
+    id: 'app',
+    theme: 'dark',
+    bonusXp: 120,
+    freezeTokens: 2,
+    frozenDates: ['2026-11-18'],
+    bossCleared: ['contracts'],
+    lastChestAt: '2026-11-20',
+    soundEnabled: false,
+  });
+
+  const backup = await exportBackup();
+  await db.settings.clear();
+  await importBackup(backup);
+
+  const restored = await db.settings.get('app');
+  expect(restored).toMatchObject({
+    bonusXp: 120,
+    freezeTokens: 2,
+    frozenDates: ['2026-11-18'],
+    bossCleared: ['contracts'],
+    lastChestAt: '2026-11-20',
+    soundEnabled: false,
+  });
+});
+
 test('非法备份被拒绝且不清空现有数据', async () => {
   await saveNote('kp', 'contract-formation', '保留');
   await expect(importBackup({ version: 99 })).rejects.toThrow();

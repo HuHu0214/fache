@@ -6,16 +6,22 @@ import { cn } from '../../lib/cn';
 import { playClick } from '../../lib/sound';
 import { buildReviewQueue } from '../review/queue';
 import { DailyChest } from '../rewards/DailyChest';
+import { StreakPanel } from '../rewards/StreakPanel';
 import { computeProfile } from '../settings/profile';
 import { useProfileData } from '../settings/useProfileData';
-import { buildThemePath, type PathStatus } from './path';
+import {
+  buildGlobalPath,
+  type PathStatus,
+} from './path';
 
 const ROW_HEIGHT = 104;
-const OFFSETS = [0, 14, 0, -14, 0, 14];
+const offsetFor = (index: number) =>
+  [0, 14, 0, -14][index % 4];
 
 type PathNodeData = {
   id: string;
   index: number;
+  kind: 'scenario' | 'boss';
   status: PathStatus;
   title: string;
   to: string;
@@ -32,6 +38,24 @@ function PathNode({
 }) {
   const base =
     'relative grid h-[72px] w-[72px] place-items-center rounded-full border-2 font-mono text-sm transition-transform';
+  const isBoss = node.kind === 'boss';
+
+  const tone = {
+    locked: isBoss
+      ? 'border-[var(--amber)]/30 bg-[var(--bg-elev)] text-[var(--amber)]/50 opacity-60'
+      : 'border-[var(--line)] bg-[var(--bg-elev)] text-[var(--muted)] opacity-55',
+    complete: isBoss
+      ? 'path-node-complete border-[var(--amber)] bg-[var(--amber-soft)] text-lg font-bold text-[var(--amber)] shadow-[0_0_16px_-8px_var(--amber)] hover:scale-105'
+      : 'path-node-complete border-[var(--accent)] bg-[var(--accent-soft)] text-xl font-bold text-[var(--accent)] shadow-[0_0_16px_-8px_var(--accent)] hover:scale-105',
+    current: isBoss
+      ? 'path-node-current border-[var(--amber)] bg-[var(--amber)] text-[#1a1206] hover:scale-105'
+      : 'path-node-current border-[var(--accent)] bg-[var(--accent)] text-[var(--on-accent)] hover:scale-105',
+  } as const;
+
+  const label =
+    node.kind === 'boss'
+      ? 'BOSS'
+      : String(node.index + 1).padStart(2, '0');
 
   return (
     <div
@@ -48,14 +72,15 @@ function PathNode({
           title={`${node.title}（未解锁）`}
           className={cn(
             base,
-            'border-[var(--line)] bg-[var(--bg-elev)] text-[var(--muted)] opacity-55',
+            tone.locked,
+            isBoss && 'text-[10px] tracking-[0.12em]',
           )}
         >
-          {String(node.index + 1).padStart(2, '0')}
+          {label}
         </span>
       )}
 
-      {node.status === 'complete' && (
+      {node.status !== 'locked' && (
         <Link
           to={node.to}
           aria-label={node.title}
@@ -63,31 +88,24 @@ function PathNode({
           onClick={playClick}
           className={cn(
             base,
-            'path-node-complete border-[var(--accent)] bg-[var(--accent-soft)] text-xl font-bold text-[var(--accent)] shadow-[0_0_16px_-8px_var(--accent)] hover:scale-105 hover:shadow-[0_0_26px_-6px_var(--accent)]',
+            tone[node.status === 'complete' ? 'complete' : 'current'],
+            isBoss && 'text-[10px] tracking-[0.12em]',
           )}
         >
-          ✓
-        </Link>
-      )}
-
-      {node.status === 'current' && (
-        <Link
-          to={node.to}
-          aria-label={node.title}
-          title={node.title}
-          onClick={playClick}
-          className={cn(
-            base,
-            'path-node-current border-[var(--accent)] bg-[var(--accent)] text-[var(--on-accent)] hover:scale-105',
+          {node.status === 'complete' ? '✓' : label}
+          {node.status === 'current' && (
+            <span
+              className={cn(
+                'path-arrow absolute -top-7',
+                isBoss
+                  ? 'text-[var(--amber)]'
+                  : 'text-[var(--accent)]',
+              )}
+              aria-hidden="true"
+            >
+              ▼
+            </span>
           )}
-        >
-          {String(node.index + 1).padStart(2, '0')}
-          <span
-            className="path-arrow absolute -top-7 text-[var(--accent)]"
-            aria-hidden="true"
-          >
-            ▼
-          </span>
         </Link>
       )}
 
@@ -100,17 +118,14 @@ function PathNode({
   );
 }
 
-function UnitPath({
-  nodes,
-  completed,
-}: {
-  nodes: PathNodeData[];
-  completed: number;
-}) {
+function UnitPath({ nodes }: { nodes: PathNodeData[] }) {
   const height = nodes.length * ROW_HEIGHT;
 
   return (
-    <div className="relative mx-auto w-full max-w-[27rem]" style={{ height }}>
+    <div
+      className="relative mx-auto w-full max-w-[27rem]"
+      style={{ height }}
+    >
       <svg
         className="pointer-events-none absolute inset-0 h-full w-full"
         viewBox={`0 0 100 ${height}`}
@@ -125,13 +140,15 @@ function UnitPath({
           return (
             <line
               key={node.id}
-              x1={50 + OFFSETS[index - 1]}
+              x1={50 + offsetFor(index - 1)}
               y1={(index - 1) * ROW_HEIGHT + ROW_HEIGHT / 2}
-              x2={50 + OFFSETS[index]}
+              x2={50 + offsetFor(index)}
               y2={index * ROW_HEIGHT + ROW_HEIGHT / 2}
               stroke={
                 previous.status === 'complete'
-                  ? 'var(--accent)'
+                  ? previous.kind === 'boss'
+                    ? 'var(--amber)'
+                    : 'var(--accent)'
                   : 'var(--line-strong)'
               }
               strokeWidth={1}
@@ -145,52 +162,70 @@ function UnitPath({
         <PathNode
           key={node.id}
           node={node}
-          offset={OFFSETS[index]}
+          offset={offsetFor(index)}
           top={index * ROW_HEIGHT + ROW_HEIGHT / 2}
         />
       ))}
-
-      {completed === nodes.length && (
-        <p className="absolute inset-x-0 bottom-0 text-center font-mono text-[10px] tracking-[0.25em] text-[var(--accent)]">
-          [ UNIT CLEARED ]
-        </p>
-      )}
     </div>
   );
 }
 
 export default function HomePage() {
-  const { reads, progress, stats } = useProfileData();
+  const { reads, progress, stats, setting } = useProfileData();
   const profile = computeProfile(stats);
   const dueCount = buildReviewQueue(progress, new Date()).length;
 
-  const units = getThemes().map((theme) => {
-    const scenarios = getScenarios(theme.id);
+  const themes = getThemes();
+  const units = themes.map((theme) => ({
+    theme,
+    scenarios: getScenarios(theme.id),
+  }));
+  const scenarioById = new Map(
+    units.flatMap((unit) =>
+      unit.scenarios.map((scenario) => [scenario.meta.id, scenario]),
+    ),
+  );
+
+  const globalNodes = buildGlobalPath(
+    units.map((unit) => ({
+      themeId: unit.theme.id,
+      scenarioIds: unit.scenarios.map(
+        (scenario) => scenario.meta.id,
+      ),
+    })),
+    reads,
+    setting?.bossCleared ?? [],
+  );
+
+  const nodes: PathNodeData[] = globalNodes.map((node, index) => {
+    const theme = themes.find((item) => item.id === node.themeId);
+    if (node.kind === 'boss') {
+      return {
+        id: node.id,
+        index,
+        kind: 'boss',
+        status: node.status,
+        title: `${theme?.title ?? '章节'} · Boss 关`,
+        to: `/boss/${node.themeId}`,
+      };
+    }
+    const scenario = scenarioById.get(node.id);
     return {
-      theme,
-      scenarios,
-      nodes: scenarios.map((scenario) => ({
-        id: scenario.meta.id,
-        title: scenario.meta.title,
-        to: `/scenario/${scenario.meta.id}`,
-      })),
+      id: node.id,
+      index,
+      kind: 'scenario',
+      status: node.status,
+      title: scenario?.meta.title ?? node.id,
+      to: `/scenario/${node.id}`,
     };
   });
 
-  const flatNodes = units.flatMap((unit) => unit.nodes);
-  const path = buildThemePath(
-    flatNodes.map((node) => node.id),
-    reads,
-  );
-  const nodes: PathNodeData[] = flatNodes.map((node, index) => ({
-    ...node,
-    index,
-    status: path[index]?.status ?? 'locked',
-  }));
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
   const completedCount = nodes.filter(
-    (node) => node.status === 'complete',
+    (node) =>
+      node.kind === 'scenario' && node.status === 'complete',
   ).length;
+  const bossClearedCount =
+    setting?.bossCleared?.length ?? 0;
   const currentNode = nodes.find(
     (node) => node.status === 'current',
   );
@@ -228,7 +263,10 @@ export default function HomePage() {
           <div className="flex flex-wrap items-center gap-2">
             <Badge tone="muted">待复习 {dueCount}</Badge>
             <Badge tone="accent">
-              已通关 {completedCount}/18
+              已通关 {completedCount}/36
+            </Badge>
+            <Badge tone="muted">
+              Boss {bossClearedCount}/3
             </Badge>
             <Link
               to={continueTo}
@@ -240,16 +278,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      <DailyChest />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <DailyChest />
+        <StreakPanel
+          streak={stats.streak}
+          reads={reads}
+          setting={setting}
+        />
+      </div>
 
       <div className="mx-auto max-w-[30rem]">
         {units.map((unit) => {
-          const unitNodes = unit.nodes.map(
-            (node) => nodeById.get(node.id)!,
+          const unitNodes = nodes.filter(
+            (node) =>
+              node.id === `boss:${unit.theme.id}` ||
+              unit.scenarios.some(
+                (scenario) => scenario.meta.id === node.id,
+              ),
           );
-          const completed = unitNodes.filter(
-            (node) => node.status === 'complete',
+          const scenarioCompleted = unitNodes.filter(
+            (node) =>
+              node.kind === 'scenario' &&
+              node.status === 'complete',
           ).length;
+          const bossNode = unitNodes.find(
+            (node) => node.kind === 'boss',
+          );
 
           return (
             <section key={unit.theme.id} className="pb-8">
@@ -263,22 +317,27 @@ export default function HomePage() {
                   </h3>
                 </Link>
                 <span className="font-mono text-[10px] tracking-[0.12em] text-[var(--amber)]">
-                  {completed}/{unitNodes.length}
+                  {scenarioCompleted}/{unit.scenarios.length}
+                  {bossNode?.status === 'complete' && ' · BOSS ✓'}
+                  {bossNode?.status === 'current' && ' · BOSS READY'}
                 </span>
               </div>
               <Progress
-                value={(completed / unitNodes.length) * 100}
+                value={
+                  (scenarioCompleted / unit.scenarios.length) * 100
+                }
                 className="mt-2 mb-4"
                 label={`${unit.theme.title}通关进度`}
               />
-              <UnitPath nodes={unitNodes} completed={completed} />
+              <UnitPath nodes={unitNodes} />
             </section>
           );
         })}
       </div>
 
       <p className="mx-auto max-w-[30rem] text-xs leading-6 text-[var(--muted)]">
-        一条 18 节点的主航线，必须按顺序通关：展开答案并完成自评后，下一个节点才会解锁。点主题名可以进入章节页自由浏览。
+        主线：36 个场景 + 3 个章节 Boss。每章 12 个场景全部通关后解锁
+        Boss；通过 Boss 才能进入下一章。点主题名可自由浏览章节内容。
       </p>
     </div>
   );

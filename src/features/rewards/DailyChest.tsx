@@ -11,6 +11,7 @@ export function DailyChest() {
   const setting = useLiveQuery(() => db.settings.get('app'), []);
   const [burst, setBurst] = useState(false);
   const [lastBonus, setLastBonus] = useState(0);
+  const [lastFreeze, setLastFreeze] = useState(false);
 
   const canOpen = setting?.lastChestAt !== localDateKey();
 
@@ -21,6 +22,7 @@ export function DailyChest() {
         return;
       }
       setLastBonus(result.bonus);
+      setLastFreeze(result.freeze);
       setBurst(true);
       playChest();
       setTimeout(() => setBurst(false), 1100);
@@ -68,12 +70,12 @@ export function DailyChest() {
         </svg>
 
         <div className="min-w-0 flex-1">
-          <p className="hud-label">[ DAILY CACHE ] 每日宝箱</p>
+          <p className="hud-label">[ CACHE ] 每日宝箱</p>
           <p className="mt-1 text-sm">
             {canOpen
-              ? '今日可开启：+20～30 阅历'
+              ? '开启可得 20–30 阅历，可能掉落护符'
               : lastBonus > 0
-                ? `今日已开启：+${lastBonus} 阅历`
+                ? `今日已开启：+${lastBonus} 阅历${lastFreeze ? ' · +1 断签护符' : ''}`
                 : '今日已开启，明天再来'}
           </p>
           <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-[var(--muted)]">

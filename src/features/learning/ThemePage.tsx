@@ -69,6 +69,7 @@ export default function ThemePage({ themeId }: ThemePageProps) {
       </header>
 
       <section className="space-y-3">
+        <h3 className="text-lg font-medium">场景</h3>
         {scenarios.map((scenario, index) => (
           <Link
             key={scenario.meta.id}
@@ -98,6 +99,27 @@ export default function ThemePage({ themeId }: ThemePageProps) {
             </Card>
           </Link>
         ))}
+      </section>
+
+      <section className="space-y-3">
+        <h3 className="text-lg font-medium">知识点</h3>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {kps.map((kp) => (
+            <Link
+              key={kp.meta.id}
+              to={`/concept/${kp.meta.id}`}
+              aria-label={kp.meta.title}
+              className="rounded-lg border border-[var(--line)] bg-[var(--card)] px-4 py-3 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+            >
+              <span className="block text-sm font-medium">
+                {kp.meta.title}
+              </span>
+              <span className="mt-1 block text-xs leading-6 text-[var(--muted)]">
+                {kp.meta.oneLiner}
+              </span>
+            </Link>
+          ))}
+        </div>
       </section>
     </div>
   );

@@ -1,4 +1,3 @@
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Link,
@@ -9,11 +8,10 @@ import {
 import { BootOverlay } from '../components/BootOverlay';
 import { Disclaimer } from '../components/Disclaimer';
 import { LevelUpOverlay } from '../components/LevelUpOverlay';
-import { db } from '../lib/db';
 import { cn } from '../lib/cn';
 import { buildReviewQueue } from '../features/review/queue';
-import { computeStreak } from '../features/learning/theme-progress';
 import { computeProfile } from '../features/settings/profile';
+import { useProfileData } from '../features/settings/useProfileData';
 import { useTheme } from '../features/settings/useTheme';
 
 const navItems = [
@@ -27,21 +25,9 @@ const navItems = [
 export default function AppLayout() {
   const { theme, setTheme } = useTheme();
   const location = useLocation();
-  const progress = useLiveQuery(() => db.progress.toArray(), []) ?? [];
-  const reads = useLiveQuery(() => db.reads.toArray(), []) ?? [];
-  const notes = useLiveQuery(() => db.notes.toArray(), []) ?? [];
-  const bookmarks =
-    useLiveQuery(() => db.bookmarks.toArray(), []) ?? [];
+  const { progress, stats } = useProfileData();
   const dueCount = buildReviewQueue(progress, new Date()).length;
-
-  const profile = computeProfile({
-    scenariosRead: reads.filter((read) => read.rated).length,
-    kpsMastered: progress.filter((item) => item.state === 'review')
-      .length,
-    notes: notes.length,
-    bookmarks: bookmarks.length,
-    streak: computeStreak(reads, new Date()),
-  });
+  const profile = computeProfile(stats);
 
   const previousLevel = useRef<number | null>(null);
   const [levelUp, setLevelUp] = useState<{

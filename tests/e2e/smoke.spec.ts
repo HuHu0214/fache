@@ -81,6 +81,15 @@ test('笔记和收藏在刷新后保留', async ({ page }) => {
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
+test('每日宝箱每天只能开一次', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: '开启' }).click();
+  await expect(page.getByText(/今日已开启/)).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: '已领取' }),
+  ).toBeDisabled();
+});
+
 test('主题切换生效', async ({ page }) => {
   await page.goto('/');
   const initial = await page

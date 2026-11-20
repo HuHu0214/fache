@@ -4,6 +4,7 @@ export type ProfileStats = {
   notes: number;
   bookmarks: number;
   streak: number;
+  bonusXp?: number;
 };
 
 export type Profile = {
@@ -39,7 +40,8 @@ export function computeProfile(stats: ProfileStats): Profile {
     stats.kpsMastered * 25 +
     stats.notes * 5 +
     stats.bookmarks * 3 +
-    stats.streak * 5;
+    stats.streak * 5 +
+    (stats.bonusXp ?? 0);
 
   let index = 0;
   for (let i = 0; i < LEVELS.length; i += 1) {

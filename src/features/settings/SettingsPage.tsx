@@ -1,13 +1,13 @@
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useState, type ChangeEvent } from 'react';
 import { Button } from '../../components/ui/button';
 import { db } from '../../lib/db';
 import { cn } from '../../lib/cn';
-import { computeStreak } from '../learning/theme-progress';
+import { playClick } from '../../lib/sound';
 import {
   computeAchievements,
   computeProfile,
 } from './profile';
+import { useProfileData } from './useProfileData';
 import {
   exportBackup,
   exportNotesMarkdown,
@@ -37,22 +37,11 @@ export default function SettingsPage() {
   const [exported, setExported] = useState(
     () => localStorage.getItem('fajing.exported') === '1',
   );
+  const [soundOn, setSoundOn] = useState(
+    () => localStorage.getItem('fajing.sound') !== '0',
+  );
 
-  const reads = useLiveQuery(() => db.reads.toArray(), []) ?? [];
-  const progress =
-    useLiveQuery(() => db.progress.toArray(), []) ?? [];
-  const notes = useLiveQuery(() => db.notes.toArray(), []) ?? [];
-  const bookmarks =
-    useLiveQuery(() => db.bookmarks.toArray(), []) ?? [];
-
-  const stats = {
-    scenariosRead: reads.length,
-    kpsMastered: progress.filter((item) => item.state === 'review')
-      .length,
-    notes: notes.length,
-    bookmarks: bookmarks.length,
-    streak: computeStreak(reads, new Date()),
-  };
+  const { stats } = useProfileData();
   const profile = computeProfile(stats);
   const achievements = computeAchievements(stats, { exported });
   const unlocked = achievements.filter((item) => item.unlocked).length;
@@ -60,6 +49,15 @@ export default function SettingsPage() {
   const markExported = () => {
     localStorage.setItem('fajing.exported', '1');
     setExported(true);
+  };
+
+  const toggleSound = () => {
+    const next = !soundOn;
+    localStorage.setItem('fajing.sound', next ? '1' : '0');
+    setSoundOn(next);
+    if (next) {
+      playClick();
+    }
   };
 
   const handleExport = () => {
@@ -287,6 +285,19 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          aria-pressed={soundOn}
+          onClick={toggleSound}
+          className={cn(
+            'w-full rounded-[2px] border px-3 py-2 font-mono text-[11px] tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]',
+            soundOn
+              ? 'border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]'
+              : 'border-[var(--line)] bg-[var(--panel)] text-[var(--muted)]',
+          )}
+        >
+          音效：{soundOn ? '开' : '关'}
+        </button>
       </section>
 
       <section className="space-y-3">

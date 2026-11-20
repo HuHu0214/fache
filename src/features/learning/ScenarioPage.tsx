@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import { mdxComponents } from '../../components/mdx';
 import { Reveal } from '../../components/mdx/reveal';
 import { ArticleRef } from '../../components/mdx/article-ref';
+import { ParticleBurst } from '../../components/ParticleBurst';
+import { playComplete } from '../../lib/sound';
 import { BookmarkButton } from '../bookmarks/BookmarkButton';
 import { NoteEditor } from '../notes/NoteEditor';
 import { getScenario, getTheme } from '../../content/registry';
@@ -26,6 +28,7 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
   const [revealed, setRevealed] = useState(false);
   const [rated, setRated] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
+  const [burst, setBurst] = useState(false);
 
   if (!entry) {
     return <p className="text-sm text-[var(--muted)]">找不到这个场景。</p>;
@@ -53,7 +56,10 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
       await markScenarioRated(entry.meta.id);
       setRated(true);
       setToastVisible(true);
+      setBurst(true);
+      playComplete();
       setTimeout(() => setToastVisible(false), 3500);
+      setTimeout(() => setBurst(false), 1100);
     })();
   };
 
@@ -133,6 +139,8 @@ export default function ScenarioPage({ scenarioId }: ScenarioPageProps) {
           targetId={entry.meta.id}
         />
       </section>
+
+      {burst && <ParticleBurst />}
 
       {toastVisible && (
         <div className="completion-toast hud-panel fixed bottom-6 left-1/2 z-50 w-[min(92vw,22rem)] border-[var(--accent)] px-5 py-3 text-center shadow-[0_0_30px_-10px_var(--accent)]">

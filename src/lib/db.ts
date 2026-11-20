@@ -39,6 +39,9 @@ export type Setting = {
   id: 'app';
   theme: 'light' | 'dark' | 'system';
   disclaimerAcceptedAt?: string;
+  bonusXp?: number;
+  lastChestAt?: string;
+  soundEnabled?: boolean;
 };
 
 class FajingDatabase extends Dexie {

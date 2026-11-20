@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { playLevelUp } from '../lib/sound';
+import { ParticleBurst } from './ParticleBurst';
 
 export type LevelUpOverlayProps = {
   level: number;
@@ -12,6 +14,7 @@ export function LevelUpOverlay({
   onDone,
 }: LevelUpOverlayProps) {
   useEffect(() => {
+    playLevelUp();
     const timer = setTimeout(onDone, 2600);
     return () => clearTimeout(timer);
   }, [onDone]);
@@ -23,6 +26,7 @@ export function LevelUpOverlay({
       onClick={onDone}
       className="fixed inset-0 z-[65] grid cursor-pointer place-items-center bg-black/70 backdrop-blur-sm"
     >
+      <ParticleBurst count={36} />
       <div className="relative text-center">
         <div className="level-burst" aria-hidden="true" />
         <p className="hud-label tracking-[0.4em] text-[var(--amber)]">

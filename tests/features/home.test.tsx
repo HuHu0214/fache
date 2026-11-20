@@ -13,7 +13,7 @@ test('首页显示学习航线和当前节点', async () => {
       <HomePage />
     </MemoryRouter>,
   );
-  expect(await screen.findByText(/学习航线/)).toBeInTheDocument();
+  expect(await screen.findByText(/法径航线/)).toBeInTheDocument();
   expect(
     await screen.findByRole('link', {
       name: '口头说好的事，算数吗？',
